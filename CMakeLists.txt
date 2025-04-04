@@ -17,52 +17,49 @@ project(
 set(CMAKE_CXX_STANDARD 17)
 # set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-
-# Dependencies
-
-
-
 # Executable File
-add_executable("${CMAKE_PROJECT_NAME}"
+add_executable(${CMAKE_PROJECT_NAME}
 ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
 )
 
+# Dependencies
+add_subdirectory(external/glfw)
 
 
 
 
-
-# VyEngine include dirs (Header Files)
-target_include_directories("${CMAKE_PROJECT_NAME}" PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
 
 
 # Automatically links to these libs
-target_link_libraries("${CMAKE_PROJECT_NAME}" PRIVATE
-    # glfw
-    # glad
-    # glm::glm-header-only
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+# glfw
+# glad
+# glm::glm-header-only
 )
 
+# VyEngine include dirs
+target_include_directories(${CMAKE_PROJECT_NAME}
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/glfw/include
+)
 
-# Add directories with any random loose .dlls or .libs here
-target_link_directories("${CMAKE_PROJECT_NAME}" PRIVATE
-
+# VyEngine link dirs
+target_link_directories(${CMAKE_PROJECT_NAME}
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/glfw/src
 )
 
 
 # Set configuration properties for VyEngine
 if(MSVC)
-    target_compile_options("${CMAKE_PROJECT_NAME}" PRIVATE
+    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
         /W3
         /MP # multithreaded build
         /WX # warnings as errors
         /ZI # program database for edit and continue
     )
 else()
-    target_compile_options("${CMAKE_PROJECT_NAME}" PRIVATE 
+    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE 
         -Wall 
         -Wextra 
         -Wpedantic
@@ -71,7 +68,7 @@ endif()
 
 
 # Set VyEngine as the startup project
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${CMAKE_PROJECT_NAME}")
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${CMAKE_PROJECT_NAME})
 
 
 # Filters

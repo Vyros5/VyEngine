@@ -74,4 +74,5 @@ ipch/
 *.scc
 
 build/
+out/
 CMakeUserPresets.json
