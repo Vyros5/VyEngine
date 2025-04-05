@@ -9,25 +9,8 @@ project(
     LANGUAGES CXX C
 )
 
-
-#===========================================================================================
-# GLAD CONFIGURATION
-#
-# Configure GLAD loader generation variables (lines below pulled from the GLAD top-level
-# CMakeLists.txt file, with slight modifications.
-# Refer to https://github.com/Dav1dde/glad for more information)
-
-set(GLAD_OUT_DIR        "${CMAKE_CURRENT_BINARY_DIR}" CACHE STRING "Output directory" FORCE)
-set(GLAD_PROFILE        "core" CACHE STRING "OpenGL profile" FORCE)
-set(GLAD_API            "gl=4.6" CACHE STRING "API type/version pairs, like \"gl=3.2,gles=\", no version means latest" FORCE)
-set(GLAD_EXTENSIONS     "" CACHE STRING "Path to extensions file or comma separated list of extensions, if missing all extensions are included" FORCE)
-set(GLAD_SPEC           "gl" CACHE STRING "Name of the spec" FORCE)
-set(GLAD_ALL_EXTENSIONS OFF CACHE BOOL "Include all extensions instead of those specified by GLAD_EXTENSIONS" FORCE)
-set(GLAD_NO_LOADER      OFF CACHE BOOL "No loader" FORCE)
-set(GLAD_REPRODUCIBLE   OFF CACHE BOOL "Reproducible build" FORCE)
-
-#===========================================================================================
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 #===========================================================================================
 # Set Directory Paths
 
@@ -37,9 +20,6 @@ set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 # Executable Directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-
 # CMake Linking-Files Directroy
 set(CMAKE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -47,7 +27,6 @@ set(CMAKE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 set(sources ${SOURCE_DIR}/main.cpp ${SOURCE_DIR}/glad.c)
 
-# set(includes ${SOURCE_DIR})
 # Executable File
 add_executable(${CMAKE_PROJECT_NAME} ${sources} ${includes})
 
@@ -58,26 +37,28 @@ add_executable(${CMAKE_PROJECT_NAME} ${sources} ${includes})
 include(${CMAKE_DIR}/LinkGLFW.cmake)
 LinkGLFW(${CMAKE_PROJECT_NAME} PRIVATE)
 
-# GLAD
-# include(${CMAKE_DIR}/LinkGLAD.cmake)
-# LinkGLAD(${CMAKE_PROJECT_NAME} PRIVATE)
-
 # OpenGL
-# find_package(OpenGL REQUIRED)
-# if (OpenGL_FOUND)
-#     target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${OPENGL_INCLDUE_DIRS})
-#     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${OPENGL_LIBRARIES})
-# else()
-#     message(FATAL_ERROR "OpenGL was not found on the system")
-# endif()
+find_package(OpenGL REQUIRED)
+if (OpenGL_FOUND)
+    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${OPENGL_INCLDUE_DIRS})
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${OPENGL_LIBRARIES})
+else()
+    message(FATAL_ERROR "OpenGL was not found on the system")
+endif()
 
 # GLM
-# include(${CMAKE_DIR}/LinkGLM.cmake)
-# LinkGLM(${CMAKE_PROJECT_NAME} PRIVATE)
+include(${CMAKE_DIR}/LinkGLM.cmake)
+LinkGLM(${CMAKE_PROJECT_NAME} PRIVATE)
+
+# 3rd Party Libraries Directory
 add_subdirectory(libraries/)
-#===========================================================================================
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE libraries/includes)
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE glad)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE 
+    glad
+)
+
+#===========================================================================================
+
 # Enable C++17
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
     CXX_STANDARD 17
