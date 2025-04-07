@@ -53,12 +53,14 @@ set(CMAKE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 file(GLOB_RECURSE VY_SOURCES CONFIGURE_DEPENDS
     ${VY_SOURCE_DIR}/*.cpp
     ${VY_SOURCE_DIR}/core/*.cpp
+    ${VY_SOURCE_DIR}/io/camera.cpp
 )
 
 # Headers
 file(GLOB_RECURSE VY_HEADERS CONFIGURE_DEPENDS
     ${VY_INCLUDE_DIR}/*.hpp
     ${VY_INCLUDE_DIR}/core/*.hpp
+    ${VY_INCLUDE_DIR}/io/camera.hpp
 )
 
 # Appliation
@@ -73,6 +75,13 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
     CXX_EXTENSIONS NO
 )
 
+# add_library(VySources ${CMAKE_SOURCE_DIR}/VyEngine/src/core/main.cpp)
+# VyEngine Sub-Directory
+add_subdirectory(VyEngine)
+target_link_libraries(${CMAKE_PROJECT_NAME} 
+    PRIVATE
+    VySources
+)
 #===========================================================================================
 # Dependency Linkage
 
@@ -99,14 +108,16 @@ endif()
 include(${CMAKE_DIR}/LinkGLM.cmake)
 LinkGLM(${CMAKE_PROJECT_NAME} PRIVATE)
 
+
 #===========================================================================================
 # Main Library Sub-Directory
 # target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${MAIN_LIB_DIR})
-
-# VyEngine Sub-Directory
+# add_library(VySources ${CMAKE_CURRENT_SOURCE_DIR}/VyEngine/src/core/main.cpp)
+# # VyEngine Sub-Directory
 # add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/VyEngine)
 
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE 
+
+target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC 
     ${VY_INCLUDE_DIR}
     ${VY_INCLUDE_DIR}/core/
 )

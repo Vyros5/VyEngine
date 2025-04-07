@@ -1,13 +1,43 @@
 # VyEngine\VyEngine\CMakeLists.txt
 # https://cmake.org/cmake/help/latest/command/add_library.html
 
-# VyEngine Source Files
-# set(VY_CORE_SOURCES
-#     src/core/main.cpp
-#     src/core/window.cpp
-# )
+# add_executable(${CMAKE_PROJECT_NAME} src/core/main.cpp)
 
-# # VyEngine Header Files
-# set(VY_CORE_HEADERS
-#     include/core/window.hpp
-# )
+add_library(VySources "")
+
+# VyEngine Source Files
+set(VY_CORE_SOURCES
+    src/core/main.cpp
+    src/core/window.cpp
+)
+
+# VyEngine Header Files
+set(VY_CORE_HEADERS
+    include/core/window.hpp
+)
+
+# IO Source Files
+set(VY_IO_SOURCES
+    src/io/camera.cpp
+)
+
+# IO Headers Files
+set(VY_IO_HEADERS
+    include/io/camera.hpp
+)
+
+cmake_policy(SET CMP0076 NEW)
+
+target_sources(VySources 
+    PRIVATE 
+        ${VY_CORE_SOURCES}
+        ${VY_IO_SOURCES}
+    PUBLIC
+        ${VY_CORE_HEADERS}
+        ${VY_IO_HEADERS}
+)
+
+target_include_directories(VySources PUBLIC 
+    ${${CMAKE_CURRENT_LIST_DIR}}/include/core
+    ${${CMAKE_CURRENT_LIST_DIR}}/include/io
+)

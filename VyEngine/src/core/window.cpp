@@ -1,4 +1,4 @@
-#include "core/window.hpp"
+#include "window.hpp"
 
 Window::Window(int majVer, int minVer, unsigned int width, unsigned int height, const char* title) :
     majVersion(majVer), minVersion(minVer), scrWidth(width), scrHeight(height), title(title)

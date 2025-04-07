@@ -18,7 +18,7 @@ const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 
 // Title
-const char* TITLE = "OpenGL Engine";
+const char* TITLE = "VyEngine";
 
 
 void ProcessInput(GLFWwindow* window)
