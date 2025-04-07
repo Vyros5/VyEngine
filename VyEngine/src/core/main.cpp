@@ -1,7 +1,7 @@
 #include <iostream>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "core/window.hpp"
 
 void ProcessInput(GLFWwindow* window)
 {
@@ -33,7 +33,7 @@ int main()
     }
 
     // Handle view port dimensions
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, 800, 800);
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height)
     {
         glViewport(0, 0, width, height);
@@ -45,7 +45,7 @@ int main()
         ProcessInput(window);
 
         // Druids are the best
-        glClearColor(1.00f, 0.49f, 0.04f, 1.00f);
+        glClearColor(0.3f, 0.3f, 0.3f, 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glfwSwapBuffers(window);

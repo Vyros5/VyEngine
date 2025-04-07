@@ -2,20 +2,20 @@
 
 macro(LinkGLM TARGET ACCESS)
 
+set(GLM_VERSION 1.0.1)
+
     FetchContent_Declare(
         glm
         GIT_REPOSITORY  https://github.com/g-truc/glm
-        GIT_TAG         master
+        GIT_TAG         2d4c4b4dd31fde06cfffad7915c2b3006402322f
     )
 
-    message(STATUS "Fetching GLM...")
-    FetchContent_GetProperties(glm)
+    FetchContent_MakeAvailable(glm)
+    
+    message(STATUS "")
+    message(STATUS "=======[GLM ${GLM_VERSION}]=======")
+    message(STATUS "")
 
-    if (NOT glm_POPULATED)
-
-        FetchContent_MakeAvailable(glm)
-
-    endif()
 
     target_include_directories(${TARGET} ${ACCESS} ${glm_SOURCE_DIR})
 

@@ -1,0 +1,169 @@
+https://cmake.org/cmake/help/book/mastering-cmake/chapter/Key%20Concepts.html
+
+
+Structure:
+
+[VyEngine]
+|
+|
++---[VyEngine]
+|   |
+|   +---[include]
+|   |   |
+|   |   +---[core]
+|   |   +---[rendering]
+|   |
+|   +---[src]
+|   |   |
+|   |   +---[core]
+|   |   +---[rendering]
+|
+|
++---[libraries]
+|   |
+|   +---[glad]
+|   |   |
+|   |   +---[include]
+|   |   |
+|   |   +---[src]
+|   |
+|   |
+|   +---[VyLib]
+|   |   |
+|   |   +---[include]
+|   |   |
+|   |   +---[src]
+
+
+Imagine Targets as Objects:
+
+Constructors:
+    add_executable()
+    add_library()
+
+Mebmber Vars:
+    Target Properties (too many to list)
+
+Member Functions:
+    get_target_property()
+    set_target_properties()
+    get_property(TARGET)
+    set_property(TARGET)
+    target_compile_definitions()
+    target_compile_features()
+    target_compile_options()
+    target_include_directories()
+    target_link_libraries()
+    target_sources()
+
+
+
+Targets:
+
+    - Represent executables, libraries, and utilities built by CMake. 
+    - Commands that create a target:
+        > [add_library]
+        > [add_executable]
+        > [add_custom_target]
+    
+    Example: [add_library(foo STATIC foo1.c foo2.c)]
+        - “foo” is now available for use as a library name everywhere else in the project.
+
+        Libraries can be declared as a particular type such as STATIC, SHARED, MODULE, or left undeclared. 
+        
+        STATIC indicates that the library must be built as a static library. 
+        SHARED indicates it must be built as a shared library. 
+        MODULE indicates that the library must be created so that it can be dynamically-loaded into an executable.
+            - Module libraries are implemented as shared libraries on many platforms, but not all. 
+            Therefore, CMake does not allow other targets to link to modules. 
+        
+        If none of these options are specified, it indicates that the library could be built as either shared or static. 
+        In that case, CMake uses the setting of the variable BUILD_SHARED_LIBS to determine if the library should be SHARED or STATIC. 
+        If it is not set, then CMake defaults to building static libraries.
+
+    - Targets keep track of general properties.
+        [set_target_properties] / [set_property]
+        [get_target_property] / [get_property]
+
+        Example: LINK_FLAGS - used to specify additional link flags for a specific target.
+
+    Targets store a list of libraries that they link against, which are set using the [target_link_libraries] command. 
+    Names passed into this command can be libraries, full paths to libraries, or the name of a library from an [add_library] command. 
+    
+    Targets also store the link directories to use when linking, and custom commands to execute after building.
+
+
+
+Usage Requirements:
+
+    CMake will also propagate “usage requirements” from linked library targets. 
+    Usage requirements affect compilation of sources in the <target>. 
+    They are specified by properties defined on linked targets.
+
+    For example, to specify include directories that are required when linking to a library you would can do the following:
+
+    add_library(foo foo.cxx)
+    target_include_directories(foo PUBLIC
+        "${CMAKE_CURRENT_BINARY_DIR}"
+        "${CMAKE_CURRENT_SOURCE_DIR}"
+    )
+
+    Now anything that links to the target "foo" will automatically have foo’s binary and source as include directories.
+    The order of the include directories brought in through “usage requirements” will match the order of the targets 
+    in the [target_link_libraries] call.
+
+    For each library or executable CMake creates, it tracks of all the libraries on which that target 
+    depends using the [target_link_libraries] command. For example:
+
+    add_library(foo foo.cxx)
+    target_link_libraries(foo bar)
+
+    add_executable(foobar foobar.cxx)
+    target_link_libraries(foobar foo)
+
+    will link the libraries “foo” and “bar” into the executable “foobar” even though only “foo” was explicitly specified for it.
+
+
+
+Object Libraries:
+
+    Large projects often organize their source files into groups, perhaps in separate subdirectories, 
+    that each need different include directories and preprocessor definitions. 
+    For this use case CMake has developed the concept of Object Libraries.
+
+    An Object Library is a collection of source files compiled into an object file which is not linked 
+    into a library file or made into an archive. 
+
+    Instead other targets created by [add_library] or [add_executable] may reference the objects using 
+    an expression of the form $<TARGET_OBJECTS:name> as a source, 
+    where “name” is the target created by the [add_library] call. 
+    
+    For example:
+
+    add_library(A OBJECT a.cpp)
+    add_library(B OBJECT b.cpp)
+    add_library(Combined $<TARGET_OBJECTS:A> $<TARGET_OBJECTS:B>)
+
+    will include A and B object files in a library called Combined. 
+    Object libraries may contain only sources (and headers) that compile to object files.
+
+
+Source Files:
+
+The source file structure is in many ways similar to a target. 
+It stores the filename, extension, and a number of general properties related to a source file. 
+Like targets, you can set and get properties using [set_source_files_properties] and [get_source_file_property], 
+or the more generic versions.
+
+
+Directories, Tests, and Properties:
+
+In addition to targets and source files, you may find yourself occasionally working with other objects such as directories and tests. 
+Normally such interactions take the shape of setting or getting properties 
+(e.g. set_directory_properties or set_tests_properties) from these objects.
+
+
+
+
+
+

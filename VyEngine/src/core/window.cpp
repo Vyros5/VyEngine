@@ -1,10 +1,10 @@
-#include "window.hpp"
+#include "core/window.hpp"
 
 Window::Window(int majVer, int minVer, unsigned int width, unsigned int height, const char* title) :
     majVersion(majVer), minVersion(minVer), scrWidth(width), scrHeight(height), title(title)
 {
     // Set Window
-    pWindow = glWindow(majVer, minVer, width, height, title);
+    // pWindow = glWindow(majVer, minVer, width, height, title);
 
     // Initialize
     if (pWindow)
