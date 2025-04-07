@@ -4,7 +4,7 @@ Window::Window(int majVer, int minVer, unsigned int width, unsigned int height, 
     majVersion(majVer), minVersion(minVer), scrWidth(width), scrHeight(height), title(title)
 {
     // Set Window
-    // pWindow = glWindow(majVer, minVer, width, height, title);
+    pWindow = InitGLFW(majVer, minVer, width, height, title);
 
     // Initialize
     if (pWindow)
@@ -16,7 +16,7 @@ Window::Window(int majVer, int minVer, unsigned int width, unsigned int height, 
 	aspectRatio = (float)scrWidth / (float)scrHeight;
 
 	// Window color
-	setWindowColor(0.1f, 0.15f, 0.15f, 1.0f);
+	setWindowColor(0.15f, 0.15f, 0.15f, 1.0f);
 }
 
 
@@ -57,15 +57,16 @@ void Window::newFrame()
 }
 
 
-void Window::processInput(float dt)
+void Window::processInput(double dt)
 {
-
+	processWindowInput();
 }
 
 
 void Window::processWindowInput()
 {
-
+    if (glfwGetKey(pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		setShouldClose(true);
 }
 
 

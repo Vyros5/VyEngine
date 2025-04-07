@@ -1,5 +1,6 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#pragma once
+
+#include <vy_glfw.hpp>
 
 #include <stdlib.h>
 #include <iostream>
@@ -12,7 +13,7 @@ class Window
 	GLFWwindow* pWindow;
 
     // Window Values
-    const char* title;
+    const char*  title;
     unsigned int scrWidth;
     unsigned int scrHeight;
 
@@ -40,7 +41,7 @@ class Window
 
     void newFrame();
 
-    void processInput(float dt);
+    void processInput(double dt);
 
     void processWindowInput();
 

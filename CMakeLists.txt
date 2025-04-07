@@ -35,7 +35,10 @@ set(VY_SOURCE_DIR ${VY_PROJECT_DIR}/src)
 # Project Includes Directory
 set(VY_INCLUDE_DIR ${VY_PROJECT_DIR}/include)
 
-# Library Directory
+#VyLib Directory
+set(VYLIB_DIR ${VY_PROJECT_DIR}/VyLib)
+
+# Main Library Directory
 set(MAIN_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libraries)
 
 # Executable Directory
@@ -105,7 +108,7 @@ LinkGLM(${CMAKE_PROJECT_NAME} PRIVATE)
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE 
     ${VY_INCLUDE_DIR}
-    ${VY_INCLUDE_DIR}/core
+    ${VY_INCLUDE_DIR}/core/
 )
 
 # 3rd Party Libraries Directory

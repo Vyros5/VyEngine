@@ -1,7 +1,25 @@
+#include <window.hpp>
+
 #include <iostream>
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+
+// Delta Time - Time between frames.
+double dt = 0.0f; 
+
+// Time of last frame.
+double lastFrame = 0.0f; 
+
+// GLFW Version
+const unsigned int MAJ_VERSION = 3;
+const unsigned int MIN_VERSION = 3;
+
+// Window dimensions
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
+
+// Title
+const char* TITLE = "OpenGL Engine";
+
 
 void ProcessInput(GLFWwindow* window)
 {
@@ -11,47 +29,30 @@ void ProcessInput(GLFWwindow* window)
 
 int main()
 {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // Main Window
+    Window window(MAJ_VERSION, MIN_VERSION, SCR_WIDTH, SCR_HEIGHT, TITLE);
 
-    // Construct the window
-    GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL Template", nullptr, nullptr);
-    if (!window)
+
+    while (!window.shouldClose())
     {
-        std::cout << "Failed to create the GLFW window\n";
-        glfwTerminate();
+		// Delta Time (dt)
+		double currentTime = glfwGetTime();
+		dt = currentTime - lastFrame;
+		lastFrame = currentTime;
+
+		// Update Window
+		window.update();
+
+		// Process Input
+		window.processInput(dt);
+
+		// New Frame
+		window.newFrame();
     }
 
-    glfwMakeContextCurrent(window);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD\n";
-        return -1;
-    }
+    
 
-    // Handle view port dimensions
-    glViewport(0, 0, 800, 800);
-    glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height)
-    {
-        glViewport(0, 0, width, height);
-    });
-
-    // This is the render loop
-    while (!glfwWindowShouldClose(window))
-    {
-        ProcessInput(window);
-
-        // Druids are the best
-        glClearColor(0.3f, 0.3f, 0.3f, 1.00f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-    glfwTerminate();
+    window.cleanup();
     return 0;
 }
