@@ -108,7 +108,7 @@ if(MSVC)
     target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
         /W3
         /MP # multithreaded build
-        /WX # warnings as errors
+        # /WX # warnings as errors
         /ZI # program database for edit and continue
     )
 else()

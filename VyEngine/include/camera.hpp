@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+
 enum class CameraDirection
 {
     NONE = 0,
@@ -15,6 +16,7 @@ enum class CameraDirection
     UP,
     DOWN
 };
+
 
 struct ProjData
 {
@@ -31,66 +33,61 @@ class Camera
 public:
 
 	// Position
-    glm::vec3 pos;
+    glm::vec3 Position = glm::vec3(0.0f);
 
     // Camera Directions
-    glm::vec3 Target;
-    glm::vec3 Right;
-    glm::vec3 Up;
+    glm::vec3 Target = glm::vec3(0.0f, 0.0f, -1.0f);
+    glm::vec3 Right  = glm::vec3(1.0f, 0.0f,  0.0f);
+    glm::vec3 Up     = glm::vec3(0.0f, 1.0f,  0.0f);
 
     // Global Directions
-    glm::vec3 worldUp;
+    glm::vec3 WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
     // Yaw Rotation (X-Axis)
-    float yaw;
+    double Yaw = -90.0;
 
     // Pitch Rotation (Y-Axis)
-    float pitch;
+    double Pitch = 0.0;
 
-    // Movement Values
-    float speed;
-    float sensitivity;
-    float zoom;
+    // Values
+    double MoveSpeed = 2.5;
+    double Sensitivity = 0.5;
+    double Zoom = 45.0;
 
-    float aspect;
+    // Aspect Ratio
+    float Aspect;
 
-    ProjData projectionData;
+    ProjData ProjectionData;
 
-    bool firstLook = true;
+    bool FirstLook = true;
 
-    // Initialize with aspect and position.
+    // Initialize with projection data and position.
     Camera(float aspectRatio, glm::vec3 position = glm::vec3(0.0f));
     
-     ~Camera();
+    ~Camera();
 
     // Get Matrices
-    glm::mat4 getMatrix() const;
-    glm::mat4 getViewMatrix() const { return getMatrix(); }
-    glm::mat4 getProjMatrix() const;
-    glm::mat4 getViewProjMatrix() const;
+    glm::mat4 getMatrix()           const;
+    glm::mat4 getViewMatrix()       const { return getMatrix(); }
+    glm::mat4 getProjMatrix()       const;
+    glm::mat4 getVPMatrix()         const;
 
-    const ProjData& getProjData() const { return projectionData; }
+    const ProjData& getProjData()   const { return ProjectionData; }
 
-    const glm::vec3 getPos() const { return pos; }
-    const glm::vec3& getTarget() const { return Target; }
-    const glm::vec3& getUp() const { return Up; }
+    const glm::vec3 getPosition()   const { return Position; }
+    const glm::vec3 getTarget()     const { return Target; }
+    const glm::vec3 getUp()         const { return Up; }
 
-    void setPosition(float x, float y, float z);
-    void setPosition(const glm::vec3 &pos);
+    const double getZoom()          const { return Zoom; }
 
-    void setTarget(float x, float y, float z);
-    void setTarget(const glm::vec3 &target);
 
-    void setUp(float x, float y, float z) { Up.x = x; Up.y = y; Up.z = z; }
-    void setUp(const glm::vec3 &up) { Up = up; }
+    void setPosition(const glm::vec3 &pos)  { Position = pos; }
+    void setTarget(const glm::vec3 &target) { Target = target; }
+    void setUp(const glm::vec3 &up)         { Up = up; }
 
-    void updateDirection(float dx, float dy);
-
-    void updatePosition(CameraDirection direction, double dt);
-
-    void updateZoom(double dy);
-
-    float getZoom();
 
     void updateCameraVectors();
+    void updateZoom(double dy);
+    void updateDirection(double dx, double dy);
+    void updatePosition(CameraDirection direction, double dt);
 };
