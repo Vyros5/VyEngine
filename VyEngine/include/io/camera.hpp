@@ -1,6 +1,9 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/ext.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 enum class CameraDirection
 {
@@ -49,6 +52,8 @@ public:
     float sensitivity;
     float zoom;
 
+    float aspect;
+
     ProjData projectionData;
 
     bool firstLook = true;
@@ -79,4 +84,13 @@ public:
     void setUp(float x, float y, float z) { Up.x = x; Up.y = y; Up.z = z; }
     void setUp(const glm::vec3 &up) { Up = up; }
 
+    void updateDirection(float dx, float dy);
+
+    void updatePosition(CameraDirection direction, double dt);
+
+    void updateZoom(double dy);
+
+    float getZoom();
+
+    void updateCameraVectors();
 };

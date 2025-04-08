@@ -50,21 +50,21 @@ set(CMAKE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 #===========================================================================================
 
 # Sources
-file(GLOB_RECURSE VY_SOURCES CONFIGURE_DEPENDS
-    ${VY_SOURCE_DIR}/*.cpp
-    ${VY_SOURCE_DIR}/core/*.cpp
-    ${VY_SOURCE_DIR}/io/camera.cpp
-)
+# file(GLOB_RECURSE VY_SOURCES CONFIGURE_DEPENDS
+#     ${VY_SOURCE_DIR}/*.cpp
+#     ${VY_SOURCE_DIR}/core/*.cpp
+#     ${VY_SOURCE_DIR}/io/camera.cpp
+# )
 
-# Headers
-file(GLOB_RECURSE VY_HEADERS CONFIGURE_DEPENDS
-    ${VY_INCLUDE_DIR}/*.hpp
-    ${VY_INCLUDE_DIR}/core/*.hpp
-    ${VY_INCLUDE_DIR}/io/camera.hpp
-)
+# # Headers
+# file(GLOB_RECURSE VY_HEADERS CONFIGURE_DEPENDS
+#     ${VY_INCLUDE_DIR}/*.hpp
+#     ${VY_INCLUDE_DIR}/core/*.hpp
+#     ${VY_INCLUDE_DIR}/io/camera.hpp
+# )
 
 # Appliation
-add_executable(${CMAKE_PROJECT_NAME} ${VY_SOURCES} ${VY_HEADERS})
+add_executable(${CMAKE_PROJECT_NAME} ${VY_SOURCE_DIR}/core/main.cpp) # ${VY_SOURCES} ${VY_HEADERS})
 
 
 
@@ -82,6 +82,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     PRIVATE
     VySources
 )
+
 #===========================================================================================
 # Dependency Linkage
 

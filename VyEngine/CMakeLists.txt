@@ -13,17 +13,19 @@ set(VY_CORE_SOURCES
 
 # VyEngine Header Files
 set(VY_CORE_HEADERS
-    include/core/window.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/core/window.hpp
 )
 
 # IO Source Files
 set(VY_IO_SOURCES
     src/io/camera.cpp
+    src/io/input.cpp
 )
 
 # IO Headers Files
 set(VY_IO_HEADERS
-    include/io/camera.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/io/camera.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/io/input.hpp
 )
 
 cmake_policy(SET CMP0076 NEW)
@@ -38,6 +40,6 @@ target_sources(VySources
 )
 
 target_include_directories(VySources PUBLIC 
-    ${${CMAKE_CURRENT_LIST_DIR}}/include/core
-    ${${CMAKE_CURRENT_LIST_DIR}}/include/io
+    ${CMAKE_CURRENT_LIST_DIR}/include/core
+    ${CMAKE_CURRENT_LIST_DIR}/include/io
 )

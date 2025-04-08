@@ -2,6 +2,9 @@
 
 #include <vy_glfw.hpp>
 
+#include "io/input.hpp"
+#include "io/camera.hpp"
+
 #include <stdlib.h>
 #include <iostream>
 
@@ -25,6 +28,18 @@ class Window
     float bg[4];
     
     public:
+
+    // Camera Object
+    Camera* camera;
+    
+    // Camera Position
+    glm::vec3 cameraPos;
+    glm::vec3 cameraTarget;
+
+    // Matrices
+    glm::mat4 viewMatrix;
+    glm::mat4 projMatrix;
+    glm::mat4 modlMatrix;
 
     // Aspect Ratio
     float aspectRatio = 0;

@@ -1,4 +1,4 @@
-#include "window.hpp"
+#include "core/window.hpp"
 
 Window::Window(int majVer, int minVer, unsigned int width, unsigned int height, const char* title) :
     majVersion(majVer), minVersion(minVer), scrWidth(width), scrHeight(height), title(title)
@@ -35,7 +35,17 @@ void Window::initWindow()
 
 void Window::initCallbacks()
 {
+	// Keyboard Key Callback
+	glfwSetKeyCallback(pWindow, Keyboard::keyCallback);
 
+	// Mouse Cursor Callback
+	glfwSetCursorPosCallback(pWindow, Mouse::cursorPosCallback);
+
+	// Mouse Button Callback
+	glfwSetMouseButtonCallback(pWindow, Mouse::mouseButtonCallback);
+
+	// Mouse Scroll Callback
+	glfwSetScrollCallback(pWindow, Mouse::mouseWheelCallback);
 }
 
 
@@ -59,14 +69,78 @@ void Window::newFrame()
 
 void Window::processInput(double dt)
 {
+	// Window Inputs
 	processWindowInput();
+
+	
+	// Camera Direction Control
+	double dx = Mouse::getDX();
+	double dy = Mouse::getDY();
+
+	if (dx != 0 || dy != 0)
+	{
+		camera->updateDirection(dx, dy);
+	}
+
+
+	// Camera Zoom Control
+	double scrollDy = Mouse::getScrollDY();
+
+	if (scrollDy != 0)
+	{
+		camera->updateZoom(scrollDy);
+	}
+
+
+	// Camera Position Control
+	if (Keyboard::key(GLFW_KEY_W))
+	{
+		camera->updatePosition(CameraDirection::FORWARD, dt);	// -Z
+	}
+
+	if (Keyboard::key(GLFW_KEY_S))
+	{
+		camera->updatePosition(CameraDirection::BACKWARD, dt);	// +Z
+	}
+
+	if (Keyboard::key(GLFW_KEY_D))
+	{
+		camera->updatePosition(CameraDirection::RIGHT, dt);		// +X
+	}
+
+	if (Keyboard::key(GLFW_KEY_A))
+	{
+		camera->updatePosition(CameraDirection::LEFT, dt);		// -X
+	}
+
+	if (Keyboard::key(GLFW_KEY_SPACE))
+	{
+		camera->updatePosition(CameraDirection::UP, dt);		// +Y
+	}
+
+	if (Keyboard::key(GLFW_KEY_LEFT_SHIFT))
+	{
+		camera->updatePosition(CameraDirection::DOWN, dt);		// -Y
+	}
+
+
+	// Set Matrices
+	viewMatrix = camera->getViewMatrix();
+	projMatrix = camera->getProjMatrix();
+
+	// Set Camera Position
+	cameraPos 	 = camera->getPos();
+	cameraTarget = camera->getTarget();
 }
 
 
 void Window::processWindowInput()
 {
-    if (glfwGetKey(pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	// Exit Window
+	if (Keyboard::key(GLFW_KEY_ESCAPE))
+	{
 		setShouldClose(true);
+	}	
 }
 
 

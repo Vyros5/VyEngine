@@ -1,4 +1,4 @@
-#include <window.hpp>
+#include "window.hpp"
 
 #include <iostream>
 
@@ -20,18 +20,21 @@ const unsigned int SCR_HEIGHT = 1080;
 // Title
 const char* TITLE = "VyEngine";
 
-
-void ProcessInput(GLFWwindow* window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
+// ================================================================================================
 
 int main()
 {
     // Main Window
     Window window(MAJ_VERSION, MIN_VERSION, SCR_WIDTH, SCR_HEIGHT, TITLE);
 
+	float aspectRatio = (float)SCR_WIDTH / (float)SCR_HEIGHT;
+
+	// Main Camera
+	window.camera = new Camera(aspectRatio, glm::vec3(0.0f, 0.0f, 0.0f));
+
+
+
+	// MAIN LOOP ==================================================================================
 
     while (!window.shouldClose())
     {
@@ -46,12 +49,13 @@ int main()
 		// Process Input
 		window.processInput(dt);
 
-		// New Frame
+		// Swap Frames
 		window.newFrame();
     }
 
-
+	// ============================================================================================
     
+	// Cleanup Objects
 
     window.cleanup();
     return 0;
