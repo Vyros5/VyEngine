@@ -1,45 +1,72 @@
-# VyEngine\VyEngine\CMakeLists.txt
+# VyEngine\CMakeLists.txt
+
 # https://cmake.org/cmake/help/latest/command/add_library.html
 
-# add_executable(${CMAKE_PROJECT_NAME} src/core/main.cpp)
 
-add_library(VySources "")
+# Appliation
+add_executable(${CMAKE_PROJECT_NAME} ${VY_SOURCE_DIR}/main.cpp)
+message(STATUS "${CMAKE_PROJECT_NAME}")
+
+# Properties
+set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
+    CXX_STANDARD 20
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
+)
+
+
+add_subdirectory(libraries)
+
 
 # VyEngine Source Files
-set(VY_CORE_SOURCES
-    src/core/main.cpp
-    src/core/window.cpp
+set(VY_SOURCES
+    src/main.cpp
+    src/window.cpp
+    src/vy_glfw.cpp
+    src/camera.cpp
+    src/input.cpp
 )
 
-# VyEngine Header Files
-set(VY_CORE_HEADERS
-    ${CMAKE_CURRENT_LIST_DIR}/include/core/window.hpp
-)
-
-# IO Source Files
-set(VY_IO_SOURCES
-    src/io/camera.cpp
-    src/io/input.cpp
-)
-
-# IO Headers Files
-set(VY_IO_HEADERS
-    ${CMAKE_CURRENT_LIST_DIR}/include/io/camera.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/io/input.hpp
+set(VY_HEADERS
+    include/window.hpp
+    include/camera.hpp
+    include/input.hpp
+    include/vy_glfw.hpp
 )
 
 cmake_policy(SET CMP0076 NEW)
 
-target_sources(VySources 
+target_sources(${CMAKE_PROJECT_NAME}  
     PRIVATE 
-        ${VY_CORE_SOURCES}
-        ${VY_IO_SOURCES}
+        ${VY_SOURCES}
     PUBLIC
-        ${VY_CORE_HEADERS}
-        ${VY_IO_HEADERS}
+        ${VY_HEADERS}
 )
 
-target_include_directories(VySources PUBLIC 
-    ${CMAKE_CURRENT_LIST_DIR}/include/core
-    ${CMAKE_CURRENT_LIST_DIR}/include/io
+target_include_directories(${CMAKE_PROJECT_NAME} 
+
+    PUBLIC 
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/libraries
+    PRIVATE
+        ${glad_SOURCE_DIR}/include
+        ${glfw_SOURCE_DIR}/include
+        ${glm_SOURCE_DIR}
 )
+
+message(STATUS "${glfw_SOURCE_DIR}/include")
+message(STATUS "${glad_SOURCE_DIR}/include")
+message(STATUS "${glm_SOURCE_DIR}\n")
+
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE 
+    glfw
+    glad
+)
+
+message(STATUS "[CURRENT INC_DIR]: ${CMAKE_CURRENT_SOURCE_DIR}/include\n")
+# target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE 
+#     ${glad_SOURCE_DIR}/include
+#     ${glfw_SOURCE_DIR}/include
+#     ${glm_SOURCE_DIR}
+# )
+

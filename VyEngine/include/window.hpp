@@ -2,8 +2,8 @@
 
 #include <vy_glfw.hpp>
 
-#include "io/input.hpp"
-#include "io/camera.hpp"
+#include "input.hpp"
+#include "camera.hpp"
 
 #include <stdlib.h>
 #include <iostream>

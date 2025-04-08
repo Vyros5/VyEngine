@@ -11,12 +11,12 @@ project(
 )
 
 
-message(STATUS "==========[${PROJECT_NAME} v${PROJECT_VERSION}]==========\n")
+message(STATUS "\n==========[${PROJECT_NAME} v${PROJECT_VERSION}]==========\n")
 
 
 # Prevent building in the source directory
 if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
-  message(FATAL_ERROR "In-source builds not allowed.\n")
+    message(FATAL_ERROR "In-source builds not allowed.\n")
 endif()
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -36,10 +36,7 @@ set(VY_SOURCE_DIR ${VY_PROJECT_DIR}/src)
 set(VY_INCLUDE_DIR ${VY_PROJECT_DIR}/include)
 
 #VyLib Directory
-set(VYLIB_DIR ${VY_PROJECT_DIR}/VyLib)
-
-# Main Library Directory
-set(MAIN_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libraries)
+set(VY_LIB_DIR ${VY_PROJECT_DIR}/libraries)
 
 # Executable Directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -49,90 +46,61 @@ set(CMAKE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 #===========================================================================================
 
-# Sources
-# file(GLOB_RECURSE VY_SOURCES CONFIGURE_DEPENDS
-#     ${VY_SOURCE_DIR}/*.cpp
-#     ${VY_SOURCE_DIR}/core/*.cpp
-#     ${VY_SOURCE_DIR}/io/camera.cpp
-# )
-
-# # Headers
-# file(GLOB_RECURSE VY_HEADERS CONFIGURE_DEPENDS
-#     ${VY_INCLUDE_DIR}/*.hpp
-#     ${VY_INCLUDE_DIR}/core/*.hpp
-#     ${VY_INCLUDE_DIR}/io/camera.hpp
-# )
-
-# Appliation
-add_executable(${CMAKE_PROJECT_NAME} ${VY_SOURCE_DIR}/core/main.cpp) # ${VY_SOURCES} ${VY_HEADERS})
 
 
-
-# Properties
-set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
-    CXX_STANDARD 20
-    CXX_STANDARD_REQUIRED YES
-    CXX_EXTENSIONS NO
-)
-
-# add_library(VySources ${CMAKE_SOURCE_DIR}/VyEngine/src/core/main.cpp)
 # VyEngine Sub-Directory
 add_subdirectory(VyEngine)
-target_link_libraries(${CMAKE_PROJECT_NAME} 
-    PRIVATE
-    VySources
-)
+
 
 #===========================================================================================
 # Dependency Linkage
 
 # GLFW
-include(${CMAKE_DIR}/LinkGLFW.cmake)
-LinkGLFW(${CMAKE_PROJECT_NAME} PRIVATE)
+# include(${CMAKE_DIR}/LinkGLFW.cmake)
+# LinkGLFW(${CMAKE_PROJECT_NAME} PRIVATE)
 
-# GLAD
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libraries/glad)
-# include(${CMAKE_DIR}/LinkGLAD.cmake)
-# LinkGLAD(${CMAKE_PROJECT_NAME} PRIVATE)
 
-# OpenGL
-find_package(OpenGL REQUIRED)
-if (OpenGL_FOUND)
-    message(STATUS "[OpenGL]: Libararies - ${OPENGL_LIBRARIES}")
-    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${OPENGL_INCLDUE_DIRS})
-    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${OPENGL_LIBRARIES})
-else()
-    message(FATAL_ERROR "OpenGL was not found on the system")
-endif()
+# # GLAD
+# add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/VyEngine/libraries/glad)
+
+
+# # OpenGL
+# include(${CMAKE_DIR}/LinkOpenGL.cmake)
+# LinkOpenGL(${CMAKE_PROJECT_NAME} PRIVATE)
+
+# find_package(OpenGL REQUIRED)
+# if (OpenGL_FOUND)
+#     message(STATUS "[OpenGL]: Libararies - ${OPENGL_LIBRARIES}\n")
+#     target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${OPENGL_INCLDUE_DIRS})
+#     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${OPENGL_LIBRARIES})
+# else()
+#     message(FATAL_ERROR "OpenGL was not found on the system.\n")
+# endif()
+
 
 # GLM
-include(${CMAKE_DIR}/LinkGLM.cmake)
-LinkGLM(${CMAKE_PROJECT_NAME} PRIVATE)
+# include(${CMAKE_DIR}/LinkGLM.cmake)
+# LinkGLM(${CMAKE_PROJECT_NAME} PRIVATE)
 
 
 #===========================================================================================
-# Main Library Sub-Directory
-# target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${MAIN_LIB_DIR})
-# add_library(VySources ${CMAKE_CURRENT_SOURCE_DIR}/VyEngine/src/core/main.cpp)
-# # VyEngine Sub-Directory
-# add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/VyEngine)
 
+# target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
+#     ${VY_INCLUDE_DIR}
+#     ${CMAKE_CURRENT_SOURCE_DIR}/libraries
+# )
 
-target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC 
-    ${VY_INCLUDE_DIR}
-    ${VY_INCLUDE_DIR}/core/
-)
+# # 3rd Party Libraries Directory
+# target_link_libraries(${CMAKE_PROJECT_NAME} 
+#     PRIVATE
+#         glad
 
-# 3rd Party Libraries Directory
-target_link_libraries(${CMAKE_PROJECT_NAME} 
-    PRIVATE
-        glad
-)
+# )
 
 #===========================================================================================
 
 # Set project folders
-set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES FOLDER ${PROJECT_NAME})
+# set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES FOLDER ${PROJECT_NAME})
 
 
 # Set configuration properties for VyEngine

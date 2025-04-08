@@ -1,4 +1,4 @@
-#include "io/camera.hpp"
+#include "camera.hpp"
 
 
 Camera::Camera(float aspectRatio, glm::vec3 position) :
