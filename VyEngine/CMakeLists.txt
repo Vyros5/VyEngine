@@ -87,6 +87,7 @@ target_include_directories(${CMAKE_PROJECT_NAME}
         ${glad_SOURCE_DIR}/include
         ${glfw_SOURCE_DIR}/include
         ${glm_SOURCE_DIR}
+        ${stb_SOURCE_DIR}
 )
 
 # Link Libaries to project.
@@ -94,6 +95,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     glfw
     glad
     assimp
+    stb
 )
 
 get_target_property(OUT ${CMAKE_PROJECT_NAME} LINK_LIBRARIES)

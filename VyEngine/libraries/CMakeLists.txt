@@ -75,3 +75,15 @@ set(ASSIMP_INSTALL              OFF CACHE BOOL "Configure an install for ASSIMP"
 FetchContent_MakeAvailable(assimp)
 
 #===========================================================================================
+
+# STB
+message(STATUS "\n=======[STB]=======\n")
+FetchContent_Declare(
+    stb
+    GIT_REPOSITORY  https://github.com/nothings/stb.git
+    GIT_TAG         master
+)
+
+FetchContent_MakeAvailable(stb)
+
+#===========================================================================================
