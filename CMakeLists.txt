@@ -1,5 +1,5 @@
 # VyEngine\CMakeLists.txt
-cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 
 # Project Information
