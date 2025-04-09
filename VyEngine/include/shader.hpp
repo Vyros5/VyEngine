@@ -14,6 +14,7 @@
 #include <sstream>
 #include <iostream>
 
+#include <vy_logger.hpp>
 
 std::string getFileContents(const char* filePath);
 
@@ -27,5 +28,5 @@ struct Shader
 
 	bool compile(const char* filePath, GLuint type);
 
-	void destory();
+	void destroy();
 };

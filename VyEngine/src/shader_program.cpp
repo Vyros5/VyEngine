@@ -1,62 +1,180 @@
 #include <shader_program.hpp>
 
 
-
-ShaderProgram::ShaderProgram()
+// Activation & Deactivation
+void ShaderProgram::activate() const
 {
-    programID = 0;
+	glUseProgram(programID);
 }
 
-ShaderProgram::~ShaderProgram()
+void ShaderProgram::deactivate() const
 {
-    // Delete the intermediate shader objects that have been added to the program
-    // The list will only contain something if shaders were compiled but the object itself
-    // was destroyed prior to linking.
-
-    for (ShaderObjList::iterator it = shaderList.begin(); it != shaderList.end(); it++)
-    {
-        glDeleteShader(*it);
-    }
-
-    if (programID != 0)
-    {
-        glDeleteProgram(programID);
-        programID = 0;
-    }
+	glUseProgram(0);
 }
 
-bool ShaderProgram::init()
+void ShaderProgram::destroy()
 {
-    programID = glCreateProgram();
-
-    if (programID == 0)
-    {
-        fprintf(stderr, "Error creating shader program\n");
-        return false;
-    }
-
-    return true;
+	if (programID != UINT32_MAX)
+	{
+		glDeleteProgram(programID);
+		programID = UINT32_MAX;
+	}
 }
 
-// Used to add shaders to the program. When finished - call finalize()
-bool addShader(GLenum shaderType, const char* pFilename)
+void ShaderProgram::init(const char* vertexShaderPath, const char* fragShaderPath)
 {
-    std::string s;
-
-    if (!ReadFile(pFilename, s))
-    {
-        return false;
-    }
-
-    Shader shader;
+	if (!generate(vertexShaderPath, fragShaderPath))
+	{
+		destroy();
+		VY_LOG_ERROR("Failed to generate the shader program.");
+	}
 }
 
-bool finalize()
-{
 
+bool ShaderProgram::generate(const char* vertexShaderPath, const char* fragShaderPath)
+{
+	// Create Shader Program
+	GLuint program = glCreateProgram();
+
+	Shader vertShader;
+	if (!vertShader.compile(vertexShaderPath, GL_VERTEX_SHADER))
+	{
+		vertShader.destroy();
+		VY_LOG_ERROR("Failed to compile vertex shader.");
+		return false;
+	}
+
+	Shader fragShader;
+	if (!fragShader.compile(fragShaderPath, GL_FRAGMENT_SHADER))
+	{
+		fragShader.destroy();
+		VY_LOG_ERROR("Failed to compile fragment shader.");
+		return false;
+	}
+
+	// Attach the shader to program and delete it.
+	glAttachShader(program, vertShader.shaderID);
+	glAttachShader(program, fragShader.shaderID);
+
+	// Link Program
+	glLinkProgram(program);
+
+	// Catch linking errors.
+	GLint isLinked = GL_FALSE;
+	glGetProgramiv(program, GL_LINK_STATUS, &isLinked);
+
+	if (!isLinked)
+	{
+		GLint maxLength = 0;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+
+		// The maxLength includes the NULL character.
+		std::vector<GLchar> infoLog(maxLength);
+		glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
+
+		// Delete Program and Shaders.
+		glDeleteProgram(program);
+		vertShader.destroy();
+		fragShader.destroy();
+
+		VY_LOG_ERROR("Shader Linking Failed: \n%s", infoLog.data());
+		
+		programID = UINT32_MAX;
+		return false;
+	}
+
+	// Always detach shaders after a successful link and destroy them since we don't need them anymore.
+	glDetachShader(program, vertShader.shaderID);
+	glDetachShader(program, fragShader.shaderID);
+	vertShader.destroy();
+	fragShader.destroy();
+
+	// Set program.
+	programID = program;
+	VY_LOG_INFO("Shader compilation and linking succeeded <Vertex: %s> : <Fragment: %s>", vertexShaderPath, fragShaderPath);
+
+	return true;
 }
 
-GLuint getUniformLocation(const char* pUniformName)
-{
 
+
+// Bool
+void ShaderProgram::setUniform(const std::string& name, bool v)
+{
+	glUniform1i(glGetUniformLocation(programID, name.c_str()), (int)v);
+}
+
+
+// Integer
+void ShaderProgram::setUniform(const std::string& name, int  v)
+{
+	glUniform1i(glGetUniformLocation(programID, name.c_str()), v);
+}
+
+void ShaderProgram::setUniform(const std::string& name, unsigned int  v)
+{
+	glUniform1i(glGetUniformLocation(programID, name.c_str()), v);
+}
+
+
+// Float
+void ShaderProgram::setUniform(const std::string& name, float v)
+{
+	glUniform1f(glGetUniformLocation(programID, name.c_str()), v);
+}
+
+void ShaderProgram::setUniform(const std::string& name, float v1, float v2)
+{
+	glUniform2f(glGetUniformLocation(programID, name.c_str()), v1, v2);
+}
+
+void ShaderProgram::setUniform(const std::string& name, float v1, float v2, float v3)
+{
+	glUniform3f(glGetUniformLocation(programID, name.c_str()), v1, v2, v3);
+}
+
+void ShaderProgram::setUniform(const std::string& name, float v1, float v2, float v3, float v4)
+{
+	glUniform4f(glGetUniformLocation(programID, name.c_str()), v1, v2, v3, v4);
+}
+
+
+// GLM Vector
+void ShaderProgram::setUniform(const std::string& name, glm::vec2 v)
+{
+	glUniform2f(glGetUniformLocation(programID, name.c_str()), v.x, v.y);
+}
+
+void ShaderProgram::setUniform(const std::string& name, glm::vec3 v)
+{
+	glUniform3f(glGetUniformLocation(programID, name.c_str()), v.x, v.y, v.z);
+}
+
+void ShaderProgram::setUniform(const std::string& name, glm::vec4 v)
+{
+	glUniform4f(glGetUniformLocation(programID, name.c_str()), v.x, v.y, v.z, v.w);
+}
+
+
+// Assimp Color
+void ShaderProgram::setUniform(const std::string& name, aiColor4D v)
+{
+	glUniform4f(glGetUniformLocation(programID, name.c_str()), v.r, v.g, v.b, v.a);
+}
+
+
+// GLM Matrix
+void ShaderProgram::setUniform(const std::string& name, glm::mat2 v)
+{
+	glUniformMatrix2fv(glGetUniformLocation(programID, name.c_str()), 1, GL_FALSE, value_ptr(v));
+}
+
+void ShaderProgram::setUniform(const std::string& name, glm::mat3 v)
+{
+	glUniformMatrix3fv(glGetUniformLocation(programID, name.c_str()), 1, GL_FALSE, value_ptr(v));
+}
+
+void ShaderProgram::setUniform(const std::string& name, glm::mat4 v)
+{
+	glUniformMatrix4fv(glGetUniformLocation(programID, name.c_str()), 1, GL_FALSE, value_ptr(v));
 }

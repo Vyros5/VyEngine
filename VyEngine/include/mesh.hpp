@@ -1,6 +1,8 @@
 #pragma once
 
 #include <texture.hpp>
+#include <shader_program.hpp>
+
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -35,9 +37,6 @@ private:
 
     // True if mesh only has materials
     bool noTex;
-
-    // Setup data with buffers
-    void setup();
     
     unsigned int VBO, EBO;
 
@@ -72,8 +71,7 @@ public:
 
     void setupMesh();
 
-    // Render a number of instances using a shader
-    // void render(ShaderProgram &shader); //, unsigned int numInstances);
+    void render(ShaderProgram &shader); //, unsigned int numInstances);
 
     void cleanup();
 };

@@ -4,35 +4,44 @@
 #include <vy_file.hpp>
 #include <list>
 
-class ShaderProgram
+struct ShaderProgram
 {
-public:
+	GLuint programID;
 
-    ShaderProgram();
+	void init(const char* vertexShaderPath, const char* fragShaderPath);
 
-    ~ShaderProgram();
+	bool generate(const char* vertexShaderPath, const char* fragShaderPath);
 
-    bool init();
+	void activate() const;
+	
+	void deactivate() const;
+	
+	void destroy();
 
-    void enable();
+    
+	// Bool
+	void setUniform(const std::string& name, bool v);
 
-    GLuint getProgram() const { return programID; }
+	// Integer
+	void setUniform(const std::string& name, int  v);
+	void setUniform(const std::string& name, unsigned int  v);
 
-protected:
+	// Float
+	void setUniform(const std::string& name, float v);
+	void setUniform(const std::string& name, float v1, float v2);
+	void setUniform(const std::string& name, float v1, float v2, float v3);
+	void setUniform(const std::string& name, float v1, float v2, float v3, float v4);
 
-    bool addShader(GLenum shaderType, const char* pFilename);
+	// GLM Vector
+	void setUniform(const std::string& name, glm::vec2 v);
+	void setUniform(const std::string& name, glm::vec3 v);
+	void setUniform(const std::string& name, glm::vec4 v);
 
-    bool finalize();
+	// Assimp Color
+	void setUniform(const std::string& name, aiColor4D color);
 
-    GLuint getUniformLocation(const char* pUniformName);
-
-    GLuint programID;
-
-private:
-
-    typedef std::list<GLuint> ShaderObjList;
-
-    ShaderObjList shaderList;
+	// GLM Matrix
+	void setUniform(const std::string& name, glm::mat2 v);
+	void setUniform(const std::string& name, glm::mat3 v);
+	void setUniform(const std::string& name, glm::mat4 v);
 };
-
-
