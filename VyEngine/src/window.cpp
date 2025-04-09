@@ -130,7 +130,7 @@ void Window::processInput(double dt)
 	projMatrix = camera->getProjMatrix();
 
 	// Set Camera Position
-	cameraPos 	 = camera->getPos();
+	cameraPos 	 = camera->getPosition();
 	cameraTarget = camera->getTarget();
 }
 
@@ -140,6 +140,7 @@ void Window::processWindowInput()
 	// Exit Window
 	if (Keyboard::key(GLFW_KEY_ESCAPE))
 	{
+		std::cout << "EXIT\n";
 		setShouldClose(true);
 	}	
 }

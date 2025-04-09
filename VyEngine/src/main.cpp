@@ -30,7 +30,7 @@ int main()
 	float aspectRatio = (float)SCR_WIDTH / (float)SCR_HEIGHT;
 
 	// Main Camera
-	window.camera = new Camera(aspectRatio, glm::vec3(0.0f, 0.0f, 0.0f));
+	window.camera = new Camera(aspectRatio, glm::vec3(0.0f));
 
 
 

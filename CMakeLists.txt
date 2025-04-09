@@ -46,11 +46,8 @@ set(CMAKE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 #===========================================================================================
 
-
-
 # VyEngine Sub-Directory
 add_subdirectory(VyEngine)
-
 
 #===========================================================================================
 # Dependency Linkage

@@ -27,6 +27,10 @@ set(VY_SOURCES
     src/input.cpp
 )
 
+set(VY_COMPILE_HEADERS
+    src/vertex_memory.hpp
+)
+
 set(VY_HEADERS
     include/window.hpp
     include/camera.hpp
@@ -39,12 +43,12 @@ cmake_policy(SET CMP0076 NEW)
 target_sources(${CMAKE_PROJECT_NAME}  
     PRIVATE 
         ${VY_SOURCES}
+        ${VY_COMPILE_HEADERS}
     PUBLIC
         ${VY_HEADERS}
 )
 
 target_include_directories(${CMAKE_PROJECT_NAME} 
-
     PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/libraries

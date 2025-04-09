@@ -19,7 +19,7 @@ glm::mat4 Camera::getMatrix() const
 
 glm::mat4 Camera::getProjMatrix() const
 {
-    return glm::perspective(glm::radians(Zoom), Aspect, 0.1, 100.0);
+    return glm::perspective(glm::radians(Zoom), Aspect, 0.1f, 100.0f);
 }
 
 glm::mat4 Camera::getVPMatrix() const
@@ -30,7 +30,7 @@ glm::mat4 Camera::getVPMatrix() const
     return vp;
 }
 
-void Camera::updateDirection(double dx, double dy)
+void Camera::updateDirection(float dx, float dy)
 {
     // Apply sensitivity.
     dx *= Sensitivity;
@@ -67,7 +67,8 @@ void Camera::updateCameraVectors()
 
 void Camera::updatePosition(CameraDirection direction, double dt)
 {
-    double velocity = dt * MoveSpeed;
+
+    float velocity = (float)dt * MoveSpeed;
 
     switch (direction) 
     {
@@ -98,14 +99,14 @@ void Camera::updatePosition(CameraDirection direction, double dt)
 }
 
 
-void Camera::updateZoom(double dy)
+void Camera::updateZoom(float dy)
 {
-    if (Zoom >= 1.0 && Zoom <= 45.0)
+    if (Zoom >= 1.0f && Zoom <= 45.0f)
     { Zoom -= dy; }
 
-    else if (zoom < 1.0) 
-    { Zoom = 1.0; }
+    else if (Zoom < 1.0f) 
+    { Zoom = 1.0f; }
 
     else
-    { Zoom = 45.0; }
+    { Zoom = 45.0f; }
 }

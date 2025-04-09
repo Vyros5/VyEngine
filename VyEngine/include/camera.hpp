@@ -44,15 +44,15 @@ public:
     glm::vec3 WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
     // Yaw Rotation (X-Axis)
-    double Yaw = -90.0;
+    float Yaw = -90.0f;
 
     // Pitch Rotation (Y-Axis)
-    double Pitch = 0.0;
+    float Pitch = 0.0f;
 
     // Values
-    double MoveSpeed = 2.5;
-    double Sensitivity = 0.5;
-    double Zoom = 45.0;
+    float MoveSpeed = 2.5f;
+    float Sensitivity = 0.5f;
+    float Zoom = 45.0f;
 
     // Aspect Ratio
     float Aspect;
@@ -78,7 +78,7 @@ public:
     const glm::vec3 getTarget()     const { return Target; }
     const glm::vec3 getUp()         const { return Up; }
 
-    const double getZoom()          const { return Zoom; }
+    const float getZoom()          const { return Zoom; }
 
 
     void setPosition(const glm::vec3 &pos)  { Position = pos; }
@@ -87,7 +87,7 @@ public:
 
 
     void updateCameraVectors();
-    void updateZoom(double dy);
-    void updateDirection(double dx, double dy);
+    void updateZoom(float dy);
+    void updateDirection(float dx, float dy);
     void updatePosition(CameraDirection direction, double dt);
 };
