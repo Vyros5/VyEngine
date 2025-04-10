@@ -9,8 +9,6 @@
 #include <cstdarg>
 #include <cstdlib>
 
-#include <WinUser.h>
-
 
 void VyLogError(const char* pFileName, unsigned int line, const char* pFormat, ...);
 void VyLogFileError(const char* pFileName, unsigned int line, const char* pFileError);

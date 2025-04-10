@@ -75,8 +75,8 @@ void Window::processInput(double dt)
 
 	
 	// Camera Direction Control
-	double dx = Mouse::getDX();
-	double dy = Mouse::getDY();
+	float dx = Mouse::getDX();
+	float dy = Mouse::getDY();
 
 	if (dx != 0 || dy != 0)
 	{
@@ -85,7 +85,7 @@ void Window::processInput(double dt)
 
 
 	// Camera Zoom Control
-	double scrollDy = Mouse::getScrollDY();
+	float scrollDy = Mouse::getScrollDY();
 
 	if (scrollDy != 0)
 	{

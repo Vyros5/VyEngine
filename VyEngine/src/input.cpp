@@ -75,31 +75,31 @@ bool Keyboard::keyWentUp(int key)
 */
 
 // x posiiton
-double Mouse::x = 0;
+float Mouse::x = 0;
 
 // y position
-double Mouse::y = 0;
+float Mouse::y = 0;
 
 
 // previous x position
-double Mouse::lastX = 0;
+float Mouse::lastX = 0;
 
 // previous y position
-double Mouse::lastY = 0;
+float Mouse::lastY = 0;
 
 
 // change in x position from lastX
-double Mouse::dx = 0;
+float Mouse::dx = 0;
 
 // change in y position from lastY
-double Mouse::dy = 0;
+float Mouse::dy = 0;
 
 
 // change in scroll x
-double Mouse::scrollDx = 0;
+float Mouse::scrollDx = 0;
 
 // change in scroll y
-double Mouse::scrollDy = 0;
+float Mouse::scrollDy = 0;
 
 
 // if this is the first change in the mouse position
@@ -172,48 +172,48 @@ void Mouse::mouseWheelCallback(GLFWwindow* window, double dx, double dy)
 */
 
 // get mouse x position
-double Mouse::getMouseX() 
+float Mouse::getMouseX() 
 {
     return x;
 }
 
 // get mouse y position
-double Mouse::getMouseY()
+float Mouse::getMouseY()
 {
     return y;
 }
 
 // get mouse change in x
-double Mouse::getDX()
+float Mouse::getDX()
 {
-    double _dx = dx;
+    float _dx = dx;
     // set to 0 because change no longer new
     dx = 0;
     return _dx;
 }
 
 // get mouse change in y
-double Mouse::getDY() 
+float Mouse::getDY() 
 {
-    double _dy = dy;
+    float _dy = dy;
     // set to 0 because change no longer new
     dy = 0;
     return _dy;
 }
 
 // get scroll value in x
-double Mouse::getScrollDX()
+float Mouse::getScrollDX()
 {
-    double _scrollDx = scrollDx;
+    float _scrollDx = scrollDx;
     // set to 0 because change no longer new
     scrollDx = 0;
     return _scrollDx;
 }
 
 // get scroll value in y
-double Mouse::getScrollDY()
+float Mouse::getScrollDY()
 {
-    double _scrollDy = scrollDy;
+    float _scrollDy = scrollDy;
     // set to 0 because change no longer new
     scrollDy = 0;
     return _scrollDy;

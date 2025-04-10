@@ -5,6 +5,9 @@
 #include "input.hpp"
 #include "camera.hpp"
 
+#include "model.hpp"
+#include "shader_program.hpp"
+
 #include <stdlib.h>
 #include <iostream>
 

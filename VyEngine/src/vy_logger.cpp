@@ -12,7 +12,7 @@ void VyLogError(const char* pFileName, unsigned int line, const char* pFormat, .
     #ifdef _WIN32
         char msg2[512];
         _snprintf_s(msg2, sizeof(msg2), "%s:%d: %s", pFileName, line, msg);
-        MessageBoxA(NULL, msg2, NULL, 0);
+        // MessageBoxA(NULL, msg2, NULL, 0);
     #else
         fprintf(stderr, "%s:%d - %s", pFileName, line, msg);
     #endif
@@ -23,7 +23,7 @@ void VyLogFileError(const char* pFileName, unsigned int line, const char* pFileE
     #ifdef _WIN32
         char msg[1000];
         _snprintf_s(msg, sizeof(msg), "%s:%d: unable to open file `%s`", pFileName, line, pFileError);
-        MessageBoxA(NULL, msg, NULL, 0);
+        // MessageBoxA(NULL, msg, NULL, 0);
     #else
         fprintf(stderr, "%s:%d: unable to open file `%s`\n", pFileName, line, pFileError);
     #endif

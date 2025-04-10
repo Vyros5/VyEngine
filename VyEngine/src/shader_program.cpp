@@ -91,7 +91,9 @@ bool ShaderProgram::generate(const char* vertexShaderPath, const char* fragShade
 
 	// Set program.
 	programID = program;
-	VY_LOG_INFO("Shader compilation and linking succeeded <Vertex: %s> : <Fragment: %s>", vertexShaderPath, fragShaderPath);
+	std::cout << "Shader compilation and linking succeeded:\n";
+	std::cout << "<Vertex: " << vertexShaderPath << ">\n";
+	std::cout << "<Fragment: " << fragShaderPath << ">\n";
 
 	return true;
 }
