@@ -1,8 +1,12 @@
 #include "model.hpp"
 
-Model::Model(std::string const &path)
+// Had to be included here in the .cpp file.
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
+
+Model::Model(const std::string &pPath)
 {
-    loadModel(path);
+    loadModel(pPath);
 }
 
 
@@ -31,7 +35,7 @@ void Model::addMesh(Mesh* mesh)
 void Model::cleanup()
 {
 	// cleanup each mesh
-	for (unsigned int i = 0, len = meshes.size(); i < len; i++)
+	for (size_t i = 0, len = meshes.size(); i < len; i++)
     {
 		meshes[i].cleanup();
 	}
@@ -39,56 +43,58 @@ void Model::cleanup()
 
 
 // Load Model from path with ASSIMP
-void Model::loadModel(std::string const &path)
+void Model::loadModel(const std::string &pPath)
 {
     // Use ASSIMP Importer to read file.
-    scene = import.ReadFile(path,
-        aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals // | aiProcess_CalcTangentSpace
+    pScene = import.ReadFile(pPath,
+        aiProcess_Triangulate | 
+        aiProcess_FlipUVs | 
+        aiProcess_GenSmoothNormals // | aiProcess_CalcTangentSpace
     );
 
 	// Error check
-    if (!scene || !scene->mRootNode || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE)
+    if (!pScene || !pScene->mRootNode || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE)
     {
         std::cout << "Assimp importer.ReadFile (Error) -- " << import.GetErrorString() << std::endl;
         return;
     }
 
 	// Retrieve the directory path of the filepath.
-	directory = path.substr(0, path.find_last_of("/"));
+	directory = pPath.substr(0, pPath.find_last_of("/"));
 
 	// Process ASSIMP's root node recursively.
-	processNode(scene->mRootNode, scene);
+	processNode(pScene->mRootNode, pScene);
 }
 
 /* 
  *  Process a node recursively.
  *  Process each individual mesh located at the node and repeat on the children nodes (if any).
  */
-void Model::processNode(aiNode* node, const aiScene* scene)
+void Model::processNode(aiNode* node, const aiScene* pScene)
 {
 	// Process all the node's meshes.
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
         /*
-        *   The Node Object only contains Indices in order to index the actual objects in the scene.
+        *   The Node Object only contains Indices in order to index the actual objects in the pScene.
         *   The Scene contains all the data. 
         */
 
-		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		Mesh newMesh = processMesh(mesh, scene);
+		aiMesh* mesh = pScene->mMeshes[node->mMeshes[i]];
+		Mesh newMesh = processMesh(mesh, pScene);
 		addMesh(&newMesh);
 	}
 
 	// Process all children node's meshes.
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
-		processNode(node->mChildren[i], scene);
+		processNode(node->mChildren[i], pScene);
 	}
 }
 
 
 // Process mesh in object file. (Assimp to Mesh)
-Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
+Mesh Model::processMesh(aiMesh* mesh, const aiScene* pScene)
 {
     // Data to fill
     std::vector<Vertex> vertices(mesh->mNumVertices);
@@ -147,7 +153,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
         }
     }
 
-    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+    aiMaterial* material = pScene->mMaterials[mesh->mMaterialIndex];
 
     // 1. Diffuse Maps
     std::vector<MeshTexture> diffuseMaps = loadTextures(material, aiTextureType_DIFFUSE);

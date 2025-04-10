@@ -1,5 +1,17 @@
 #include "window.hpp"
 
+#pragma region Callbacks
+
+// Window Resize
+void Window::frameBufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
+}
+
+#pragma endregion
+
+
+
 
 Window::Window(int majVer, int minVer, unsigned int width, unsigned int height, const char* title) :
     majVersion(majVer), minVersion(minVer), scrWidth(width), scrHeight(height), title(title)
@@ -31,11 +43,19 @@ void Window::initWindow()
 
 	// Disable cursor on startup.
 	glfwSetInputMode(pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	// Initialize Callbacks
+	initCallbacks();
+	
+	std::cout << "WINDOW::initWindow: Initialized window.\n";
 }
 
 
 void Window::initCallbacks()
 {
+	// Frame Resize Callback
+	glfwSetFramebufferSizeCallback(pWindow, frameBufferSizeCallback);
+
 	// Keyboard Key Callback
 	glfwSetKeyCallback(pWindow, Keyboard::keyCallback);
 
@@ -57,6 +77,13 @@ void Window::update()
 
 	// Clear Occupied Bits
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+
+void Window::renderShader(ShaderProgram shader)
+{
+	shader.setUniform("view", viewMatrix);
+	shader.setUniform("proj", projMatrix);
 }
 
 

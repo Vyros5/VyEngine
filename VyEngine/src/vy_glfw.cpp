@@ -12,7 +12,7 @@ GLFWwindow* InitGLFW(int majorVer, int minorVer, int scrWidth, int scrHeight, co
 
     int major, minor, rev;
     glfwGetVersion(&major, &minor, &rev);
-    std::cout << "GLFW " << major << "." << minor << "." << rev << " Initialized\n";
+    std::cout << "===<[GLFW " << major << "." << minor << "." << rev << " Initialized]>===\n";
 
     // GLFW Context ===============================================================================
 
@@ -23,10 +23,13 @@ GLFWwindow* InitGLFW(int majorVer, int minorVer, int scrWidth, int scrHeight, co
 	// Profile
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+	// Mazimize
+	glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+
     // Window =====================================================================================
 
     // Initalize Window.
-    GLFWwindow* glWindow = glfwCreateWindow(scrWidth, scrHeight, title, NULL, NULL);
+    GLFWwindow* glWindow = glfwCreateWindow(scrWidth, scrHeight, title, glfwGetPrimaryMonitor(), NULL);
 
 	// Error handling.
 	if (!glWindow)

@@ -32,11 +32,13 @@ set(VY_IO_SOURCES
 set(VY_LIB_SOURCES
     src/vy_glfw.cpp
     src/vy_file.cpp
+    src/vy_logger.cpp
 )
 
 set(VY_REND_SOURCES
     src/texture.cpp
     src/mesh.cpp
+    src/model.cpp
     src/shader.cpp
     src/shader_program.cpp
 )
@@ -53,9 +55,11 @@ set(VY_HEADERS
 
     include/vy_glfw.hpp
     include/vy_file.hpp
+    include/vy_logger.hpp
 
     include/texture.hpp
     include/mesh.hpp
+    include/model.hpp
     include/shader.hpp
     include/shader_program.hpp
 )
@@ -83,7 +87,6 @@ target_include_directories(${CMAKE_PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/libraries
         PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/libraries/stb
         ${assimp_SOURCE_DIR}/include
         ${glad_SOURCE_DIR}/include
         ${glfw_SOURCE_DIR}/include
@@ -98,5 +101,5 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
 )
 
 get_target_property(OUT ${CMAKE_PROJECT_NAME} LINK_LIBRARIES)
-message(STATUS "\n[${CMAKE_PROJECT_NAME} Libraries]: ${OUT}\n")
+message(STATUS "\n[${CMAKE_PROJECT_NAME} Linked Libraries]: ${OUT}\n")
 

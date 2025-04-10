@@ -120,8 +120,8 @@ bool Mouse::buttonsChanged[GLFW_MOUSE_BUTTON_LAST] = { 0 };
 // cursor position changed
 void Mouse::cursorPosCallback(GLFWwindow* window, double _x, double _y) 
 {
-    x = _x;
-    y = _y;
+    x = static_cast<float>(_x);
+    y = static_cast<float>(_y);
 
     if (firstMouse) 
     {
@@ -162,8 +162,8 @@ void Mouse::mouseButtonCallback(GLFWwindow* window, int button, int action, int 
 // scroll wheel moved
 void Mouse::mouseWheelCallback(GLFWwindow* window, double dx, double dy) 
 {
-    scrollDx = dx;
-    scrollDy = dy;
+    scrollDx = static_cast<float>(dx);
+    scrollDy = static_cast<float>(dy);
 }
 
 

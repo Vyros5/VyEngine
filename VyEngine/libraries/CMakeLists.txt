@@ -52,16 +52,6 @@ set(ASSIMP_INSTALL              OFF CACHE BOOL "Configure an install for ASSIMP"
 FetchContent_MakeAvailable(assimp)
 #===========================================================================================
 
-# STB
-# FetchContent_Declare(
-#     stb
-#     GIT_REPOSITORY      https://github.com/nothings/stb.git
-#     GIT_TAG             ${STB_TAG}
-# )
-
-# FetchContent_MakeAvailable(stb)
-#===========================================================================================
-
 # OpenGL
 cmake_policy(SET CMP0079 NEW)
 find_package(OpenGL REQUIRED)

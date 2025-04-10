@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
+#include <iostream>
 
 /*
     Keyboard class to handle keyboard callbacks
@@ -13,7 +14,7 @@ public:
         Static Callback
     */
 
-    // key state changed
+    // Key-State changed
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 
@@ -21,16 +22,16 @@ public:
         Static Accessors
     */
 
-    // get key state
+    // Get Key-State
     static bool key(int key);
 
-    // get if key recently changed
+    // Get if key recently changed
     static bool keyChanged(int key);
 
-    // get if key recently changed and is up
+    // Get if key recently changed and is up
     static bool keyWentUp(int key);
 
-    // get if key recently changed and is down
+    // Get if key recently changed and is down
     static bool keyWentDown(int key);
 
 

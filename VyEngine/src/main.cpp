@@ -33,6 +33,16 @@ int main()
 	window.camera = new Camera(aspectRatio, glm::vec3(0.0f));
 
 
+	// Model Paths 
+	const std::string modelPath = "C:/dev/cpp/VyEngine/VyEngine/assets/models/backpack/backpack.obj";
+
+
+	// Models
+	Model objectModel(modelPath);
+
+	// Shaders
+	ShaderProgram modelShader;
+	modelShader.init("VyEngine/assets/shaders/model.vert", "VyEngine/assets/shaders/model.frag");
 
 	// MAIN LOOP ==================================================================================
 
@@ -48,6 +58,19 @@ int main()
 
 		// Process Input
 		window.processInput(dt);
+
+		// Model Shader
+		modelShader.activate();
+		window.renderShader(modelShader);
+
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		modelShader.setUniform("model", model);
+
+		// Render Model
+		objectModel.render(modelShader);
+
 
 		// Swap Frames
 		window.newFrame();

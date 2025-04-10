@@ -50,51 +50,6 @@ set(CMAKE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 add_subdirectory(VyEngine)
 
 #===========================================================================================
-# Dependency Linkage
-
-# GLFW
-# include(${CMAKE_DIR}/LinkGLFW.cmake)
-# LinkGLFW(${CMAKE_PROJECT_NAME} PRIVATE)
-
-
-# # GLAD
-# add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/VyEngine/libraries/glad)
-
-
-# # OpenGL
-# include(${CMAKE_DIR}/LinkOpenGL.cmake)
-# LinkOpenGL(${CMAKE_PROJECT_NAME} PRIVATE)
-
-# find_package(OpenGL REQUIRED)
-# if (OpenGL_FOUND)
-#     message(STATUS "[OpenGL]: Libararies - ${OPENGL_LIBRARIES}\n")
-#     target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${OPENGL_INCLDUE_DIRS})
-#     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${OPENGL_LIBRARIES})
-# else()
-#     message(FATAL_ERROR "OpenGL was not found on the system.\n")
-# endif()
-
-
-# GLM
-# include(${CMAKE_DIR}/LinkGLM.cmake)
-# LinkGLM(${CMAKE_PROJECT_NAME} PRIVATE)
-
-
-#===========================================================================================
-
-# target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
-#     ${VY_INCLUDE_DIR}
-#     ${CMAKE_CURRENT_SOURCE_DIR}/libraries
-# )
-
-# # 3rd Party Libraries Directory
-# target_link_libraries(${CMAKE_PROJECT_NAME} 
-#     PRIVATE
-#         glad
-
-# )
-
-#===========================================================================================
 
 # Set project folders
 # set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES FOLDER ${PROJECT_NAME})

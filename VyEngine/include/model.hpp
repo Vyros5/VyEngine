@@ -1,11 +1,10 @@
 #pragma once
 
+
+
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
-
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
 
 #include "mesh.hpp"
 #include "shader_program.hpp"
@@ -36,14 +35,14 @@ public:
 
 
 	// Constructor
-	Model(std::string const &path);
+	Model(const std::string &pPath);
 
 	// Destructor
 	~Model();
 
 
 	// Load Model from path
-	void loadModel(std::string const &path);
+	void loadModel(const std::string &pPath);
 
 	// Add a mesh to the list
 	void addMesh(Mesh* mesh);
@@ -58,9 +57,9 @@ private:
 
 	Assimp::Importer import;
 
-	const aiScene* scene = nullptr;
+	const aiScene* pScene = nullptr;
 	
-	aiNode* rootNode = nullptr;
+	aiNode* pRootNode = nullptr;
 
 
 protected:

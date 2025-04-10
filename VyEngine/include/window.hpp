@@ -47,6 +47,8 @@ class Window
     // Aspect Ratio
     float aspectRatio = 0;
     
+    // Window Resize
+    static void frameBufferSizeCallback(GLFWwindow* window, int width, int height);
     
     // Window Constructor
     Window(int majVer, int minVer, unsigned int width, unsigned int height, const char* title);
@@ -57,11 +59,13 @@ class Window
 
     void update();
 
-    void newFrame();
-
     void processInput(double dt);
-
+    
     void processWindowInput();
+
+    void renderShader(ShaderProgram shader);
+    
+    void newFrame();
 
     void cleanup();
 
