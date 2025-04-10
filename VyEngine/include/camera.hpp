@@ -17,9 +17,39 @@ enum class CameraDirection
     DOWN
 };
 
+struct ProjectionInfo
+{
+    float FOV    = 0.0f;
+    float Width  = 0.0f;
+    float Height = 0.0f;
+    float zNear  = 0.0f;
+    float zFar   = 0.0f;
+};
+
+struct CameraSettings
+{
+    glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 target = glm::vec3(0.0f, 0.0f, -1.0f);
+    glm::vec3 right = glm::vec3(1.0f, 0.0f, 0.0f);
+    glm::vec3 up  = glm::vec3(0.0f, 1.0f, 0.0f);
+    
+    
+    double yaw   = -90.0f;
+    double pitch = 0.0f;
+
+    double speed = 2.5f;
+    double sensitivity = 0.5f;
+    double zoom = 45.0f;
+
+    float aspectRatio = 0.0f;
+};
+
 class Camera
 {
 public:
+
+    // Name
+    std::string Name;
 
 	// Position
     glm::vec3 Position;
@@ -33,25 +63,27 @@ public:
     glm::vec3 WorldUp;
 
     // Yaw Rotation (X-Axis)
-    float Yaw;
+    double Yaw = 0.0f;
+    double AngleH;
 
     // Pitch Rotation (Y-Axis)
-    float Pitch;
+    double Pitch = 0.0f;
+    double AngleV;
 
     // Values
-    float MoveSpeed;
-    float Sensitivity;
-    float Zoom;
+    double MoveSpeed = 0.0f;
+    double Sensitivity = 0.0f;
+    double Zoom = 0.0f;
 
     // Aspect Ratio
-    float Aspect;
+    float Aspect = 0.0f;
 
     bool FirstLook = true;
 
     // Initialize with projection data and position.
-    Camera(float aspectRatio, glm::vec3 position = glm::vec3(0.0f));
+    Camera(CameraSettings settings);
     
-    ~Camera();
+    ~Camera() {};
 
     // Get Matrices
     glm::mat4 getViewMatrix()       const;
@@ -62,7 +94,7 @@ public:
     const glm::vec3 getTarget()     const { return Target; }
     const glm::vec3 getUp()         const { return Up; }
 
-    const float getZoom()          const { return Zoom; }
+    const double getZoom()          const { return Zoom; }
 
 
     void setPosition(const glm::vec3 &pos)  { Position = pos; }
@@ -70,8 +102,9 @@ public:
     void setUp(const glm::vec3 &up)         { Up = up; }
 
 
-    void updateDirection(float dx, float dy);
+    void updateDirection(double dx, double dy);
     void updatePosition(CameraDirection direction, double dt);
-    void updateZoom(float dy);
+    void updateZoom(double dy);
     void updateCameraVectors();
+
 };

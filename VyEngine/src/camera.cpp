@@ -1,26 +1,36 @@
 #include "camera.hpp"
 
 
-Camera::Camera(float aspectRatio, glm::vec3 position) :
-    Aspect(aspectRatio), 
-    Position(position),
-	Target(glm::vec3 (0.0f, 0.0f, -1.0f)),
-	Up(glm::vec3 (0.0f, 1.0f, 0.0f)),
-    WorldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
-    Right(glm::vec3(1.0f, 0.0f, 0.0f)),
-	Yaw(-90.0f),
-	Pitch(0.0f),
-	MoveSpeed(2.5f),
-	Sensitivity(0.5f),
-	Zoom(45.0f)
+// Aspect(aspectRatio), 
+// Position(position),
+// Target(glm::vec3 (0.0f, 0.0f, -1.0f)),
+// Up(glm::vec3 (0.0f, 1.0f, 0.0f)),
+// WorldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
+// Right(glm::vec3(1.0f, 0.0f, 0.0f)),
+// Yaw(-90.0f),
+// Pitch(0.0f),
+// MoveSpeed(2.5f),
+// Sensitivity(0.5f),
+// Zoom(45.0f)
+
+Camera::Camera(CameraSettings settings)
 {
-    
+    Position    = settings.position;
+    Target      = settings.target;
+    Right       = settings.right;
+    Up          = settings.up;
+    WorldUp     = glm::vec3(0.0f, 1.0f, 0.0f);
+
+    Yaw         = settings.yaw;
+    Pitch       = settings.pitch;
+
+    MoveSpeed   = settings.speed;
+    Sensitivity = settings.sensitivity;
+    Zoom        = settings.zoom;
+
+    Aspect      = settings.aspectRatio;
 }
 
-Camera::~Camera()
-{
-    
-}
 
 glm::mat4 Camera::getViewMatrix() const
 {
@@ -29,7 +39,7 @@ glm::mat4 Camera::getViewMatrix() const
 
 glm::mat4 Camera::getProjMatrix() const
 {
-    return glm::perspective(glm::radians(Zoom), Aspect, 0.1f, 100.0f);
+    return glm::perspective(glm::radians(Zoom), (double)Aspect, 0.1, 1000.0);
 }
 
 glm::mat4 Camera::getVPMatrix() const
@@ -40,7 +50,7 @@ glm::mat4 Camera::getVPMatrix() const
     return vp;
 }
 
-void Camera::updateDirection(float dx, float dy)
+void Camera::updateDirection(double dx, double dy)
 {
     // Apply sensitivity.
     dx *= Sensitivity;
@@ -63,7 +73,7 @@ void Camera::updateDirection(float dx, float dy)
 // Change camera directional vectors based on movement.
 void Camera::updateCameraVectors()
 {
-    glm::vec3 dir;
+    glm::dvec3 dir;
 
     dir.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
     dir.y = sin(glm::radians(Pitch));
@@ -78,7 +88,7 @@ void Camera::updateCameraVectors()
 void Camera::updatePosition(CameraDirection direction, double dt)
 {
 
-    float velocity = (float)dt * MoveSpeed;
+    float velocity = (float)dt * static_cast<float>(MoveSpeed);
 
     switch (direction) 
     {
@@ -109,14 +119,14 @@ void Camera::updatePosition(CameraDirection direction, double dt)
 }
 
 
-void Camera::updateZoom(float dy)
+void Camera::updateZoom(double dy)
 {
-    if (Zoom >= 1.0f && Zoom <= 45.0f)
+    if (Zoom >= 1.0 && Zoom <= 45.0)
     { Zoom -= dy; }
 
-    else if (Zoom < 1.0f) 
-    { Zoom = 1.0f; }
+    else if (Zoom < 1.0) 
+    { Zoom = 1.0; }
 
     else
-    { Zoom = 45.0f; }
+    { Zoom = 45.0; }
 }

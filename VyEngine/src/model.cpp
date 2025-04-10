@@ -16,7 +16,7 @@ Model::~Model()
 }
 
 
-void Model::render(ShaderProgram &shader)
+void Model::render(ShaderProgram& shader)
 {
     for (unsigned int i = 0; i < meshes.size(); i++)
     {
@@ -26,9 +26,9 @@ void Model::render(ShaderProgram &shader)
 
 
 // Add a mesh to the list
-void Model::addMesh(Mesh* mesh)
+void Model::addMesh(Mesh* pMesh)
 {
-	meshes.push_back(*mesh);
+	meshes.push_back(*pMesh);
 }
 
 
@@ -46,14 +46,14 @@ void Model::cleanup()
 void Model::loadModel(const std::string &pPath)
 {
     // Use ASSIMP Importer to read file.
-    pScene = import.ReadFile(pPath,
+    mScene = import.ReadFile(pPath,
         aiProcess_Triangulate | 
         aiProcess_FlipUVs | 
         aiProcess_GenSmoothNormals // | aiProcess_CalcTangentSpace
     );
 
 	// Error check
-    if (!pScene || !pScene->mRootNode || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE)
+    if (!mScene || !mScene->mRootNode || mScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE)
     {
         std::cout << "Assimp importer.ReadFile (Error) -- " << import.GetErrorString() << std::endl;
         return;
@@ -63,61 +63,61 @@ void Model::loadModel(const std::string &pPath)
 	directory = pPath.substr(0, pPath.find_last_of("/"));
 
 	// Process ASSIMP's root node recursively.
-	processNode(pScene->mRootNode, pScene);
+	processNode(mScene->mRootNode, mScene);
 }
 
 /* 
  *  Process a node recursively.
  *  Process each individual mesh located at the node and repeat on the children nodes (if any).
  */
-void Model::processNode(aiNode* node, const aiScene* pScene)
+void Model::processNode(aiNode* pNode, const aiScene* pScene)
 {
 	// Process all the node's meshes.
-	for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	for (unsigned int i = 0; i < pNode->mNumMeshes; i++)
 	{
         /*
         *   The Node Object only contains Indices in order to index the actual objects in the pScene.
         *   The Scene contains all the data. 
         */
 
-		aiMesh* mesh = pScene->mMeshes[node->mMeshes[i]];
+		aiMesh* mesh = pScene->mMeshes[pNode->mMeshes[i]];
 		Mesh newMesh = processMesh(mesh, pScene);
 		addMesh(&newMesh);
 	}
 
 	// Process all children node's meshes.
-	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	for (unsigned int i = 0; i < pNode->mNumChildren; i++)
 	{
-		processNode(node->mChildren[i], pScene);
+		processNode(pNode->mChildren[i], pScene);
 	}
 }
 
 
 // Process mesh in object file. (Assimp to Mesh)
-Mesh Model::processMesh(aiMesh* mesh, const aiScene* pScene)
+Mesh Model::processMesh(aiMesh* pMesh, const aiScene* pScene)
 {
     // Data to fill
-    std::vector<Vertex> vertices(mesh->mNumVertices);
-    std::vector<unsigned int> indices(3 * mesh->mNumFaces);
+    std::vector<Vertex> vertices(pMesh->mNumVertices);
+    std::vector<unsigned int> indices(3 * pMesh->mNumFaces);
     std::vector<MeshTexture> textures;
 
     // Process Vertices
-    for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+    for (unsigned int i = 0; i < pMesh->mNumVertices; i++)
     {
         // Positions
         vertices[i].position = glm::vec3(
-            mesh->mVertices[i].x,
-            mesh->mVertices[i].y,
-            mesh->mVertices[i].z
+            pMesh->mVertices[i].x,
+            pMesh->mVertices[i].y,
+            pMesh->mVertices[i].z
         );
 
         // Normals
-        if (mesh->HasNormals())
+        if (pMesh->HasNormals())
         {
             vertices[i].normal = glm::vec3(
-                mesh->mNormals[i].x,
-                mesh->mNormals[i].y,
-                mesh->mNormals[i].z
+                pMesh->mNormals[i].x,
+                pMesh->mNormals[i].y,
+                pMesh->mNormals[i].z
             );
         }
         else
@@ -127,11 +127,11 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* pScene)
         }
 
         // Texture UV Coordinates
-        if (mesh->mTextureCoords[0])
+        if (pMesh->mTextureCoords[0])
         {
             vertices[i].texCoord = glm::vec2(
-                mesh->mTextureCoords[0][i].x,
-                mesh->mTextureCoords[0][i].y
+                pMesh->mTextureCoords[0][i].x,
+                pMesh->mTextureCoords[0][i].y
             );
         }
         else
@@ -142,9 +142,9 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* pScene)
     }
 
     // Process Faces and their Indices
-    for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+    for (unsigned int i = 0; i < pMesh->mNumFaces; i++)
     {
-        aiFace face = mesh->mFaces[i];
+        aiFace face = pMesh->mFaces[i];
 
         // Process Indices 
         for (unsigned int j = 0; j < face.mNumIndices; j++)
@@ -153,22 +153,22 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* pScene)
         }
     }
 
-    aiMaterial* material = pScene->mMaterials[mesh->mMaterialIndex];
+    aiMaterial* pMaterial = pScene->mMaterials[pMesh->mMaterialIndex];
 
     // 1. Diffuse Maps
-    std::vector<MeshTexture> diffuseMaps = loadTextures(material, aiTextureType_DIFFUSE);
+    std::vector<MeshTexture> diffuseMaps = loadTextures(pMaterial, aiTextureType_DIFFUSE);
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
     // 2. Specular Maps
-    std::vector<MeshTexture> specularMaps = loadTextures(material, aiTextureType_SPECULAR);
+    std::vector<MeshTexture> specularMaps = loadTextures(pMaterial, aiTextureType_SPECULAR);
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
     // 3. Normal Maps
-    std::vector<MeshTexture> normalMaps = loadTextures(material, aiTextureType_HEIGHT);
+    std::vector<MeshTexture> normalMaps = loadTextures(pMaterial, aiTextureType_HEIGHT);
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
     // 4. Height Maps
-    std::vector<MeshTexture> heightMaps = loadTextures(material, aiTextureType_AMBIENT);
+    std::vector<MeshTexture> heightMaps = loadTextures(pMaterial, aiTextureType_AMBIENT);
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 
@@ -178,14 +178,14 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* pScene)
 
 
 // Load List of Textures
-std::vector<MeshTexture> Model::loadTextures(aiMaterial* mat, aiTextureType type)
+std::vector<MeshTexture> Model::loadTextures(aiMaterial* pMat, aiTextureType type)
 {
     std::vector<MeshTexture> textures;
 
-    for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+    for (unsigned int i = 0; i < pMat->GetTextureCount(type); i++)
     {
         aiString texPath;
-        mat->GetTexture(type, i, &texPath);
+        pMat->GetTexture(type, i, &texPath);
 
         // Prevent duplicate loading.
         bool skip = false;

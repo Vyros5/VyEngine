@@ -45,7 +45,7 @@ public:
 	void loadModel(const std::string &pPath);
 
 	// Add a mesh to the list
-	void addMesh(Mesh* mesh);
+	void addMesh(Mesh* pMesh);
 
 	// Render meshes
 	void render(ShaderProgram &shader);
@@ -57,7 +57,7 @@ private:
 
 	Assimp::Importer import;
 
-	const aiScene* pScene = nullptr;
+	const aiScene* mScene = nullptr;
 	
 	aiNode* pRootNode = nullptr;
 
@@ -79,11 +79,11 @@ protected:
 	*/
 
 	// Process node in object file
-	void processNode(aiNode* node, const aiScene* scene);
+	void processNode(aiNode* pNode, const aiScene* pScene);
 
 	// Process Mesh in object file
-	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+	Mesh processMesh(aiMesh* pMesh, const aiScene* pScene);
 
 	// Load list of Textures
-	std::vector<MeshTexture> loadTextures(aiMaterial* mat, aiTextureType type);
+	std::vector<MeshTexture> loadTextures(aiMaterial* pMat, aiTextureType type);
 };

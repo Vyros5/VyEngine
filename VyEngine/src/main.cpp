@@ -10,8 +10,8 @@ double dt = 0.0f;
 double lastFrame = 0.0f; 
 
 // GLFW Version
-const unsigned int MAJ_VERSION = 3;
-const unsigned int MIN_VERSION = 3;
+const unsigned int MAJ_VERSION = 4;
+const unsigned int MIN_VERSION = 5;
 
 // Window dimensions
 const unsigned int SCR_WIDTH = 1920;
@@ -30,7 +30,10 @@ int main()
 	float aspectRatio = (float)SCR_WIDTH / (float)SCR_HEIGHT;
 
 	// Main Camera
-	window.camera = new Camera(aspectRatio, glm::vec3(0.0f));
+	CameraSettings camSettings;
+	camSettings.aspectRatio = aspectRatio;
+
+	window.camera = new Camera(camSettings);
 
 
 	// Model Paths 
@@ -42,7 +45,7 @@ int main()
 
 	// Shaders
 	ShaderProgram modelShader;
-	modelShader.init("VyEngine/assets/shaders/model.vert", "VyEngine/assets/shaders/model.frag");
+	modelShader.init("C:/dev/cpp/VyEngine/VyEngine/assets/shaders/model.vert", "C:/dev/cpp/VyEngine/VyEngine/assets/shaders/model.frag");
 
 	// MAIN LOOP ==================================================================================
 

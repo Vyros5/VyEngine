@@ -46,7 +46,7 @@ class Window
 
     // Aspect Ratio
     float aspectRatio = 0;
-    
+
     // Window Resize
     static void frameBufferSizeCallback(GLFWwindow* window, int width, int height);
     

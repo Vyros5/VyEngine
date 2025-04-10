@@ -72,22 +72,22 @@ public:
     */
 
     // get mouse x position
-    static float getMouseX();
+    static double getMouseX();
 
     // get mouse y position
-    static float getMouseY();
+    static double getMouseY();
 
     // get mouse change in x
-    static float getDX();
+    static double getDX();
 
     // get mouse change in y
-    static float getDY();
+    static double getDY();
 
     // get scroll value in x
-    static float getScrollDX();
+    static double getScrollDX();
 
     // get scroll value in y
-    static float getScrollDY();
+    static double getScrollDY();
 
     // get button state
     static bool button(int button);
@@ -107,29 +107,29 @@ private:
     */
 
     // x posiiton
-    static float x;
+    static double x;
     // y position
-    static float y;
+    static double y;
 
 
     // previous x position
-    static float lastX;
+    static double lastX;
     // previous y position
-    static float lastY;
+    static double lastY;
 
 
     // change in x position from lastX
-    static float dx;
+    static double dx;
 
     // change in y position from lastY
-    static float dy;
+    static double dy;
 
 
     // change in scroll x
-    static float scrollDx;
+    static double scrollDx;
 
     // change in scroll y
-    static float scrollDy;
+    static double scrollDy;
 
 
     // if this is the first change in the mouse position

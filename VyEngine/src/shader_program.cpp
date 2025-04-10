@@ -1,4 +1,4 @@
-#include <shader_program.hpp>
+#include "shader_program.hpp"
 
 
 // Activation & Deactivation
@@ -25,9 +25,10 @@ void ShaderProgram::init(const char* vertexShaderPath, const char* fragShaderPat
 {
 	if (!generate(vertexShaderPath, fragShaderPath))
 	{
+		std::cout << "Failed to generate the shader program." << std::endl;
 		destroy();
-		VY_LOG_ERROR("Failed to generate the shader program.");
 	}
+
 }
 
 
@@ -39,16 +40,16 @@ bool ShaderProgram::generate(const char* vertexShaderPath, const char* fragShade
 	Shader vertShader;
 	if (!vertShader.compile(vertexShaderPath, GL_VERTEX_SHADER))
 	{
+		std::cout << "Failed to compile vertex shader." << std::endl;
 		vertShader.destroy();
-		VY_LOG_ERROR("Failed to compile vertex shader.");
 		return false;
 	}
 
 	Shader fragShader;
 	if (!fragShader.compile(fragShaderPath, GL_FRAGMENT_SHADER))
 	{
+		std::cout << "Failed to compile fragment shader." << std::endl;
 		fragShader.destroy();
-		VY_LOG_ERROR("Failed to compile fragment shader.");
 		return false;
 	}
 
@@ -76,19 +77,18 @@ bool ShaderProgram::generate(const char* vertexShaderPath, const char* fragShade
 		glDeleteProgram(program);
 		vertShader.destroy();
 		fragShader.destroy();
-
-		VY_LOG_ERROR("Shader Linking Failed: \n%s", infoLog.data());
 		
+		std::cout << "Shader Linking Failed: " << infoLog.data() << std::endl;
 		programID = UINT32_MAX;
 		return false;
 	}
-
+	
 	// Always detach shaders after a successful link and destroy them since we don't need them anymore.
 	glDetachShader(program, vertShader.shaderID);
 	glDetachShader(program, fragShader.shaderID);
 	vertShader.destroy();
 	fragShader.destroy();
-
+	
 	// Set program.
 	programID = program;
 	std::cout << "Shader compilation and linking succeeded:\n";

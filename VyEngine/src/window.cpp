@@ -53,6 +53,9 @@ void Window::initWindow()
 
 void Window::initCallbacks()
 {
+	// GLFW Error Callback
+	GLFWerrorfun glfwSetErrorCallback(GLFWerrorfun cbfun);
+
 	// Frame Resize Callback
 	glfwSetFramebufferSizeCallback(pWindow, frameBufferSizeCallback);
 
@@ -102,8 +105,8 @@ void Window::processInput(double dt)
 
 	
 	// Camera Direction Control
-	float dx = Mouse::getDX();
-	float dy = Mouse::getDY();
+	double dx = Mouse::getDX();
+	double dy = Mouse::getDY();
 
 	if (dx != 0 || dy != 0)
 	{
@@ -112,7 +115,7 @@ void Window::processInput(double dt)
 
 
 	// Camera Zoom Control
-	float scrollDy = Mouse::getScrollDY();
+	double scrollDy = Mouse::getScrollDY();
 
 	if (scrollDy != 0)
 	{

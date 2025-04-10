@@ -37,7 +37,7 @@ bool Shader::compile(const char* filePath, GLuint type)
     shaderID = glCreateShader(type);
 
     // Attach contents to shader.
-    glShaderSource(shaderID, 1, &shaderContents, NULL);
+    glShaderSource(shaderID, 1, &shaderContents, nullptr);
 
     // Compile Shader into machine code.
     glCompileShader(shaderID);
@@ -56,11 +56,14 @@ bool Shader::compile(const char* filePath, GLuint type)
 
         // Delete the shader.
         glDeleteShader(shaderID);
-
-        VY_LOG_ERROR("Shader Compilation Failed: \n%s", infoLog.data());
+        std::cout << "Shader Compilation Failed: " << infoLog.data() << std::endl;
 
         shaderID = UINT32_MAX;
         return false;
+    }
+    else
+    {
+        std::cout << "Successfully Compiled\n\n";
     }
 
     return true;
