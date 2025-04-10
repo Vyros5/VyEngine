@@ -4,7 +4,7 @@
 #include <glm/ext.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
+#include <iostream>
 
 enum class CameraDirection
 {
@@ -17,47 +17,34 @@ enum class CameraDirection
     DOWN
 };
 
-
-struct ProjData
-{
-   float FOV    = 0.0f;
-   float Width  = 0.0f;
-   float Height = 0.0f;
-   float zNear  = 0.0f;
-   float zFar   = 0.0f;
-};
-
-
 class Camera
 {
 public:
 
 	// Position
-    glm::vec3 Position = glm::vec3(0.0f);
+    glm::vec3 Position;
 
     // Camera Directions
-    glm::vec3 Target = glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::vec3 Right  = glm::vec3(1.0f, 0.0f,  0.0f);
-    glm::vec3 Up     = glm::vec3(0.0f, 1.0f,  0.0f);
+    glm::vec3 Target;
+    glm::vec3 Right;
+    glm::vec3 Up;
 
     // Global Directions
-    glm::vec3 WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 WorldUp;
 
     // Yaw Rotation (X-Axis)
-    float Yaw = -90.0f;
+    float Yaw;
 
     // Pitch Rotation (Y-Axis)
-    float Pitch = 0.0f;
+    float Pitch;
 
     // Values
-    float MoveSpeed = 2.5f;
-    float Sensitivity = 0.5f;
-    float Zoom = 45.0f;
+    float MoveSpeed;
+    float Sensitivity;
+    float Zoom;
 
     // Aspect Ratio
     float Aspect;
-
-    ProjData ProjectionData;
 
     bool FirstLook = true;
 
@@ -67,12 +54,9 @@ public:
     ~Camera();
 
     // Get Matrices
-    glm::mat4 getMatrix()           const;
-    glm::mat4 getViewMatrix()       const { return getMatrix(); }
+    glm::mat4 getViewMatrix()       const;
     glm::mat4 getProjMatrix()       const;
     glm::mat4 getVPMatrix()         const;
-
-    const ProjData& getProjData()   const { return ProjectionData; }
 
     const glm::vec3 getPosition()   const { return Position; }
     const glm::vec3 getTarget()     const { return Target; }
@@ -86,8 +70,8 @@ public:
     void setUp(const glm::vec3 &up)         { Up = up; }
 
 
-    void updateCameraVectors();
-    void updateZoom(float dy);
     void updateDirection(float dx, float dy);
     void updatePosition(CameraDirection direction, double dt);
+    void updateZoom(float dy);
+    void updateCameraVectors();
 };

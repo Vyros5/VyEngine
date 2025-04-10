@@ -2,7 +2,17 @@
 
 
 Camera::Camera(float aspectRatio, glm::vec3 position) :
-    Aspect(aspectRatio), Position(position)
+    Aspect(aspectRatio), 
+    Position(position),
+	Target(glm::vec3 (0.0f, 0.0f, -1.0f)),
+	Up(glm::vec3 (0.0f, 1.0f, 0.0f)),
+    WorldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
+    Right(glm::vec3(1.0f, 0.0f, 0.0f)),
+	Yaw(-90.0f),
+	Pitch(0.0f),
+	MoveSpeed(2.5f),
+	Sensitivity(0.5f),
+	Zoom(45.0f)
 {
     
 }
@@ -12,7 +22,7 @@ Camera::~Camera()
     
 }
 
-glm::mat4 Camera::getMatrix() const
+glm::mat4 Camera::getViewMatrix() const
 {
     return glm::lookAt(Position, Position + Target, Up);
 }
@@ -53,7 +63,7 @@ void Camera::updateDirection(float dx, float dy)
 // Change camera directional vectors based on movement.
 void Camera::updateCameraVectors()
 {
-    glm::dvec3 dir;
+    glm::vec3 dir;
 
     dir.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
     dir.y = sin(glm::radians(Pitch));
