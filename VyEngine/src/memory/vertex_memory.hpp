@@ -219,24 +219,25 @@ public:
 
 /*
 	Byte Size: 4
-	Offset(- - ): 3, 6 * Byte Size (4) = 12, 24
-	Stride(----): Size of Vertex in bytes (num of elements (8) * byte size (4) = 32)
+	Offset(- - -): 3, 6 * Byte Size (4) = 12, 24
+	Stride(--/==): Size of Vertex in bytes (num of elements (8) * byte size (4) = 32)
  
 	    | Vertex 1              | Vertex 2              | Vertex 3              |
 	    |X |Y |Z |R |B |G |S |T |X |Y |Z |R |B |G |S |T |X |Y |Z |R |B |G |S |T |
 	BYT 0 04 08 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96
 	    |        |        |     |        |        |     |        |        |     |
 	    |        |        |     |        |        |     |        |        |     |
-	POS |-----------------------|-----------------------|-----------------------|
-	    |        |              |                 |     |        |        |
-	CLR |-  -  - |-----------------------|-----------------------|-------------->
-	    |        |                       |                       |
-	UVS |- - - - - - - - -|-----------------------|-----------------------|----->
+	POS |========---------------|========---------------|========---------------|
+	    |        |        |     |        |        |     |        |        |
+	CLR |-  -  - |========------|--------|========---------------|========------>
+	    |                 |                       |                       |
+	UVS |- - - - - - - - -|=====------------------|=====------------------|=====>
 
 
     glBufferData
 
     Buffer Binding Target 			Purpose
+
     GL_ARRAY_BUFFER 				Vertex attributes
     GL_ATOMIC_COUNTER_BUFFER 		Atomic counter storage
     GL_COPY_READ_BUFFER 			Buffer copy source

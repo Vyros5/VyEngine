@@ -66,6 +66,8 @@ set(VY_HEADERS
     include/render/shader_program.hpp
 )
 
+
+
 # Source file paths should be converted to absolute paths.
 cmake_policy(SET CMP0076 NEW)
 
@@ -92,13 +94,17 @@ target_include_directories(${CMAKE_PROJECT_NAME}
         ${assimp_SOURCE_DIR}/include
         ${glad_SOURCE_DIR}/include
         ${glfw_SOURCE_DIR}/include
+        ${imgui_SOURCE_DIR}/backends
+        ${imgui_SOURCE_DIR}
         ${glm_SOURCE_DIR}
 )
+
 
 # Link Libaries to project.
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE 
     glfw
     glad
+    imgui
     assimp
 )
 

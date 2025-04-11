@@ -1,7 +1,7 @@
 #include "core/window.hpp"
 
 #include <iostream>
-
+#include "imgui/imgui.h"
 
 // Delta Time - Time between frames.
 double dt = 0.0f; 

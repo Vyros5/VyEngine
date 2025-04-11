@@ -85,9 +85,11 @@ void WriteBinaryFile(const char* pFilename, const void* pData, int size)
         exit(0);
     }
 
-    int bytesWritten = fwrite(pData, 1, size, f);
+    size_t Size = static_cast<size_t>(size);
 
-    if (bytesWritten != size)
+    size_t bytesWritten = fwrite(pData, 1, Size, f);
+
+    if (bytesWritten != Size)
     {
         char buf[256] = { 0 };
         strerror_s(buf, sizeof(buf), err);
