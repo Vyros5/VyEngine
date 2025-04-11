@@ -4,7 +4,7 @@
 
 
 # Appliation
-add_executable(${CMAKE_PROJECT_NAME} ${VY_SOURCE_DIR}/main.cpp)
+add_executable(${CMAKE_PROJECT_NAME} ${VY_SOURCE_DIR}/core/main.cpp)
 message(STATUS "${CMAKE_PROJECT_NAME}")
 
 # Properties
@@ -20,48 +20,52 @@ add_subdirectory(libraries)
 
 # VyEngine Source Files
 set(VY_CORE_SOURCES
-    src/main.cpp
-    src/window.cpp
+    src/core/main.cpp
+    src/core/window.cpp
 )
 
 set(VY_IO_SOURCES
-    src/camera.cpp
-    src/input.cpp
+    src/io/camera.cpp
+    src/io/input.cpp
 )
 
 set(VY_LIB_SOURCES
-    src/vy_glfw.cpp
-    src/vy_file.cpp
-    src/vy_logger.cpp
+    src/VyLib/vy_glfw.cpp
+    src/VyLib/vy_file.cpp
+    src/VyLib/vy_logger.cpp
 )
 
 set(VY_REND_SOURCES
-    src/texture.cpp
-    src/mesh.cpp
-    src/model.cpp
-    src/shader.cpp
-    src/shader_program.cpp
+    src/render/texture.cpp
+    src/object/mesh.cpp
+    src/object/model.cpp
+
+    src/shader/shader.cpp
+    src/shader/shader_program.cpp
 )
+
 
 set(VY_COMPILE_HEADERS
-    src/vertex_memory.hpp
+    src/memory/vertex_memory.hpp
 )
 
+
 set(VY_HEADERS
-    include/window.hpp
+    include/core/window.hpp
 
-    include/camera.hpp
-    include/input.hpp
+    include/io/camera.hpp
+    include/io/input.hpp
 
-    include/vy_glfw.hpp
-    include/vy_file.hpp
-    include/vy_logger.hpp
+    include/VyLib/vy_glfw.hpp
+    include/VyLib/vy_file.hpp
+    include/VyLib/vy_logger.hpp
 
-    include/texture.hpp
-    include/mesh.hpp
-    include/model.hpp
-    include/shader.hpp
-    include/shader_program.hpp
+    include/render/texture.hpp
+    include/object/mesh.hpp
+    include/object/model.hpp
+
+    include/shader/shader.hpp
+    include/shader/shader_program.hpp
 )
 
 # Source file paths should be converted to absolute paths.
