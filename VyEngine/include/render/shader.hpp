@@ -24,7 +24,7 @@ std::string getFileContents(const char* filePath);
 
 struct Shader
 {
-	glm::uint32 shaderID;
+	GLuint shaderID;
 
 	bool compile(const char* filePath, GLuint type);
 

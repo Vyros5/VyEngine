@@ -92,7 +92,7 @@ bool ShaderProgram::generate(const char* vertexShaderPath, const char* fragShade
 	// Set program.
 	programID = program;
 	std::cout << "Shader compilation and linking succeeded:\n";
-	std::cout << "<Vertex: " << vertexShaderPath << ">\n";
+	std::cout << "<Vertex:   " << vertexShaderPath << ">\n";
 	std::cout << "<Fragment: " << fragShaderPath << ">\n";
 
 	return true;

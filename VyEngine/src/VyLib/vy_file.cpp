@@ -25,12 +25,75 @@ bool ReadFile(const char* pFileName, std::string& outFile)
     return finished;
 }
 
-// char* ReadBinaryFile(const char* pFilename, int& size)
-// {
+// Returns a pointer to a buffer with the contents of the file.
+// As well as the size of the file.
+char* ReadBinaryFile(const char* pFilename, int& size)
+{
+    FILE* f = NULL;
 
-// }
+    errno_t err = fopen_s(&f, pFilename, "rb");
+    
+    if (!f)
+    {
+        char buf[256] = { 0 };
+        strerror_s(buf, sizeof(buf), err);
+        printf("Error opening '%s': %s", pFilename, buf);
+        exit(0);
+    }
 
-// void WriteBinaryFile(const char* pFilename, const void* pData, int size)
-// {
+    struct stat statBuffer;
+    int error = stat(pFilename, &statBuffer);
 
-// }
+    if (error)
+    {
+        char buf[256] = { 0 };
+        strerror_s(buf, sizeof(buf), err);
+        printf("Error getting file stats: %s", buf);
+        return NULL;
+    }
+
+    size = statBuffer.st_size;
+
+    // Read contents into the buffer that's allocated according to the size.
+    char* pCont = (char*)malloc(size);
+    assert(pCont);
+
+    size_t bytesRead = fread(pCont, 1, size, f);
+
+    if (bytesRead != size)
+    {
+        char buf[256] = { 0 };
+        strerror_s(buf, sizeof(buf), err);
+        printf("Read file error: %s", buf);
+        exit(0);
+    }
+
+    fclose(f);
+
+    return pCont;
+}
+
+void WriteBinaryFile(const char* pFilename, const void* pData, int size)
+{
+    FILE* f = NULL;
+    
+    errno_t err = fopen_s(&f, pFilename, "wb");
+
+    if (!f)
+    {
+        printf("Error opening '%s'", pFilename);
+        exit(0);
+    }
+
+    int bytesWritten = fwrite(pData, 1, size, f);
+
+    if (bytesWritten != size)
+    {
+        char buf[256] = { 0 };
+        strerror_s(buf, sizeof(buf), err);
+        printf("Write file error: %s", buf);
+        exit(0);
+    }
+
+    fclose(f);
+}
