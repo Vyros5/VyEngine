@@ -36,12 +36,11 @@ set(VY_LIB_SOURCES
 )
 
 set(VY_REND_SOURCES
+    src/render/mesh.cpp
+    src/render/model.cpp
+    src/render/shader.cpp
     src/render/texture.cpp
-    src/object/mesh.cpp
-    src/object/model.cpp
-
-    src/shader/shader.cpp
-    src/shader/shader_program.cpp
+    src/render/shader_program.cpp
 )
 
 
@@ -60,12 +59,11 @@ set(VY_HEADERS
     include/VyLib/vy_file.hpp
     include/VyLib/vy_logger.hpp
 
+    include/render/mesh.hpp
+    include/render/model.hpp
+    include/render/shader.hpp
     include/render/texture.hpp
-    include/object/mesh.hpp
-    include/object/model.hpp
-
-    include/shader/shader.hpp
-    include/shader/shader_program.hpp
+    include/render/shader_program.hpp
 )
 
 # Source file paths should be converted to absolute paths.
