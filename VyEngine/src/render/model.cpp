@@ -1,4 +1,4 @@
-#include "model.hpp"
+#include "render/model.hpp"
 
 // Had to be included here in the .cpp file.
 #define STB_IMAGE_IMPLEMENTATION

@@ -1,4 +1,4 @@
-#include "window.hpp"
+#include "core/window.hpp"
 
 #include <iostream>
 
@@ -45,7 +45,10 @@ int main()
 
 	// Shaders
 	ShaderProgram modelShader;
-	modelShader.init("C:/dev/cpp/VyEngine/VyEngine/assets/shaders/model.vert", "C:/dev/cpp/VyEngine/VyEngine/assets/shaders/model.frag");
+	modelShader.init(
+		"C:/dev/cpp/VyEngine/VyEngine/assets/shaders/model.vert", 
+		"C:/dev/cpp/VyEngine/VyEngine/assets/shaders/model.frag"
+	);
 
 	// MAIN LOOP ==================================================================================
 

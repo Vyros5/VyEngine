@@ -1,4 +1,4 @@
-#include "input.hpp"
+#include "io/input.hpp"
 
 /*
     define initial static values

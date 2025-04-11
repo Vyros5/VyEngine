@@ -1,7 +1,7 @@
 #pragma once
 
-#include <texture.hpp>
-#include <shader_program.hpp>
+#include "render/texture.hpp"
+#include "render/shader_program.hpp"
 
 #include <glm/glm.hpp>
 #include <vector>

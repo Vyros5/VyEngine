@@ -1,4 +1,4 @@
-#include <vy_logger.hpp>
+#include <VyLib/vy_logger.hpp>
 
 
 void VyLogError(const char* pFileName, unsigned int line, const char* pFormat, ...)

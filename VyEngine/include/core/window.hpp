@@ -1,12 +1,12 @@
 #pragma once
 
-#include <vy_glfw.hpp>
+#include <VyLib/vy_glfw.hpp>
 
-#include "input.hpp"
-#include "camera.hpp"
+#include "io/input.hpp"
+#include "io/camera.hpp"
 
-#include "model.hpp"
-#include "shader_program.hpp"
+#include "render/model.hpp"
+#include "render/shader_program.hpp"
 
 #include <stdlib.h>
 #include <iostream>
