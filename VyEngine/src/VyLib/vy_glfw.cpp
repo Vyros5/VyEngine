@@ -22,6 +22,7 @@ GLFWwindow* InitGLFW(int majorVer, int minorVer, int scrWidth, int scrHeight, co
 
 	// Profile
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	// glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
 
 	// Mazimize
 	glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <VyLib/vy_glfw.hpp>
-
+#include "gui/vy_gui.hpp"
 #include "io/input.hpp"
 #include "io/camera.hpp"
 
@@ -34,6 +34,8 @@ class Window
 
     // Camera Object
     Camera* camera;
+
+    VyGUI gui;
     
     // Camera Position
     glm::vec3 cameraPos;
@@ -57,6 +59,8 @@ class Window
 
     void initCallbacks();
 
+    void initGUI();
+
     void update();
 
     void processInput(double dt);
@@ -64,6 +68,10 @@ class Window
     void processWindowInput();
 
     void renderShader(ShaderProgram shader);
+
+    void renderGUI();
+
+    void pollEvents();
     
     void newFrame();
 

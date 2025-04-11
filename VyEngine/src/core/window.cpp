@@ -73,8 +73,18 @@ void Window::initCallbacks()
 }
 
 
+void Window::initGUI()
+{
+	const char* glslVer = "#version 450";
+
+	gui.init(pWindow, glslVer);
+}
+
+
 void Window::update()
 {
+	gui.render();
+
 	// Set Background Color
 	glClearColor(bg[0], bg[1], bg[2], bg[3]);
 
@@ -90,11 +100,29 @@ void Window::renderShader(ShaderProgram shader)
 }
 
 
+void Window::renderGUI()
+{
+	// gui.newFrame();
+
+	
+	gui.render();
+}
+
+void Window::pollEvents()
+{
+	glfwPollEvents();
+
+	if (glfwGetWindowAttrib(pWindow, GLFW_ICONIFIED) != 0)
+	{
+		ImGui_ImplGlfw_Sleep(10);
+	}
+}
+
 void Window::newFrame()
 {
 	// Swap Buffers and Handle Events.
 	glfwSwapBuffers(pWindow);
-	glfwPollEvents();
+
 }
 
 
@@ -126,12 +154,12 @@ void Window::processInput(double dt)
 	// Camera Position Control
 	if (Keyboard::key(GLFW_KEY_W))
 	{
-		camera->updatePosition(CameraDirection::FORWARD, dt);	// -Z
+		camera->updatePosition(CameraDirection::FORWARD, dt);  // -Z
 	}
 
 	if (Keyboard::key(GLFW_KEY_S))
 	{
-		camera->updatePosition(CameraDirection::BACKWARD, dt);	// +Z
+		camera->updatePosition(CameraDirection::BACKWARD, dt);  // +Z
 	}
 
 	if (Keyboard::key(GLFW_KEY_D))
@@ -178,6 +206,9 @@ void Window::processWindowInput()
 
 void Window::cleanup()
 {
+	gui.shutdown();
+	
+	glfwDestroyWindow(pWindow);
     glfwTerminate();
 }
 

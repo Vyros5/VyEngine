@@ -27,6 +27,8 @@ set(VY_CORE_SOURCES
 set(VY_IO_SOURCES
     src/io/camera.cpp
     src/io/input.cpp
+
+    src/gui/vy_gui.cpp
 )
 
 set(VY_LIB_SOURCES
@@ -51,6 +53,8 @@ set(VY_COMPILE_HEADERS
 
 set(VY_HEADERS
     include/core/window.hpp
+
+    include/gui/vy_gui.hpp
 
     include/io/camera.hpp
     include/io/input.hpp
