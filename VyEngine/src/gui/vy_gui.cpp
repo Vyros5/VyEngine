@@ -1,66 +1,52 @@
 #include "gui/vy_gui.hpp"
 
-void VyGUI::init(GLFWwindow* window, const char* glslVersion)
+
+namespace VyEngine::core
 {
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-    // Enable keyboard controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-
-    // Setup platform rendering bindings.
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init(glslVersion);
-
-    // Set Style
-    ImGui::StyleColorsDark();
-}
-
-void VyGUI::newFrame()
-{
-    // Start the Dear ImGui frame
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-}
-
-
-void VyGUI::update()
-{
-    if (show_demo_window)
+    void ImGuiWindow::init(GLFWwindow* window)
     {
-        ImGui::ShowDemoWindow(&show_demo_window);
+        // Setup Dear ImGui context.
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+
+        ImGuiIO& io         = ImGui::GetIO();
+
+        io.ConfigFlags     |= ImGuiConfigFlags_NavEnableKeyboard;
+        // io.ConfigFlags     |= ImGuiConfigFlags_NoMouseCursorChange;
+
+        // Setup platform rendering bindings.
+        if(!ImGui_ImplGlfw_InitForOpenGL(window, true))
+        {
+            std::cout << "Failed to init ImGui_ImplGlfw_InitForOpenGL\n";
+        }
+        if (!ImGui_ImplOpenGL3_Init("#version 450"))
+        {
+            std::cout << "Failed to init ImGui_ImplOpenGL3\n";
+        }
+
+        // Set Style
+        ImGui::StyleColorsDark();
     }
 
-    static int counter = 0;
+    void ImGuiWindow::beginRender()
+    {
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+    }
 
-    ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+    void ImGuiWindow::endRender()
+    {
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    }
 
-    ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-    ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+    void ImGuiWindow::shutdown()
+    {
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
 
-    if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-        counter++;
-    
-    ImGui::SameLine();
-    ImGui::Text("counter = %d", counter);
-
-    ImGui::End();
-}
-
-void VyGUI::render()
-{
-    ImGui::Render();
-
-    // ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-void VyGUI::shutdown()
-{
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    }
 }

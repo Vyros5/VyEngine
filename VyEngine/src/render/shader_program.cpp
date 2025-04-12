@@ -25,7 +25,7 @@ void ShaderProgram::init(const char* vertexShaderPath, const char* fragShaderPat
 {
 	if (!generate(vertexShaderPath, fragShaderPath))
 	{
-		std::cout << "Failed to generate the shader program." << std::endl;
+		std::cout << "Failed to generate the shader program.\n\n";
 		destroy();
 	}
 
@@ -40,7 +40,7 @@ bool ShaderProgram::generate(const char* vertexShaderPath, const char* fragShade
 	Shader vertShader;
 	if (!vertShader.compile(vertexShaderPath, GL_VERTEX_SHADER))
 	{
-		std::cout << "Failed to compile vertex shader." << std::endl;
+		std::cout << "Failed to compile vertex shader.\n\n";
 		vertShader.destroy();
 		return false;
 	}
@@ -48,7 +48,7 @@ bool ShaderProgram::generate(const char* vertexShaderPath, const char* fragShade
 	Shader fragShader;
 	if (!fragShader.compile(fragShaderPath, GL_FRAGMENT_SHADER))
 	{
-		std::cout << "Failed to compile fragment shader." << std::endl;
+		std::cout << "Failed to compile fragment shader.\n\n";
 		fragShader.destroy();
 		return false;
 	}
@@ -93,7 +93,7 @@ bool ShaderProgram::generate(const char* vertexShaderPath, const char* fragShade
 	programID = program;
 	std::cout << "Shader compilation and linking succeeded:\n";
 	std::cout << "<Vertex:   " << vertexShaderPath << ">\n";
-	std::cout << "<Fragment: " << fragShaderPath << ">\n";
+	std::cout << "<Fragment: " << fragShaderPath << ">\n\n";
 
 	return true;
 }

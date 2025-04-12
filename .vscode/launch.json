@@ -13,7 +13,10 @@
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "logging": {
+                "engineLogging": true
+            }
         }
 
     ]

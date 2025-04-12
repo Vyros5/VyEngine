@@ -143,7 +143,6 @@ void Mouse::cursorPosCallback(GLFWwindow* window, double _x, double _y)
 // mouse button state changed
 void Mouse::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-    std::cout << button << "\n";
     if (action != GLFW_RELEASE) 
     {
         if (!buttons[button]) 

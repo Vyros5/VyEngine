@@ -3,6 +3,9 @@
 #include <iostream>
 
 
+using namespace VyEngine::core;
+
+
 // Delta Time - Time between frames.
 double dt = 0.0f; 
 
@@ -24,9 +27,13 @@ const char* TITLE = "VyEngine";
 
 int main()
 {
-    // Main Window
-    Window window(MAJ_VERSION, MIN_VERSION, SCR_WIDTH, SCR_HEIGHT, TITLE);
+	// Main Window
+	VyEngine::core::Window window;
 
+	WindowSettings winData = window.getWindowSettings();
+
+	window.create(winData);
+	
 	float aspectRatio = (float)SCR_WIDTH / (float)SCR_HEIGHT;
 
 	// Main Camera
@@ -50,52 +57,44 @@ int main()
 		"C:/dev/cpp/VyEngine/VyEngine/assets/shaders/model.frag"
 	);
 
-	window.initGUI();
 
 
 
 	// MAIN LOOP ==================================================================================
 
-    while (!window.shouldClose())
-    {
+	while (!window.shouldClose())
+	{
 		// Delta Time (dt)
 		double currentTime = glfwGetTime();
 		dt = currentTime - lastFrame;
 		lastFrame = currentTime;
 
 		window.pollEvents();
-
-		window.gui.newFrame();
-
-		window.gui.update();
-
-		// Update Window
-		window.update();
-
+		
 		// Process Input
 		window.processInput(dt);
 
+		window.render();
+
 		// Model Shader
-		// modelShader.activate();
-		// window.renderShader(modelShader);
+		modelShader.activate();
+		window.renderShader(modelShader);
 
-		// glm::mat4 model = glm::mat4(1.0f);
-		// model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
-		// model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-		// modelShader.setUniform("model", model);
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		modelShader.setUniform("model", model);
 
-		// // Render Model
-		// objectModel.render(modelShader);
+		// Render Model
+		objectModel.render(modelShader);
 
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		// Swap Frames
-		window.newFrame();
-    }
+		window.endRender();
+	}
 
 	// ============================================================================================
-    
+	
 	// Cleanup Objects
-
-    window.cleanup();
-    return 0;
+	objectModel.cleanup();
+	modelShader.destroy();
+	return 0;
 }

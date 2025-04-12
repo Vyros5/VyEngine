@@ -11,77 +11,101 @@
 #include <stdlib.h>
 #include <iostream>
 
-class Window
+namespace VyEngine::core
 {
-    protected:
+    struct WindowSettings
+    {
+        const char* title;
+        int x, y, w, h;
+        int wMin, hMin;
+        int flags;
+        float aspectRatio;
+        glm::vec4 clearColor;
 
-	// Window Object
-	GLFWwindow* pWindow;
-
-    // Window Values
-    const char*  title;
-    unsigned int scrWidth;
-    unsigned int scrHeight;
-
-    // GLFW Info
-    int majVersion;
-    int minVersion;
-
-    // Background Color
-    float bg[4];
+        WindowSettings();
+    };
     
+    class Window
+    {
+    private:
+
+        // Window Object
+        GLFWwindow* pWindow;
+
+        ImGuiWindow mImGuiWindow;
+
+        WindowSettings mWindowData;
+
+        // Window Values
+        const char*  title;
+        unsigned int scrWidth;
+        unsigned int scrHeight;
+
+        // GLFW Info
+        int majVersion;
+        int minVersion;
+
+        // Background Color
+        float bg[4];
+
     public:
+        bool imguiEnabled = false;
+        // Camera Object
+        Camera* camera;
 
-    // Camera Object
-    Camera* camera;
+        // Camera Position
+        glm::vec3 cameraPos;
+        glm::vec3 cameraTarget;
 
-    VyGUI gui;
-    
-    // Camera Position
-    glm::vec3 cameraPos;
-    glm::vec3 cameraTarget;
+        // Matrices
+        glm::mat4 viewMatrix;
+        glm::mat4 projMatrix;
+        glm::mat4 modlMatrix;
 
-    // Matrices
-    glm::mat4 viewMatrix;
-    glm::mat4 projMatrix;
-    glm::mat4 modlMatrix;
+        // Aspect Ratio
+        float aspectRatio = 0;
 
-    // Aspect Ratio
-    float aspectRatio = 0;
+        // Window Resize
+        static void frameBufferSizeCallback(GLFWwindow* window, int width, int height);
 
-    // Window Resize
-    static void frameBufferSizeCallback(GLFWwindow* window, int width, int height);
-    
-    // Window Constructor
-    Window(int majVer, int minVer, unsigned int width, unsigned int height, const char* title);
+        // Window Constructor
+        Window();
 
-    void initWindow();
+        ~Window();
 
-    void initCallbacks();
+        void create(WindowSettings& winSettings);
 
-    void initGUI();
+        void init();
 
-    void update();
+        void initCallbacks();
 
-    void processInput(double dt);
-    
-    void processWindowInput();
+        
+        void update();
+        
+        void processInput(double dt);
+        
+        void processWindowInput();
+        
+        void renderShader(ShaderProgram shader);
+        
+        void beginRender();
+        void render();
+        void endRender();
 
-    void renderShader(ShaderProgram shader);
+        void pollEvents();
 
-    void renderGUI();
+        void newFrame();
 
-    void pollEvents();
-    
-    void newFrame();
+        void shutdown();
 
-    void cleanup();
+        bool shouldClose();
 
-    bool shouldClose();
+        // Set if the window should close
+        void setShouldClose(bool shouldClose);
 
-    // Set if the window should close
-    void setShouldClose(bool shouldClose);
+        // Set window background color
+        void setWindowColor(glm::vec4 v);
 
-    // Set window background color
-    void setWindowColor(float r, float g, float b, float a);
-};
+        WindowSettings getWindowSettings() { return core::WindowSettings(); }
+    };
+}
