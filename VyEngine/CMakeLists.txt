@@ -4,7 +4,7 @@
 
 
 # Appliation
-add_executable(${CMAKE_PROJECT_NAME} ${VY_SOURCE_DIR}/core/main.cpp)
+add_executable(${CMAKE_PROJECT_NAME} ${VY_RUNTIME_DIR}/core/main.cpp)
 message(STATUS "${CMAKE_PROJECT_NAME}")
 
 # Properties
@@ -18,58 +18,70 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
 add_subdirectory(libraries)
 
 
-# VyEngine Source Files
+# CORE ================================
 set(VY_CORE_SOURCES
-    src/core/main.cpp
-    src/core/window.cpp
+    runtime/core/main.cpp
+    runtime/core/window.cpp
 )
 
-set(VY_IO_SOURCES
-    src/io/camera.cpp
-    src/io/input.cpp
-
-    src/gui/vy_gui.cpp
+set(VY_CORE_HEADERS
+    runtime/core/window.hpp
 )
 
+# INPUT ===============================
+set(VY_INPUT_SOURCES
+    runtime/input/camera.cpp
+    runtime/input/input.cpp
+)
+
+set(VY_INPUT_HEADERS
+    runtime/input/camera.hpp
+    runtime/input/input.hpp
+)
+
+# GUI =================================
+set(VY_GUI_SOURCES
+    runtime/gui/vy_gui.cpp
+)
+
+set(VY_GUI_HEADERS
+    runtime/gui/vy_gui.hpp
+)
+
+# VYLIB ===============================
 set(VY_LIB_SOURCES
-    src/VyLib/vy_glfw.cpp
-    src/VyLib/vy_file.cpp
-    src/VyLib/vy_logger.cpp
+    runtime/VyLib/vy_glfw.cpp
+    runtime/VyLib/vy_file.cpp
+    runtime/VyLib/vy_logger.cpp
 )
 
+set(VY_LIB_HEADERS
+    runtime/VyLib/vy_glfw.hpp
+    runtime/VyLib/vy_file.hpp
+    runtime/VyLib/vy_logger.hpp
+)
+
+# RENDER ==============================
 set(VY_REND_SOURCES
-    src/render/mesh.cpp
-    src/render/model.cpp
-    src/render/shader.cpp
-    src/render/texture.cpp
-    src/render/shader_program.cpp
+    runtime/render/mesh.cpp
+    runtime/render/model.cpp
+    runtime/render/shader.cpp
+    runtime/render/texture.cpp
+    runtime/render/shader_program.cpp
 )
 
-
-set(VY_COMPILE_HEADERS
-    src/memory/vertex_memory.hpp
+set(VY_REND_HEADERS
+    runtime/render/mesh.hpp
+    runtime/render/model.hpp
+    runtime/render/shader.hpp
+    runtime/render/texture.hpp
+    runtime/render/shader_program.hpp
 )
 
-
-set(VY_HEADERS
-    include/core/window.hpp
-
-    include/gui/vy_gui.hpp
-
-    include/io/camera.hpp
-    include/io/input.hpp
-
-    include/VyLib/vy_glfw.hpp
-    include/VyLib/vy_file.hpp
-    include/VyLib/vy_logger.hpp
-
-    include/render/mesh.hpp
-    include/render/model.hpp
-    include/render/shader.hpp
-    include/render/texture.hpp
-    include/render/shader_program.hpp
+# MEMORY ==============================
+set(VY_MEM_HEADERS
+    runtime/memory/vertex_memory.hpp
 )
-
 
 
 # Source file paths should be converted to absolute paths.
@@ -79,20 +91,31 @@ cmake_policy(SET CMP0076 NEW)
 target_sources(${CMAKE_PROJECT_NAME}  
     PRIVATE 
         ${VY_CORE_SOURCES}
-        ${VY_IO_SOURCES}
+        ${VY_INPUT_SOURCES}
+        ${VY_GUI_SOURCES}
         ${VY_LIB_SOURCES}
         ${VY_REND_SOURCES}
 
-        ${VY_COMPILE_HEADERS}
+        ${VY_MEMORY_HEADERS}
 
     PUBLIC
-        ${VY_HEADERS}
+        ${VY_CORE_HEADERS}
+        ${VY_INPUT_HEADERS}
+        ${VY_GUI_HEADERS}
+        ${VY_LIB_HEADERS}
+        ${VY_REND_HEADERS}
 )
 
 # Add Include-Libraries to target.
 target_include_directories(${CMAKE_PROJECT_NAME} 
     PUBLIC 
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/core
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/gui
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/input
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/memory
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/render
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/VyLib
+
         ${CMAKE_CURRENT_SOURCE_DIR}/libraries
         PRIVATE
         ${assimp_SOURCE_DIR}/include
@@ -113,5 +136,5 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
 )
 
 get_target_property(OUT ${CMAKE_PROJECT_NAME} LINK_LIBRARIES)
-message(STATUS "\n[${CMAKE_PROJECT_NAME} Linked Libraries]: ${OUT}\n")
+message(STATUS "\n[${CMAKE_PROJECT_NAME}: Linked Libraries]\n")
 

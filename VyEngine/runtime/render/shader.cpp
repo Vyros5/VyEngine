@@ -1,4 +1,4 @@
-#include "render/shader.hpp"
+#include "shader.hpp"
 
 // Reads file and returns a string of it's contents.
 std::string getFileContents(const char* filePath)

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "render/shader.hpp"
-#include "VyLib/vy_file.hpp"
+#include "shader.hpp"
+#include "vy_file.hpp"
 #include <list>
 
 struct ShaderProgram

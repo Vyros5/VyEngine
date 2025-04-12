@@ -1,4 +1,4 @@
-#include "core/window.hpp"
+#include "window.hpp"
 
 #pragma region Callbacks
 
@@ -246,6 +246,11 @@ namespace VyEngine::core
 		if (Keyboard::key(GLFW_KEY_ESCAPE))
 		{
 			setShouldClose(true);
+		}
+
+		if (Keyboard::key(GLFW_KEY_TAB))
+		{
+			imguiEnabled = !imguiEnabled;
 		}	
 	}
 

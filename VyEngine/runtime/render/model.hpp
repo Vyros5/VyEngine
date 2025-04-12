@@ -6,8 +6,8 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
-#include "render/mesh.hpp"
-#include "render/shader_program.hpp"
+#include "mesh.hpp"
+#include "shader_program.hpp"
 
 // Forward Declaration
 class Window;

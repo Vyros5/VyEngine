@@ -1,4 +1,4 @@
-#include "gui/vy_gui.hpp"
+#include "vy_gui.hpp"
 
 
 namespace VyEngine::core

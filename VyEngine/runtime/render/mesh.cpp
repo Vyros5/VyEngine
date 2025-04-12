@@ -1,4 +1,4 @@
-#include "render/mesh.hpp"
+#include "mesh.hpp"
 
 #pragma region VERTEX
 

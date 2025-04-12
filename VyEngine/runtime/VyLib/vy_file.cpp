@@ -1,4 +1,4 @@
-#include <VyLib/vy_file.hpp>
+#include <vy_file.hpp>
 
 bool ReadFile(const char* pFileName, std::string& outFile)
 {

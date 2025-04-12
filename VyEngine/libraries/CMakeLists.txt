@@ -1,4 +1,4 @@
-# libraries\CMakeLists.txt
+# VyEngine\libraries\CMakeLists.txt
 
 include(FetchContent)
 
@@ -6,10 +6,8 @@ include(FetchContent)
 #===========================================================================================
 
 set(GLFW_TAG    3.3.8)
-set(IMGUI_TAG   docking)
 set(GLM_TAG     2d4c4b4dd31fde06cfffad7915c2b3006402322f)
 set(ASSIMP_TAG  0ae66d27039481dc2a507bbc8482f691037c1a5a)
-set(STB_TAG     f0569113c93ad095470c54bf34a17b36646bbbb5)
 
 message(STATUS "\nFetching dependencies...\n")
 
@@ -37,15 +35,6 @@ FetchContent_Declare(
     GIT_PROGRESS    TRUE
     GIT_SHALLOW     TRUE
 )
-
-#===========================================================================================
-
-# IMGUI
-# FetchContent_Declare(
-#     imgui
-#     GIT_REPOSITORY  https://github.com/ocornut/imgui.git
-#     GIT_TAG         ${IMGUI_TAG}
-# )
 
 #===========================================================================================
 

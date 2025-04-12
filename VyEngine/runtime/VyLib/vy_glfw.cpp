@@ -1,4 +1,4 @@
-#include "VyLib/vy_glfw.hpp"
+#include "vy_glfw.hpp"
 
 #include <iostream>
 

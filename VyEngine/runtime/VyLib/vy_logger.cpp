@@ -1,4 +1,4 @@
-#include <VyLib/vy_logger.hpp>
+#include <vy_logger.hpp>
 
 namespace VyLib
 {
