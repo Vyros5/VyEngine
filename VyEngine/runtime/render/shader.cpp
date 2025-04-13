@@ -1,5 +1,6 @@
 #include "shader.hpp"
 
+
 // Reads file and returns a string of it's contents.
 std::string getFileContents(const char* filePath)
 {
@@ -16,7 +17,7 @@ std::string getFileContents(const char* filePath)
     }
     else
     {
-        VY_LOG_ERROR("Couldn't open file: '&s'", filePath);
+        std::cout << "Couldn't open file: " << filePath << std::endl;
     }
 
     return(contents);

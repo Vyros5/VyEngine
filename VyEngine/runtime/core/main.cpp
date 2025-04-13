@@ -12,17 +12,6 @@ double dt = 0.0f;
 // Time of last frame.
 double lastFrame = 0.0f; 
 
-// GLFW Version
-const unsigned int MAJ_VERSION = 4;
-const unsigned int MIN_VERSION = 5;
-
-// Window dimensions
-const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1080;
-
-// Title
-const char* TITLE = "VyEngine";
-
 // ================================================================================================
 
 int main()
@@ -33,12 +22,9 @@ int main()
 	WindowSettings winData = window.getWindowSettings();
 
 	window.create(winData);
-	
-	float aspectRatio = (float)SCR_WIDTH / (float)SCR_HEIGHT;
 
 	// Main Camera
 	CameraSettings camSettings;
-	camSettings.aspectRatio = aspectRatio;
 
 	window.camera = new Camera(camSettings);
 
