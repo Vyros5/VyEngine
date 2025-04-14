@@ -3,72 +3,48 @@
 #include <iostream>
 #include <cstdarg>
 
+// #define SPDLOG_FMT_EXTERNAL
+#include "spdlog/spdlog.h"
+#include "spdlog/fmt/ostr.h"
+
+#include "vy_core.hpp"
 #include "vy_log_settings.hpp"
 #include "vy_platform.hpp"
 
 
 namespace VyLib
 {
-    struct LoggerData;   
-    
-    class Logger
+    class Log
     {
-        static LoggerData* logger;// = nullptr;
-        
-        static void HandleErrors(LogType type);
-        static void HandleFatalErrors(LogType type);
-        static const char* GetLogTypeString(LogType type);
-        
-        public:
-        
+    public:
+
         static void Init();
-        static void Clone(LoggerData* data);
-        
-        static LoggerData* GetLog();
-        static LogLevel GetLogLevel();
-        
-        
-        static void LogToConsole(const char* text);
-        static void LogLineToConsole(const char* text);
-        static void LogToFile(const char* text);
-        static void LogLineToFile(const char* text);
-        
-        
-        static void Log(LogType type, const char* text, ...);
-        static void Log(LogType type, const std::string& caller, const std::string& message);
-        
-        
-        static void OpenLogFile(const char* filename);
-        static void OpenLogFileAppend(const char* filename);
-        static void CloseLogFile();
-        
-        
-        static bool IsLogToConsole();
-        static bool IsLogToFile();
-        static bool IsLogFileOpened();
-        static bool IsAbortOnFatal();
-        static bool IsStackTraceOnError();
-        
-        
-        static void SetLogConsole(bool value);
-        static void SetLogFile(bool value);
-        static void SetLogLevel(LogLevel level);
-        static void SetAbortOnFatal(bool value);
-        static void SetStackTraceOnError(bool value);
-        static void SetLogColor(LogType type, ConsoleColor color);
-        
-        
-        
-        
-        #define VYLOG_DEBUG(text, ...)   { VyLib::Logger::Log(VyLib::LogType::DEBUG,   text, __VA_ARGS__, ...); }
-        #define VYLOG_INFO(text, ...)    { VyLib::Logger::Log(VyLib::LogType::INFO,    text, __VA_ARGS__, ...); }
-        #define VYLOG_WARNING(text, ...) { VyLib::Logger::Log(VyLib::LogType::WARNING, text, __VA_ARGS__, ...); }
-        #define VYLOG_ERROR(text, ...)   { VyLib::Logger::Log(VyLib::LogType::ERROR,   text, __VA_ARGS__, ...); }
-        #define VYLOG_FATAL(text, ...)   { VyLib::Logger::Log(VyLib::LogType::FATAL,   text, __VA_ARGS__, ...); }
-        
-    };
+
+        const static SharedPtr<spdlog::logger>& GetCoreLogger() { return sCoreLogger; }
+        const static SharedPtr<spdlog::logger>& GetClientLogger() { return sClientLogger; }
+
+    private:
     
+        static SharedPtr<spdlog::logger> sCoreLogger;
+        static SharedPtr<spdlog::logger> sClientLogger;
+    };
 }
+
+// Engine logging
+#define VY_CORE_TRACE(...) VyLib::Log::GetCoreLogger()->trace(__VA_ARGS__);
+#define VY_CORE_INFO(...) VyLib::Log::GetCoreLogger()->info(__VA_ARGS__);
+#define VY_CORE_WARN(...) VyLib::Log::GetCoreLogger()->warn(__VA_ARGS__);
+#define VY_CORE_ERROR(...) VyLib::Log::GetCoreLogger()->error(__VA_ARGS__);
+#define VY_CORE_CRITICAL(...) VyLib::Log::GetCoreLogger()->critical(__VA_ARGS__);
+
+// Client logging
+#define VY_TRACE(...) VyLib::Log::GetClientLogger()->trace(__VA_ARGS__);
+#define VY_INFO(...) VyLib::Log::GetClientLogger()->info(__VA_ARGS__);
+#define VY_WARN(...) VyLib::Log::GetClientLogger()->warn(__VA_ARGS__);
+#define VY_ERROR(...) VyLib::Log::GetClientLogger()->error(__VA_ARGS__);
+#define VY_CRITICAL(...) VyLib::Log::GetClientLogger()->critical(__VA_ARGS__);
+
+
 
 // static void VyLogInfo(const char* pText, ...);
 // static void VyLogError(const char* pText, ...);

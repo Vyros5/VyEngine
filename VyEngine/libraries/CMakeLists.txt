@@ -8,6 +8,7 @@ include(FetchContent)
 set(GLFW_TAG    3.3.8)
 set(GLM_TAG     2d4c4b4dd31fde06cfffad7915c2b3006402322f)
 set(FMT_TAG     e814b5fabf2cbd61aeca6fdb99e99961f23fcdb7)
+set(SPDLOG_TAG  bb8694b50f186cb005d32cec76fe94ae25998c0d)
 set(ASSIMP_TAG  0ae66d27039481dc2a507bbc8482f691037c1a5a)
 
 message(STATUS "\nFetching dependencies...\n")
@@ -57,6 +58,15 @@ FetchContent_Declare(
 
 #===========================================================================================
 
+# SPDLOG
+FetchContent_Declare(
+    spdlog
+    GIT_REPOSITORY  https://github.com/gabime/spdlog.git
+    GIT_TAG         ${SPDLOG_TAG}
+)
+
+#===========================================================================================
+
 # ASSIMP
 FetchContent_Declare(
     assimp
@@ -80,7 +90,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/imgui)
 
 #===========================================================================================
 
-FetchContent_MakeAvailable(glfw glm fmt assimp)
+FetchContent_MakeAvailable(glfw glm spdlog fmt assimp)
 
 message(STATUS "\n[MakeAvailable]")
 

@@ -1,10 +1,13 @@
 #include "event_manager.hpp"
 #include "vy_macro.hpp"
+#include "vy_logger.hpp"
+
 
 namespace VyEngine
 {
     EventManager gEventManager;
 
+    using VyLib::Log;
 
     void EventManager::Shutdown()
     {
@@ -47,6 +50,7 @@ namespace VyEngine
                     if (it->GetType() == handler->GetType()) 
                     {
                         VY_ASSERT(false, "Attempting to double-register callback");
+                        // VY_ERROR("Attempting to double-register callback!");
                         return;
                     }
                 }

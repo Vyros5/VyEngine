@@ -144,6 +144,7 @@ target_include_directories(${CMAKE_PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/VyLib
     PRIVATE
         ${assimp_SOURCE_DIR}/include
+        ${spdlog_SOURCE_DIR}/include
         ${imgui_SOURCE_DIR}/backends
         ${glad_SOURCE_DIR}/include
         ${glfw_SOURCE_DIR}/include
@@ -158,10 +159,11 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     PRIVATE 
         glfw
         glad
-        VyLib
+        spdlog
         fmt
         imgui
         assimp
+        VyLib
 )
 
 message(STATUS "\n[${CMAKE_PROJECT_NAME}: Linked Libraries]\n")

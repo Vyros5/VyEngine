@@ -1,12 +1,5 @@
 #pragma once
 
-template<typename T>
-using UniquePtr = std::unique_ptr<T>;
-template<typename T, typename... Args>
-constexpr UniquePtr<T> MakeUniquePtr(Args&&... args)
-{
-    return std::make_unique<T>(std::forward<Args>(args)...);
-}
 
 
 static constexpr unsigned int crc32_table[256] = 
