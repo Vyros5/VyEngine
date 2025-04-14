@@ -147,6 +147,7 @@ target_include_directories(${CMAKE_PROJECT_NAME}
         ${imgui_SOURCE_DIR}/backends
         ${glad_SOURCE_DIR}/include
         ${glfw_SOURCE_DIR}/include
+        ${fmt_SOURCE_DIR}/include
         ${imgui_SOURCE_DIR}
         ${glm_SOURCE_DIR}
 )
@@ -158,7 +159,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         glfw
         glad
         VyLib
-        # Event
+        fmt
         imgui
         assimp
 )
