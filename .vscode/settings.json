@@ -85,5 +85,6 @@
         "xtree": "cpp",
         "xutility": "cpp"
     },
-    "C_Cpp.default.cppStandard": "c++20"
+    "C_Cpp.default.cppStandard": "c++20",
+    "C_Cpp.default.compilerPath": "cl.exe"
 }

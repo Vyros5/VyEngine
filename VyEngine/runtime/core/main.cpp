@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-
+#include "vy_crc32.hpp"
+#include "vy_file.hpp"
 using namespace VyEngine::core;
 
 

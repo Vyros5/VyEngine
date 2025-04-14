@@ -3,6 +3,8 @@
 
 namespace VyEngine
 {
+#pragma region Templates
+
     template<>
     PerspectiveCamera& CameraController::getCamera<PerspectiveCamera>()
     {
@@ -26,6 +28,11 @@ namespace VyEngine
         this->getCamera<PerspectiveCamera>() = camera;
     }
 
+#pragma endregion
+
+
+
+#pragma region Main
 
     CameraController::CameraController()
     {
@@ -50,6 +57,12 @@ namespace VyEngine
         this->mCamera.setZoom(1.0f);
     }
 
+#pragma endregion
+
+
+    
+#pragma region Matrices
+
     const glm::mat4& CameraController::getMatrix(const glm::vec3& position) const
     {
         if (this->mCamera.updateProj) { this->submitMatrixProjChanges(); }
@@ -73,7 +86,6 @@ namespace VyEngine
         return this->mCamera.getProjMatrix();
     }
 
-
     glm::mat4 CameraController::getStaticMatrix() const
     {
         if (this->mCamera.updateProj) { this->submitMatrixProjChanges(); }
@@ -90,9 +102,9 @@ namespace VyEngine
         this->mCamera.setViewMatrix(view);
 
         glm::mat3 viewMatrix = (glm::mat3)this->mCamera.getViewMatrix();
+        
         return (glm::mat4)viewMatrix;
     }
-
 
     void CameraController::submitMatrixProjChanges() const
     {
@@ -104,26 +116,11 @@ namespace VyEngine
         }
     }
 
-    void CameraController::recalculateRotation()
-    {
-        auto normDir = this->getDirection();
-        float angleV = std::asin(normDir.y);
-        float angleH = std::acos(glm::dot(normDir, glm::vec3(0.0f, 0.0f, 1.0f)));
+#pragma endregion
 
-        auto x = std::sin(angleH);
-        auto z = std::cos(angleH);
 
-        bool xCorrect = std::signbit(normDir.x) == std::signbit(x);
-        bool zCorrect = std::signbit(normDir.z) == std::signbit(z);
-        if (!xCorrect || !zCorrect)
-        {
-            angleH = glm::two_pi<float>() - angleH;
-        }
 
-        this->mAngleH = angleH;
-        this->mAngleV = angleV;
-    }
-
+#pragma region Direction
 
     glm::vec3 CameraController::getDirection() const
     {
@@ -146,15 +143,17 @@ namespace VyEngine
         return glm::cross(this->getDirection(), this->mRight);
     }
 
-    float CameraController::getHorizontalAngle() const
-    {
-        return this->mAngleH;
-    }
+#pragma endregion
 
-    float CameraController::getVerticalAngle() const
-    {
-        return this->mAngleV;
-    }
+
+
+#pragma region Rotation
+
+    float CameraController::getHorizontalAngle() const { return this->mAngleH; }
+
+    float CameraController::getVerticalAngle() const { return this->mAngleV; }
+
+
 
     CameraController& CameraController::rotate(float angleH, float angleV)
     {
@@ -193,6 +192,28 @@ namespace VyEngine
         return *this;
     }
 
+
+    void CameraController::recalculateRotation()
+    {
+        auto normDir = this->getDirection();
+        float angleV = std::asin(normDir.y);
+        float angleH = std::acos(glm::dot(normDir, glm::vec3(0.0f, 0.0f, 1.0f)));
+
+        auto x = std::sin(angleH);
+        auto z = std::cos(angleH);
+
+        bool xCorrect = std::signbit(normDir.x) == std::signbit(x);
+        bool zCorrect = std::signbit(normDir.z) == std::signbit(z);
+        if (!xCorrect || !zCorrect)
+        {
+            angleH = glm::two_pi<float>() - angleH;
+        }
+
+        this->mAngleH = angleH;
+        this->mAngleV = angleV;
+    }
+
+
     glm::vec2 CameraController::getRotation() const
     {
         return glm::vec2(glm::degrees(this->mAngleH), glm::degrees(this->mAngleV));
@@ -206,6 +227,12 @@ namespace VyEngine
 
         this->rotate(newRotation.x, newRotation.y);
     }
+
+#pragma endregion
+
+
+
+#pragma region Vector
 
     const glm::vec3& CameraController::getTargetVector() const
     {
@@ -232,4 +259,6 @@ namespace VyEngine
     {
         this->mUp = up;
     }
+
+#pragma endregion
 }

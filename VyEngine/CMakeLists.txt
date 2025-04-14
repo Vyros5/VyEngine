@@ -9,7 +9,7 @@ message(STATUS "[${CMAKE_PROJECT_NAME}]")
 
 # Properties
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
-    CXX_STANDARD 17
+    CXX_STANDARD 20
     CXX_STANDARD_REQUIRED YES
     CXX_EXTENSIONS NO
 )
@@ -18,6 +18,8 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
 add_subdirectory(libraries)
 
 add_subdirectory(VyLib)
+
+# add_subdirectory(runtime/event)
 
 # CORE ================================
 set(VY_CORE_SOURCES
@@ -43,6 +45,22 @@ set(VY_CAM_HEADERS
     runtime/camera/camera_base.hpp
     runtime/camera/camera_controller.hpp
     runtime/camera/perspec_camera.hpp
+)
+
+# EVENTS ==============================
+set(VY_EVENT_SOURCES
+    runtime/event/event_manager.cpp
+)
+
+set(VY_EVENT_HEADERS
+    runtime/event/event_manager.hpp
+    runtime/event/event_handler.hpp
+    runtime/event/event.hpp
+)
+
+set(VY_EVENTS
+    runtime/event/events/app_event.hpp
+    runtime/event/events/key_event.hpp
 )
 
 # INPUT ===============================
@@ -89,56 +107,60 @@ set(VY_MEM_HEADERS
 # Source file paths should be converted to absolute paths.
 cmake_policy(SET CMP0076 NEW)
 
-
-
 # Add sources to target.
 target_sources(${CMAKE_PROJECT_NAME}  
     PRIVATE 
-        ${VY_CORE_SOURCES}
-        ${VY_CAM_SOURCES}
         ${VY_INPUT_SOURCES}
-        ${VY_GUI_SOURCES}
+        ${VY_CORE_SOURCES}
         ${VY_REND_SOURCES}
+        ${VY_CAM_SOURCES}
+        ${VY_GUI_SOURCES}
+        ${VY_EVENT_SOURCES}
 
         ${VY_MEMORY_HEADERS}
-
+        ${VY_EVENTS}
     PUBLIC
-        ${VY_CORE_HEADERS}
-        ${VY_CAM_SOURCES}
+        ${VY_EVENT_HEADERS}
         ${VY_INPUT_HEADERS}
-        ${VY_GUI_HEADERS}
+        ${VY_CORE_HEADERS}
         ${VY_REND_HEADERS}
+        ${VY_CAM_HEADERS}
+        ${VY_GUI_HEADERS}
 )
 
 # Add Include-Libraries to target.
 target_include_directories(${CMAKE_PROJECT_NAME} 
     PUBLIC 
-        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/core
-        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/gui
-        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/input
         ${CMAKE_CURRENT_SOURCE_DIR}/runtime/camera
         ${CMAKE_CURRENT_SOURCE_DIR}/runtime/memory
         ${CMAKE_CURRENT_SOURCE_DIR}/runtime/render
-        ${CMAKE_CURRENT_SOURCE_DIR}/VyLib
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/input
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/event
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/event/events
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/core
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/gui
 
         ${CMAKE_CURRENT_SOURCE_DIR}/libraries
+        ${CMAKE_CURRENT_SOURCE_DIR}/VyLib
     PRIVATE
         ${assimp_SOURCE_DIR}/include
+        ${imgui_SOURCE_DIR}/backends
         ${glad_SOURCE_DIR}/include
         ${glfw_SOURCE_DIR}/include
-        ${imgui_SOURCE_DIR}/backends
         ${imgui_SOURCE_DIR}
         ${glm_SOURCE_DIR}
 )
 
 
 # Link Libaries to project.
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE 
-    glfw
-    glad
-    VyLib
-    imgui
-    assimp
+target_link_libraries(${CMAKE_PROJECT_NAME} 
+    PRIVATE 
+        glfw
+        glad
+        VyLib
+        # Event
+        imgui
+        assimp
 )
 
 message(STATUS "\n[${CMAKE_PROJECT_NAME}: Linked Libraries]\n")

@@ -4,11 +4,15 @@ add_library(VyLib)
 
 set(VYLIB_SOURCES
     vy_file.cpp
-
+    
     logger/vy_logger.cpp
     logger/vy_platform.cpp
 )
-
+    
+set(VYLIB_CRC
+    vy_crc32.hpp
+)
+    
 set(VYLIB_HEADERS
     vy_file.hpp
 
@@ -21,11 +25,17 @@ set(VYLIB_HEADERS
 target_sources(VyLib
     PRIVATE
         ${VYLIB_SOURCES}
+    PUBLIC
+        ${VYLIB_HEADERS}
+        ${VYLIB_CRC}
 )
 
-target_include_directories(VyLib PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/logger
-    ${CMAKE_CURRENT_SOURCE_DIR}
+target_include_directories(VyLib 
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/logger
+        ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_compile_definitions(VyLib PRIVATE CXX_STANDARD 17)
+target_compile_definitions(VyLib PRIVATE CXX_STANDARD 20)
+
+message(STATUS "\n[VyLib: Linked Libraries]\n")
