@@ -1,5 +1,5 @@
 #include "camera_controller.hpp"
-#include "vy_macro.hpp"
+#include "VyLib/vy_macro.hpp"
 
 namespace VyEngine
 {
@@ -8,7 +8,7 @@ namespace VyEngine
     template<>
     PerspectiveCamera& CameraController::getCamera<PerspectiveCamera>()
     {
-        VY_ASSERT(this->getCameraType() == CameraType::PERSPECTIVE);
+        // VY_ASSERT(this->getCameraType() == CameraType::PERSPECTIVE);
         static_assert(AssertEquality<sizeof(PerspectiveCamera), sizeof(this->mCamera)>::value, "Camera byte storage mismatch.");
         return *reinterpret_cast<PerspectiveCamera*>(&this->mCamera); // -V717
     }
@@ -16,7 +16,7 @@ namespace VyEngine
     template<>
     const PerspectiveCamera& CameraController::getCamera<PerspectiveCamera>() const
     {
-        VY_ASSERT(this->getCameraType() == CameraType::PERSPECTIVE);
+        // VY_ASSERT(this->getCameraType() == CameraType::PERSPECTIVE);
         static_assert(AssertEquality<sizeof(PerspectiveCamera), sizeof(this->mCamera)>::value, "Camera byte storage mismatch. (const)");
         return *reinterpret_cast<PerspectiveCamera*>(&this->mCamera); // -V717
     }

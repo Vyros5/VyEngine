@@ -52,7 +52,7 @@ if(MSVC)
     target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
         /W3
         /MP # multithreaded build
-        # /WX # warnings as errors
+        /WX # warnings as errors
         /ZI # program database for edit and continue
     )
 else()
@@ -63,6 +63,3 @@ else()
     )
 endif()
 
-
-# Set VyEngine as the startup project
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${CMAKE_PROJECT_NAME})

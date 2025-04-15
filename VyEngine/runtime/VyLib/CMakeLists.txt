@@ -32,8 +32,8 @@ target_sources(VyLib
 
 target_include_directories(VyLib 
     PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/logger
         ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/logger
 )
 
 target_compile_definitions(VyLib PRIVATE CXX_STANDARD 20)

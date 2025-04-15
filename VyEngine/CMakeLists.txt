@@ -11,98 +11,118 @@ message(STATUS "[${CMAKE_PROJECT_NAME}]")
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED YES
-    CXX_EXTENSIONS NO
 )
 
 # Import Third-Party Libraries
 add_subdirectory(libraries)
 
-add_subdirectory(VyLib)
+# SOURCES ======================================================
+set(VY_SOURCES
 
-# add_subdirectory(runtime/event)
-
-# CORE ================================
-set(VY_CORE_SOURCES
+    # Core
     runtime/core/vy_glfw.cpp
     runtime/core/main.cpp
     runtime/core/window.cpp
-)
 
-set(VY_CORE_HEADERS
-    runtime/core/vy_glfw.hpp
-    runtime/core/window.hpp
-)
-# CAMERA ==============================
-set(VY_CAM_SOURCES
+    # Camera
     runtime/camera/camera.cpp
     runtime/camera/camera_base.cpp
     runtime/camera/camera_controller.cpp
     runtime/camera/perspec_camera.cpp
-)
 
-set(VY_CAM_HEADERS
-    runtime/camera/camera.hpp
-    runtime/camera/camera_base.hpp
-    runtime/camera/camera_controller.hpp
-    runtime/camera/perspec_camera.hpp
-)
-
-# EVENTS ==============================
-set(VY_EVENT_SOURCES
+    # Event
     runtime/event/event_manager.cpp
-)
 
-set(VY_EVENT_HEADERS
-    runtime/event/event_manager.hpp
-    runtime/event/event_handler.hpp
-    runtime/event/event.hpp
-)
-
-set(VY_EVENTS
-    runtime/event/events/app_event.hpp
-    runtime/event/events/key_event.hpp
-)
-
-# INPUT ===============================
-set(VY_INPUT_SOURCES
+    # Input
     runtime/input/input.cpp
-)
 
-set(VY_INPUT_HEADERS
-    runtime/input/input.hpp
-)
-
-# GUI =================================
-set(VY_GUI_SOURCES
+    # GUI
     runtime/gui/vy_gui.cpp
-)
 
-set(VY_GUI_HEADERS
-    runtime/gui/vy_gui.hpp
-)
-
-# RENDER ==============================
-set(VY_REND_SOURCES
+    # Render
     runtime/render/mesh.cpp
     runtime/render/model.cpp
     runtime/render/shader.cpp
     runtime/render/texture.cpp
     runtime/render/shader_program.cpp
+
+    # VyLib
+    runtime/VyLib/vy_file.cpp
+    runtime/VyLib/vy_logger.cpp
+    runtime/VyLib/vy_platform.cpp
 )
 
-set(VY_REND_HEADERS
+# HEADERS ======================================================
+set(VY_CORE_HEADERS
+
+    # Core
+    runtime/core/vy_glfw.hpp
+    runtime/core/window.hpp
+
+    # Camera
+    runtime/camera/camera.hpp
+    runtime/camera/camera_base.hpp
+    runtime/camera/camera_controller.hpp
+    runtime/camera/perspec_camera.hpp
+
+    # Event
+    runtime/event/event_manager.hpp
+    runtime/event/event_handler.hpp
+    runtime/event/event.hpp
+
+    # Events
+    runtime/event/events/app_event.hpp
+    runtime/event/events/key_event.hpp
+
+    # Input
+    runtime/input/input.hpp
+
+    # GUI
+    runtime/gui/vy_gui.hpp
+
+    # Render
     runtime/render/mesh.hpp
     runtime/render/model.hpp
     runtime/render/shader.hpp
     runtime/render/texture.hpp
     runtime/render/shader_program.hpp
-)
 
-# MEMORY ==============================
-set(VY_MEM_HEADERS
+    # VyLib
+    runtime/VyLib/vy_file.hpp
+    runtime/VyLib/vy_crc32.hpp
+    runtime/VyLib/vy_core.hpp
+    runtime/VyLib/vy_logger.hpp
+    runtime/VyLib/vy_platform.hpp
+    runtime/VyLib/vy_log_data.hpp
+    runtime/VyLib/vy_log_settings.hpp
+
+    # Memory
     runtime/memory/vertex_memory.hpp
 )
 
+# THIRD-PARTY ==================================================
+set(THIRD_PARTY_INCLUDE_DIRS
+    ${assimp_SOURCE_DIR}/include
+    ${spdlog_SOURCE_DIR}/include
+    ${imgui_SOURCE_DIR}/backends
+    ${glad_SOURCE_DIR}/include
+    ${glfw_SOURCE_DIR}/include
+    ${fmt_SOURCE_DIR}/include
+    ${imgui_SOURCE_DIR}
+    ${glm_SOURCE_DIR}
+    ${stb_SOURCE_DIR}
+)
+
+set(THIRD_PARTY_LIBS
+    glfw
+    glad
+    spdlog
+    fmt
+    imgui
+    assimp
+)
+
+# ==============================================================
 
 # Source file paths should be converted to absolute paths.
 cmake_policy(SET CMP0076 NEW)
@@ -110,61 +130,22 @@ cmake_policy(SET CMP0076 NEW)
 # Add sources to target.
 target_sources(${CMAKE_PROJECT_NAME}  
     PRIVATE 
-        ${VY_INPUT_SOURCES}
-        ${VY_CORE_SOURCES}
-        ${VY_REND_SOURCES}
-        ${VY_CAM_SOURCES}
-        ${VY_GUI_SOURCES}
-        ${VY_EVENT_SOURCES}
-
-        ${VY_MEMORY_HEADERS}
-        ${VY_EVENTS}
-    PUBLIC
-        ${VY_EVENT_HEADERS}
-        ${VY_INPUT_HEADERS}
-        ${VY_CORE_HEADERS}
-        ${VY_REND_HEADERS}
-        ${VY_CAM_HEADERS}
-        ${VY_GUI_HEADERS}
+        ${VY_SOURCES}
+        ${VY_HEADERS}
 )
 
 # Add Include-Libraries to target.
-target_include_directories(${CMAKE_PROJECT_NAME} 
-    PUBLIC 
-        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/camera
-        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/memory
-        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/render
-        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/input
-        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/event
-        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/event/events
-        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/core
-        ${CMAKE_CURRENT_SOURCE_DIR}/runtime/gui
-
-        ${CMAKE_CURRENT_SOURCE_DIR}/libraries
-        ${CMAKE_CURRENT_SOURCE_DIR}/VyLib
+target_include_directories(${CMAKE_PROJECT_NAME}
     PRIVATE
-        ${assimp_SOURCE_DIR}/include
-        ${spdlog_SOURCE_DIR}/include
-        ${imgui_SOURCE_DIR}/backends
-        ${glad_SOURCE_DIR}/include
-        ${glfw_SOURCE_DIR}/include
-        ${fmt_SOURCE_DIR}/include
-        ${imgui_SOURCE_DIR}
-        ${glm_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/libraries
+        ${CMAKE_CURRENT_SOURCE_DIR}/runtime
+        ${THIRD_PARTY_INCLUDE_DIRS}
 )
-
 
 # Link Libaries to project.
 target_link_libraries(${CMAKE_PROJECT_NAME} 
     PRIVATE 
-        glfw
-        glad
-        spdlog
-        fmt
-        imgui
-        assimp
-        VyLib
+        ${THIRD_PARTY_LIBS}
 )
 
 message(STATUS "\n[${CMAKE_PROJECT_NAME}: Linked Libraries]\n")
-

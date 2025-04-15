@@ -14,7 +14,7 @@
 #include <sstream>
 #include <iostream>
 
-#include <vy_logger.hpp>
+#include "VyLib/vy_logger.hpp"
 
 std::string getFileContents(const char* filePath);
 

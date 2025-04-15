@@ -1,13 +1,13 @@
 #include "event_manager.hpp"
-#include "vy_macro.hpp"
-#include "vy_logger.hpp"
+#include "VyLib/vy_macro.hpp"
+#include "VyLib/vy_logger.hpp"
 
 
 namespace VyEngine
 {
     EventManager gEventManager;
 
-    using VyLib::Log;
+    using VyEngine::Log;
 
     void EventManager::Shutdown()
     {

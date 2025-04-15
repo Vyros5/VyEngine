@@ -3,8 +3,8 @@
 #include <sstream>
 #include <string>
 
-
-#include "vy_crc32.hpp"
+#include "VyLib/vy_core.hpp"
+#include "VyLib/vy_crc32.hpp"
 
 // https://denyskryvytskyi.github.io/event-system
 
