@@ -3,6 +3,8 @@
 #include <sstream>
 #include <string>
 
+#include <fmt/format.h>
+
 #include "VyLib/vy_core.hpp"
 #include "VyLib/vy_crc32.hpp"
 

@@ -13,21 +13,21 @@ class BufferObject
     public:
 
     // Buffer ID
-    GLuint bID;
+    GLuint ID;
 
     // Type of buffer (GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER, etc...)
     GLenum type;
 
     // Constructor
     BufferObject(GLenum bufferType = GL_ARRAY_BUFFER) :
-        type(bufferType), bID(0) {}
+        type(bufferType), ID(0) {}
     
 	/// <summary>
 	/// Generate a Buffer Object and assign it to the ID.
 	/// </summary>
 	void generate()
 	{
-		glGenBuffers(1, &bID);
+		glGenBuffers(1, &ID);
 	}
 
 	/// <summary>
@@ -35,7 +35,7 @@ class BufferObject
 	/// </summary>
 	void bind()
 	{
-		glBindBuffer(type, bID);
+		glBindBuffer(type, ID);
 	}
 
 	/// <summary>
@@ -51,7 +51,7 @@ class BufferObject
 	/// </summary>
 	void cleanup()
 	{
-		glDeleteBuffers(1, &bID);
+		glDeleteBuffers(1, &ID);
 	}
 
 	/// <summary>
@@ -125,7 +125,7 @@ class ArrayObject
 public:
 
     // Array ID
-	GLuint aID;
+	GLuint ID;
 
 	// Map of names to buffers.
 	std::map<const char*, BufferObject> buffers;
@@ -142,7 +142,7 @@ public:
 	/// </summary>
 	void generate()
 	{
-		glGenVertexArrays(1, &aID);
+		glGenVertexArrays(1, &ID);
 	}
 
 	/// <summary>
@@ -150,7 +150,7 @@ public:
 	/// </summary>
 	void bind()
 	{
-		glBindVertexArray(aID);
+		glBindVertexArray(ID);
 	}
 
 	/// <summary>
@@ -166,7 +166,7 @@ public:
 	/// </summary>
 	void cleanup()
 	{
-		glDeleteVertexArrays(1, &aID);
+		glDeleteVertexArrays(1, &ID);
 
 		for (auto& pair : buffers)
 		{

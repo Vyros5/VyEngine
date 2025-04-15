@@ -49,7 +49,6 @@ set(VY_SOURCES
     # VyLib
     runtime/VyLib/vy_file.cpp
     runtime/VyLib/vy_logger.cpp
-    runtime/VyLib/vy_platform.cpp
 )
 
 # HEADERS ======================================================
@@ -58,6 +57,7 @@ set(VY_CORE_HEADERS
     # Core
     runtime/core/vy_glfw.hpp
     runtime/core/window.hpp
+    runtime/core/scene.hpp
 
     # Camera
     runtime/camera/camera.hpp
@@ -73,6 +73,7 @@ set(VY_CORE_HEADERS
     # Events
     runtime/event/events/app_event.hpp
     runtime/event/events/key_event.hpp
+    runtime/event/events/mouse_event.hpp
 
     # Input
     runtime/input/input.hpp
@@ -92,9 +93,6 @@ set(VY_CORE_HEADERS
     runtime/VyLib/vy_crc32.hpp
     runtime/VyLib/vy_core.hpp
     runtime/VyLib/vy_logger.hpp
-    runtime/VyLib/vy_platform.hpp
-    runtime/VyLib/vy_log_data.hpp
-    runtime/VyLib/vy_log_settings.hpp
 
     # Memory
     runtime/memory/vertex_memory.hpp
