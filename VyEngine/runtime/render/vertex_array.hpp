@@ -11,11 +11,10 @@ namespace VyEngine
     class VertexArray
     {
     public:
-
         virtual ~VertexArray() = default;
 
-        virtual void AddVertexBuffer(const SharedPtr<VertexBuffer>& VBO) = 0;
-        virtual void SetIndexBuffer(const SharedPtr<IndexBuffer>& IBO) = 0;
+        virtual void AddVertexBuffer(const SharedPtr<VertexBuffer>& vertexBuffer) = 0;
+        virtual void SetIndexBuffer(const SharedPtr<IndexBuffer>& indexBuffer) = 0;
 
         virtual void Bind() const = 0;
 

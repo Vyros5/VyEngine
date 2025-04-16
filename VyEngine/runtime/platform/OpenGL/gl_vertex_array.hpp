@@ -1,11 +1,11 @@
 #pragma once
 
-#include "vertex_array.hpp"
-#include "buffer.hpp"
+#include "render/vertex_array.hpp"
+#include "render/buffer.hpp"
 
 namespace VyEngine
 {
-    class OpenGLVertexArray : VertexArray
+    class OpenGLVertexArray : public VertexArray
     {
     private:
         std::uint32_t mID = 0;

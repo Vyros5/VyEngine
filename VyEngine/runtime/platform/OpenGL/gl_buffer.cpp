@@ -25,7 +25,7 @@ namespace VyEngine
         glNamedBufferSubData(mID, 0, size, data);
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // ==================================================================================
 
     OpenGLIndexBuffer::OpenGLIndexBuffer(std::uint32_t* indices, std::uint32_t count) :
         mCount(count)

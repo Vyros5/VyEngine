@@ -45,6 +45,13 @@ set(VY_SOURCES
     runtime/render/shader.cpp
     runtime/render/texture.cpp
     runtime/render/shader_program.cpp
+    
+    runtime/render/buffer.cpp
+    runtime/render/vertex_array.cpp
+
+    # Platform
+    runtime/platform/OpenGL/gl_buffer.cpp
+    runtime/platform/OpenGL/gl_vertex_array.cpp
 
     # VyLib
     runtime/VyLib/vy_file.cpp
@@ -87,6 +94,13 @@ set(VY_CORE_HEADERS
     runtime/render/shader.hpp
     runtime/render/texture.hpp
     runtime/render/shader_program.hpp
+
+    runtime/render/buffer.hpp
+    runtime/render/vertex_array.hpp
+
+    # Platform
+    runtime/platform/OpenGL/gl_buffer.hpp
+    runtime/platform/OpenGL/gl_vertex_array.hpp
 
     # VyLib
     runtime/VyLib/vy_file.hpp
