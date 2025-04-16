@@ -10,7 +10,7 @@
 
 // https://denyskryvytskyi.github.io/event-system
 
-namespace VyEngine
+namespace VyEngine::Events
 {
     class Event
     {

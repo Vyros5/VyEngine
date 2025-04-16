@@ -1,7 +1,8 @@
 #include "vy_gui.hpp"
 
+#include <glfw/glfw3.h>
 
-namespace VyEngine::core
+namespace VyEngine
 {
     void ImGuiWindow::init(GLFWwindow* window)
     {

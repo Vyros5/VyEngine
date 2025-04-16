@@ -4,7 +4,7 @@
 
 #include <functional>
 
-namespace VyEngine
+namespace VyEngine::Events
 {
     template<typename EventType>
     using EventHandler = std::function<void(const EventType& e)>;

@@ -1,13 +1,13 @@
 #include "camera_base.hpp"
 
-#include "logger/vy_logger.hpp"
-#include "vy_macro.hpp"
+#include "VyLib/vy_logger.hpp"
+#include "VyLib/vy_macro.hpp"
 
 namespace VyEngine
 {
     const glm::mat4& CameraBase::getMatrix()     const
     {
-        VY_ASSERT(this->updateProj == false);
+        // VY_ASSERT(this->updateProj == false);
         if (this->updateMatrix)
         {
             this->mMatrix = this->getProjMatrix() * this->getViewMatrix();

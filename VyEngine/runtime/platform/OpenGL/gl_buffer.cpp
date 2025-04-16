@@ -1,4 +1,5 @@
 #include "gl_buffer.hpp"
+
 #include <glad/glad.h>
 
 namespace VyEngine

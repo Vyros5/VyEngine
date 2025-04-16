@@ -20,6 +20,7 @@ add_subdirectory(libraries)
 set(VY_SOURCES
 
     # Core
+    runtime/core/application.cpp
     runtime/core/vy_glfw.cpp
     runtime/core/main.cpp
     runtime/core/window.cpp
@@ -48,8 +49,14 @@ set(VY_SOURCES
     
     runtime/render/buffer.cpp
     runtime/render/vertex_array.cpp
+    runtime/render/graphics_context.cpp
 
     # Platform
+    runtime/platform/Windows/base_window.cpp
+    runtime/platform/Windows/gl_window.cpp
+
+    runtime/platform/OpenGL/gl_input.cpp
+    runtime/platform/OpenGL/gl_context.cpp
     runtime/platform/OpenGL/gl_buffer.cpp
     runtime/platform/OpenGL/gl_vertex_array.cpp
 
@@ -62,6 +69,7 @@ set(VY_SOURCES
 set(VY_CORE_HEADERS
 
     # Core
+    runtime/core/application.hpp
     runtime/core/vy_glfw.hpp
     runtime/core/window.hpp
     runtime/core/scene.hpp
@@ -94,11 +102,17 @@ set(VY_CORE_HEADERS
     runtime/render/shader.hpp
     runtime/render/texture.hpp
     runtime/render/shader_program.hpp
+    runtime/render/graphics_context.hpp
 
     runtime/render/buffer.hpp
     runtime/render/vertex_array.hpp
 
     # Platform
+    runtime/platform/Windows/base_window.hpp
+    runtime/platform/Windows/gl_window.hpp
+
+    runtime/platform/OpenGL/gl_input.hpp
+    runtime/platform/OpenGL/gl_context.hpp
     runtime/platform/OpenGL/gl_buffer.hpp
     runtime/platform/OpenGL/gl_vertex_array.hpp
 

@@ -6,10 +6,10 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-#include <glfw/glfw3.h>
 
+struct GLFWwindow;
 
-namespace VyEngine::core
+namespace VyEngine
 {
     class ImGuiWindow
     {

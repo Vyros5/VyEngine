@@ -1,87 +1,88 @@
-#include "window.hpp"
+#include "entry_point.hpp"
 
-#include <iostream>
-
-#include "VyLib/vy_crc32.hpp"
 #include "VyLib/vy_file.hpp"
-using namespace VyEngine::core;
-
-
-// Delta Time - Time between frames.
-double dt = 0.0f; 
-
-// Time of last frame.
-double lastFrame = 0.0f; 
+#include "VyLib/vy_logger.hpp"
 
 // ================================================================================================
 
-int main()
+int main(int argc, char** argv)
 {
-	// Main Window
-	VyEngine::core::Window window;
+	srand(static_cast<uint32_t>(time(0)));
 
-	WindowSettings winData = window.getWindowSettings();
+	VyEngine::Log::Init();
 
-	window.create(winData);
+	auto app = VyEngine::CreateApplication();
+	app->Run();
+	delete app;
 
-	// Main Camera
-	CameraSettings camSettings;
+	return 0;
+}
 
-	window.camera = new Camera(camSettings);
+
+	// // Main Window
+	// VyEngine::core::Window window;
+
+	// WindowSettings winData = window.getWindowSettings();
+
+	// window.create(winData);
+
+	// // Main Camera
+	// CameraSettings camSettings;
+
+	// window.camera = new Camera(camSettings);
 
 
 	// Model Paths 
-	const std::string modelPath = "C:/dev/cpp/VyEngine/VyEngine/assets/models/backpack/backpack.obj";
+	// const std::string modelPath = "C:/dev/cpp/VyEngine/VyEngine/assets/models/backpack/backpack.obj";
 
 
-	// Models
-	Model objectModel(modelPath);
+	// // Models
+	// Model objectModel(modelPath);
 
-	// Shaders
-	ShaderProgram modelShader;
-	modelShader.init(
-		"C:/dev/cpp/VyEngine/VyEngine/assets/shaders/model.vert", 
-		"C:/dev/cpp/VyEngine/VyEngine/assets/shaders/model.frag"
-	);
+	// // Shaders
+	// ShaderProgram modelShader;
+	// modelShader.init(
+	// 	"C:/dev/cpp/VyEngine/VyEngine/assets/shaders/model.vert", 
+	// 	"C:/dev/cpp/VyEngine/VyEngine/assets/shaders/model.frag"
+	// );
 
 
 
 
 	// MAIN LOOP ==================================================================================
 
-	while (!window.shouldClose())
-	{
-		// Delta Time (dt)
-		double currentTime = glfwGetTime();
-		dt = currentTime - lastFrame;
-		lastFrame = currentTime;
+	// while (!window.shouldClose())
+	// {
+	// 	// Delta Time (dt)
+	// 	double currentTime = glfwGetTime();
+	// 	dt = currentTime - lastFrame;
+	// 	lastFrame = currentTime;
 
-		window.pollEvents();
+	// 	window.pollEvents();
 		
-		// Process Input
-		window.processInput(dt);
+	// 	// Process Input
+	// 	window.processInput(dt);
 
-		window.render();
+	// 	window.render();
 
-		// Model Shader
-		modelShader.activate();
-		window.renderShader(modelShader);
+	// 	// Model Shader
+	// 	modelShader.activate();
+	// 	window.renderShader(modelShader);
 
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-		modelShader.setUniform("model", model);
+	// 	glm::mat4 model = glm::mat4(1.0f);
+	// 	model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
+	// 	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+	// 	modelShader.setUniform("model", model);
 
-		// Render Model
-		objectModel.render(modelShader);
+	// 	// Render Model
+	// 	objectModel.render(modelShader);
 
-		window.endRender();
-	}
+	// 	window.endRender();
+	// }
 
 	// ============================================================================================
 	
 	// Cleanup Objects
-	objectModel.cleanup();
-	modelShader.destroy();
-	return 0;
-}
+	// objectModel.cleanup();
+	// modelShader.destroy();
+	

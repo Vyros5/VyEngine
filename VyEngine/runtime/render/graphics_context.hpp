@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vy_core.hpp"
+#include "VyLib/vy_core.hpp"
 
 namespace VyEngine
 {

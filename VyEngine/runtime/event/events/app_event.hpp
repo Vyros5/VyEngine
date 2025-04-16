@@ -1,8 +1,8 @@
 #pragma once
 
-#include "event.hpp"
+#include "event/event.hpp"
 
-namespace VyEngine
+namespace VyEngine::Events
 {
     class WindowResizeEvent : public Event
     {

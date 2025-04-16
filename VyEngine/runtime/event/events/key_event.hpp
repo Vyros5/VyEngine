@@ -1,9 +1,9 @@
 #pragma once
 
-#include "input_codes.hpp"
-#include "event.hpp"
+#include "input/input_codes.hpp"
+#include "event/event.hpp"
 
-namespace VyEngine
+namespace VyEngine::Events
 {
     class KeyPressedEvent : public Event
     {

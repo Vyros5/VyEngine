@@ -1,9 +1,10 @@
 #include "event_manager.hpp"
+
 #include "VyLib/vy_macro.hpp"
 #include "VyLib/vy_logger.hpp"
 
 
-namespace VyEngine
+namespace VyEngine::Events
 {
     EventManager gEventManager;
 

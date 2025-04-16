@@ -5,7 +5,7 @@
 
 #include "event_handler.hpp"
 
-namespace VyEngine
+namespace VyEngine::Events
 {
     using EventType = uint32_t;
     using EventID   = uint64_t;

@@ -1,11 +1,11 @@
 #include "gl_context.hpp"
 
-#include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #include <iostream>
 
-#include "vy_logger.hpp"
+#include "VyLib/vy_logger.hpp"
 
 namespace VyEngine
 {

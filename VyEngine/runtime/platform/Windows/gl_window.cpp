@@ -1,7 +1,7 @@
 #include "gl_window.hpp"
 
-#include "graphics_context.hpp"
-#include "vy_logger.hpp"
+#include "render/graphics_context.hpp"
+#include "VyLib/vy_logger.hpp"
 #include "event/event_manager.hpp"
 #include "event/events/app_event.hpp"
 #include "event/events/key_event.hpp"
@@ -147,7 +147,7 @@ namespace VyEngine
             }
 
             // Trigger Event
-            Trigger(WindowResizeEvent(mData.Width, mData.Height));
+            Events::Trigger(Events::WindowResizeEvent(mData.Width, mData.Height));
         }
     }
 
