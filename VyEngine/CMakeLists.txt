@@ -12,7 +12,6 @@ set(VY_HEADERS
     src/core/application.hpp
     src/core/vy_glfw.hpp
     src/core/window.hpp
-    src/core/scene.hpp
     src/core/entry_point.hpp
     src/core/timer.hpp
     src/core/settings_config.hpp
@@ -49,6 +48,8 @@ set(VY_HEADERS
 
     src/render/buffer.hpp
     src/render/vertex_array.hpp
+    src/render/base_renderer.hpp
+    src/render/renderer.hpp
 
     # Platform
     src/platform/Windows/base_window.hpp
@@ -58,6 +59,7 @@ set(VY_HEADERS
     src/platform/OpenGL/gl_context.hpp
     src/platform/OpenGL/gl_buffer.hpp
     src/platform/OpenGL/gl_vertex_array.hpp
+    src/platform/OpenGL/gl_renderer.hpp
 
     # VyLib
     src/VyLib/vy_file.hpp
@@ -105,6 +107,8 @@ set(VY_SOURCES
     src/render/buffer.cpp
     src/render/vertex_array.cpp
     src/render/graphics_context.cpp
+    src/render/base_renderer.cpp
+    src/render/renderer.cpp
 
     # Platform
     src/platform/Windows/base_window.cpp
@@ -114,6 +118,7 @@ set(VY_SOURCES
     src/platform/OpenGL/gl_context.cpp
     src/platform/OpenGL/gl_buffer.cpp
     src/platform/OpenGL/gl_vertex_array.cpp
+    src/platform/OpenGL/gl_renderer.cpp
 
     # VyLib
     src/VyLib/vy_file.cpp
@@ -155,7 +160,6 @@ message(STATUS "Engine Source Directory: " ${ENGINE_SOURCE_DIR})
 
 
 set(ENGINE_INCLUDE_DIRS
-    # ${fmt_SOURCE_DIR}/include
     ${glad_SOURCE_DIR}/include   # VyEngine/vendor/glad
     ${glfw_SOURCE_DIR}/include   # out/build/default/_deps/glfw-src/include
     ${assimp_SOURCE_DIR}/include # out\build\default\_deps\assimp-src\include
@@ -177,12 +181,12 @@ target_include_directories(${LIBRARY_NAME}
 target_link_libraries(${LIBRARY_NAME} PRIVATE ${VENDOR_LIBS})
 
 
-message(STATUS "\n[${LIBRARY_NAME}: Linked Libraries]")
+message(STATUS "[${LIBRARY_NAME}: Linked Libraries]")
 
 
 # Set configuration properties for VyEngine
 if(MSVC)
-    message(STATUS "[MSVC]")
+    message(STATUS "[Compile Options: MSVC]")
     target_compile_options(${LIBRARY_NAME} PUBLIC
         /utf-8
         /W4
@@ -201,6 +205,7 @@ if(MSVC)
         /wd4018 # '>': signed/unsigned mismatch
     )
 else()
+    message(STATUS "[Compile Options: Other]")
     target_compile_options(${LIBRARY_NAME} PUBLIC 
         -Wall 
         -Wextra 

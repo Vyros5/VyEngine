@@ -6,7 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <assimp/scene.h>
+// #include <assimp/scene.h>
 
 #include <vector>
 #include <string>

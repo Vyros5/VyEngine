@@ -5,6 +5,7 @@
 #include "event/event_handler.hpp"
 #include "VyLib/vy_core.hpp"
 #include "VyLib/vy_logger.hpp"
+#include "render/renderer.hpp"
 
 namespace VyEngine
 {
@@ -39,6 +40,8 @@ namespace VyEngine
 
         SharedPtr<CameraController> GetCameraController() const {return mCameraController; }
 
+        Renderer& GetRenderer() { return mRenderer; }
+
     protected:
 
         // virtual void OnCreate();
@@ -58,8 +61,9 @@ namespace VyEngine
     protected:
         bool mRunning = false;
         
-        UniquePtr<Window> mWindow = nullptr;
         SharedPtr<CameraController> mCameraController = nullptr;
+        UniquePtr<Window> mWindow = nullptr;
+        Renderer mRenderer;
 
     private:
         static Application* sInstance;

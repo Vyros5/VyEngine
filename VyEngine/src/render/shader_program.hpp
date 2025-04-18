@@ -38,7 +38,7 @@ struct ShaderProgram
 	void setUniform(const std::string& name, glm::vec4 v);
 
 	// Assimp Color
-	void setUniform(const std::string& name, aiColor4D color);
+	// void setUniform(const std::string& name, aiColor4D color);
 
 	// GLM Matrix
 	void setUniform(const std::string& name, glm::mat2 v);

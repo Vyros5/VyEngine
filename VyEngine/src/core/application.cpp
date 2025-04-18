@@ -25,7 +25,10 @@ namespace VyEngine
         // Create Window
         mWindow = Window::Create({ "VyEngine", 1280, 720, false, false });
         
+        // Initialize Renderers
+        mRenderer.Init(mWindow->GetWidth(), mWindow->GetHeight());
         
+        // Subscribe to events
         Events::Subscribe<Events::WindowCloseEvent>(mWindowCloseCallback);
         Events::Subscribe<Events::WindowResizeEvent>(mWindowResizeCallback);
     }
@@ -88,13 +91,13 @@ namespace VyEngine
             // Input ===================================
             
                 
-                // OnProcessInput(elapsedTime);
+            // OnProcessInput(elapsedTime);
             
             
             // Update ===================================
             
 
-                // OnUpdate(elapsedTime);
+            // OnUpdate(elapsedTime);
             
             
             // Dispatch Queued Events ===================================
@@ -102,9 +105,10 @@ namespace VyEngine
             Events::gEventManager.Dispatch();
             
             // Render ===================================
-            
 
-                // OnRender(elapsedTime);
+            mRenderer.BeginScene(mCameraController);
+            // OnRender(elapsedTime);
+            mRenderer.EndScene();
 
             
             // Window Update ===================================

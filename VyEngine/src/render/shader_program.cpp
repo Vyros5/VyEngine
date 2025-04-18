@@ -159,10 +159,10 @@ void ShaderProgram::setUniform(const std::string& name, glm::vec4 v)
 
 
 // Assimp Color
-void ShaderProgram::setUniform(const std::string& name, aiColor4D v)
-{
-	glUniform4f(glGetUniformLocation(programID, name.c_str()), v.r, v.g, v.b, v.a);
-}
+// void ShaderProgram::setUniform(const std::string& name, aiColor4D v)
+// {
+// 	glUniform4f(glGetUniformLocation(programID, name.c_str()), v.r, v.g, v.b, v.a);
+// }
 
 
 // GLM Matrix

@@ -1,5 +1,5 @@
 #pragma once
-
+#include <glm/glm.hpp>
 #include "base_window.hpp"
 
 struct GLFWwindow;
@@ -31,6 +31,9 @@ namespace VyEngine
     public:
         OpenGLWindow(const WindowProps& props);
         ~OpenGLWindow() override;
+
+        void ClearBits();
+        void SetBGColor(glm::vec3 v);
 
         void OnUpdate() override;
 

@@ -105,7 +105,18 @@ namespace VyEngine
         
     }
 
+    void OpenGLWindow::ClearBits()
+    {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
 
+
+    void OpenGLWindow::SetBGColor(glm::vec3 v)
+    {
+        glClearColor(v.r, v.g, v.b, 1.0f);
+    }
+    
+    
     void OpenGLWindow::OnUpdate()
     {
         mContext->SwapBuffers();
@@ -121,6 +132,7 @@ namespace VyEngine
 
         mData.VSync = enabled;
     }
+
 
     bool OpenGLWindow::IsVSync() const
     {
