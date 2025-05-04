@@ -1,0 +1,65 @@
+#pragma once
+
+#include <cstdint>
+
+namespace VyEngine::GFX::Data
+{
+	enum class EPrimitiveMode : uint8_t
+	{
+		POINTS,
+		LINES,
+		LINE_LOOP,
+		LINE_STRIP,
+		TRIANGLES,
+		TRIANGLE_STRIP,
+		TRIANGLE_FAN,
+		LINES_ADJACENCY,
+		LINE_STRIP_ADJACENCY,
+		TRIANGLES_ADJACENCY,
+		TRIANGLE_STRIP_ADJACENCY,
+		PATCHES
+	};
+
+
+	enum class EPixelDataFormat : uint8_t
+	{
+		COLOR_INDEX,
+		STENCIL_INDEX,
+		DEPTH_COMPONENT,
+		RED,
+		GREEN,
+		BLUE,
+		ALPHA,
+		RGB,
+		BGR,
+		RGBA,
+		BGRA,
+		LUMINANCE,
+		LUMINANCE_ALPHA,
+	};
+
+
+    enum class EPixelDataType : uint8_t
+    {
+		BYTE,
+		UNSIGNED_BYTE,
+		BITMAP,
+		SHORT,
+		UNSIGNED_SHORT,
+		INT,
+		UNSIGNED_INT,
+		FLOAT,
+		UNSIGNED_BYTE_3_3_2,
+		UNSIGNED_BYTE_2_3_3_REV,
+		UNSIGNED_SHORT_5_6_5,
+		UNSIGNED_SHORT_5_6_5_REV,
+		UNSIGNED_SHORT_4_4_4_4,
+		UNSIGNED_SHORT_4_4_4_4_REV,
+		UNSIGNED_SHORT_5_5_5_1,
+		UNSIGNED_SHORT_1_5_5_5_REV,
+		UNSIGNED_INT_8_8_8_8,
+		UNSIGNED_INT_8_8_8_8_REV,
+		UNSIGNED_INT_10_10_10_2,
+		UNSIGNED_INT_2_10_10_10_REV
+    };
+}
