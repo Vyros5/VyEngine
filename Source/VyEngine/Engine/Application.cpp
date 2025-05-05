@@ -1,9 +1,9 @@
-#include "Application.hpp"
+#include "Engine/Application.hpp"
 
 
 
 
-namespace VyEditor
+namespace VyEngine
 {
     Application::Application(Context* context) : 
         Object(context),
@@ -13,21 +13,21 @@ namespace VyEditor
     }
 
 
-    // int Application::Run()
-    // {
-    //     // if (m_ExitCode)
-    //     // {
-    //     //     return m_ExitCode;
-    //     // }
+    int Application::Run()
+    {
+        if (m_ExitCode)
+        {
+            return m_ExitCode;
+        }
 
-    //     // if (!m_Engine->Init())
-    //     // {
-    //     //     ErrorExit();
-    //     //     return m_ExitCode;
-    //     // }
+        if (!m_Engine->Init())
+        {
+            ErrorExit();
+            return m_ExitCode;
+        }
 
-    //     return m_ExitCode;
-    // }
+        return m_ExitCode;
+    }
 
     bool Application::IsRunning() const
     {

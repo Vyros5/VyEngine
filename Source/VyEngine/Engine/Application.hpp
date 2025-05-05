@@ -1,25 +1,20 @@
 #pragma once
 
 #include <string>
-#include <Core/Base.h>
-#include <Engine/Engine.h>
-#include <Core/Context.h>
+#include "Core/Base.h"
+#include "Engine/Engine.h"
+#include "Core/Context.h"
 
 
-using namespace VyEngine;
-
-namespace VyEditor
+namespace VyEngine
 {
-    /// @brief VyEditor Entry Point
+    /// @brief Application Entry Point
     class Application : public Object
     {
     public:
-        //const std::string& projectName
         explicit Application(Context* context);
 
-
-
-        // int Run();
+        int Run();
 
 
         bool IsRunning() const;
@@ -27,10 +22,10 @@ namespace VyEditor
         void ErrorExit();
 
     protected:
-
         SharedPtr<Engine> m_Engine;
-        // Context m_Context;
-        // Editor  m_Editor;
+
         int m_ExitCode;
     };
+
+
 }

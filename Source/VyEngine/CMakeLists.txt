@@ -63,6 +63,11 @@ set(ENGINE_FILES
     Core/Context.cpp
     Core/Context.h
     
+    Engine/Application.cpp
+    Engine/Application.hpp
+    Engine/Engine.cpp
+    Engine/Engine.h
+    
     Core/Object/Object.cpp
     Core/Object/Object.h
 

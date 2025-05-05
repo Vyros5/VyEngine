@@ -3,8 +3,8 @@
 set(EDITOR_FILES
     EntryPoint.cpp
 
-    Application.cpp
-    Application.hpp
+    EditorApplication.cpp
+    EditorApplication.h
 
     # Editor.cpp
     # Editor.hpp
