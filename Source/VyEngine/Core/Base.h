@@ -2,10 +2,9 @@
 
 #include <memory>
 
-#include "Support/Assert.h"
-#include "Support/Logger/LogDef.h"
+#define BIT(x) (1 << x)
 
-/// @brief Unique Pointer
+
 template<typename T>
 using Scope = std::unique_ptr<T>;
 
@@ -15,7 +14,7 @@ constexpr Scope<T> MakeScope(Args&&... args)
     return std::make_unique<T>(std::forward<Args>(args)...);
 }
 
-/// @brief Shared Pointer
+
 template<typename T>
 using Ref = std::shared_ptr<T>;
 

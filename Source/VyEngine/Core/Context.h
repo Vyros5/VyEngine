@@ -1,10 +1,14 @@
 #pragma once
 
+#include <EASTL/unique_ptr.h>
+
+#include "Containers/Pointers.h"
+
 #include "Core/Base.h"
 
-namespace VyEngine::Core
+namespace VyEngine
 {
-    class Context
+    class Context : public RefCounted
     {
         friend class Object;
 
@@ -12,7 +16,7 @@ namespace VyEngine::Core
         
         Context();
 
-        ~Context();
+        ~Context() override;
     
         /// @brief Return global instance of Context Object.
         /// @note Only one Context may exist within the application.
@@ -20,7 +24,7 @@ namespace VyEngine::Core
         static Context* GetInstance();
 
 
-        Object* GetSubSystem() const;
+        // Object* GetSubSystem() const;
 
 
     };

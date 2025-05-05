@@ -5,30 +5,32 @@
 #include <Engine/Engine.h>
 #include <Core/Context.h>
 
+
 using namespace VyEngine;
-using namespace VyEngine::Core;
 
 namespace VyEditor
 {
     /// @brief VyEditor Entry Point
-    class Application : public VyObject
+    class Application : public Object
     {
     public:
         //const std::string& projectName
         explicit Application(Context* context);
 
 
-        ~Application();
 
-
-        void Run();
+        // int Run();
 
 
         bool IsRunning() const;
 
-    private:
-        Ref<Engine> m_Engine;
+        void ErrorExit();
+
+    protected:
+
+        SharedPtr<Engine> m_Engine;
         // Context m_Context;
         // Editor  m_Editor;
+        int m_ExitCode;
     };
 }

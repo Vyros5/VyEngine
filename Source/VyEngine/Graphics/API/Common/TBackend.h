@@ -3,14 +3,7 @@
 #include <cstdint>
 #include "Graphics/Data/EPixel.h"
 #include "Graphics/Data/ERender.h"
-
-namespace VyEngine::GFX
-{
-    struct DriverConfig
-    {
-        bool debugMode = false;
-    };
-}
+#include "Graphics/Driver/Driver.h"
 
 namespace VyEngine::GFX::API
 {
@@ -49,31 +42,31 @@ namespace VyEngine::GFX::API
         void ReadPixels(
             uint32_t X, uint32_t Y, 
             uint32_t width, uint32_t height, 
-            EPixelDataFormat format, EPixelDataType type, 
+            Data::EPixelDataFormat format, Data::EPixelDataType type, 
             void* data
         );
 
         /// @brief Renders primitives from array data.
         /// @param primitiveMode Specifies the kind of primitives to render.
         /// @param indexCount The number of elements to render.
-        void DrawElements(EPrimitiveMode primitiveMode, uint32_t indexCount);
+        void DrawElements(Data::EPrimitiveMode primitiveMode, uint32_t indexCount);
         
         /// @brief Renders multiple instances of a set of elements.
         /// @param primitiveMode Specifies the kind of primitives to render.
         /// @param indexCount The number of elements to render.
         /// @param instances The number of instances to render.
-        void DrawElementsInstanced(EPrimitiveMode primitiveMode, uint32_t indexCount, uint32_t instances);
+        void DrawElementsInstanced(Data::EPrimitiveMode primitiveMode, uint32_t indexCount, uint32_t instances);
         
         /// @brief Renders primitives from array data without indexing.
         /// @param primitiveMode Specifies the kind of primitives to render.
         /// @param vertexCount The number of vertices to render.
-        void DrawArrays(EPrimitiveMode primitiveMode, uint32_t vertexCount);
+        void DrawArrays(Data::EPrimitiveMode primitiveMode, uint32_t vertexCount);
         
         /// @brief Renders multiple instances of a set of vertices.
         /// @param primitiveMode Specifies the kind of primitives to render.
         /// @param vertexCount The number of vertices to render.
         /// @param instances The number of instances to render.
-        void DrawArraysInstanced(EPrimitiveMode primitiveMode, uint32_t vertexCount, uint32_t instances);
+        void DrawArraysInstanced(Data::EPrimitiveMode primitiveMode, uint32_t vertexCount, uint32_t instances);
 
 
         /// @brief Sets the clear color for the color buffer.
@@ -81,7 +74,7 @@ namespace VyEngine::GFX::API
 
         /// @brief Specifies the rasterization mode.
         /// @param rasterizationMode The desired rasterization mode.
-        void SetRasterizationMode(ERasterizationMode rasterizationMode);
+        void SetRasterizationMode(Data::ERasterizationMode rasterizationMode);
 
         /// @brief Sets the width for rasterized lines.
         /// @param width The width of rasterized lines.
@@ -90,22 +83,22 @@ namespace VyEngine::GFX::API
         /// @brief Enables or disables a specific rendering capability.
         /// @param capability The rendering capability to modify.
         /// @param value True if enabled, false otherwise.
-        void SetCapability(ERenderingCapability capability, bool value);
+        void SetCapability(Data::ERenderingCapability capability, bool value);
 
         /// @brief Retrieves the status of a rendering capability.
         /// @param capability The rendering capability to query.
         /// @return True if enabled, false otherwise.
-        bool GetCapability(ERenderingCapability capability);
+        bool GetCapability(Data::ERenderingCapability capability);
 
         /// @brief Sets the stencil test function and reference value.
         /// @param algorithm The comparison function to use.
         /// @param reference The reference value for the stencil test.
         /// @param mask A mask that is ANDed with both the reference value and the stored stencil value.
-        void SetStencilAlgorithm(EComparaisonAlgorithm algorithm, int32_t reference, uint32_t mask);
+        void SetStencilAlgorithm(Data::EComparaisonAlgorithm algorithm, int32_t reference, uint32_t mask);
 
         /// @brief Sets the depth comparison function.
         /// @param algorithm The depth comparison function to use.
-        void SetDepthAlgorithm(EComparaisonAlgorithm algorithm);
+        void SetDepthAlgorithm(Data::EComparaisonAlgorithm algorithm);
 
         /// @brief Controls the writing of individual bits in the stencil planes.
         /// @param mask Specifies a mask to enable and disable writing of individual bits in the stencil planes.
@@ -115,11 +108,11 @@ namespace VyEngine::GFX::API
 		/// @param stencilFail Action to take when the stencil test fails.
 		/// @param depthFail Action to take when the stencil test passes, but the depth test fails.
 		/// @param bothPass Action to take when both the stencil test and depth test pass.
-		void SetStencilOperations(EOperation stencilFail, EOperation depthFail, EOperation bothPass);
+		void SetStencilOperations(Data::EOperation stencilFail, Data::EOperation depthFail, Data::EOperation bothPass);
 
         /// @brief Specifies whether front- or back-facing facets can be culled.
         /// @param cullFace Specifies the faces to cull.
-        void SetCullFace(ECullFace cullFace);
+        void SetCullFace(Data::ECullFace cullFace);
 
         /// @brief Enables or disables writing into the depth buffer.
         void SetDepthWriting(bool enable);

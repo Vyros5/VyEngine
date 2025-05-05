@@ -4,10 +4,10 @@
 namespace VyEngine
 {
     Engine::Engine(Context* context) :
-        VyObject(context),
+        Object(context),
         m_Initialized(false)
     {
-
+        VYTRACE("Created Engine")
     }
 
     Engine::~Engine() = default;
@@ -22,18 +22,18 @@ namespace VyEngine
         return true;
     }
 
-    void Engine::Run()
-    {
+    // void Engine::Run()
+    // {
 
-    }
+    // }
 
-    void Engine::Exit()
-    {
+    // void Engine::Exit()
+    // {
 
-    }
+    // }
 
     bool Engine::OnEngineClosed(Events::EngineClosedEvent& event)
     {
-        return true;
+        return false;
     }
 }

@@ -2,7 +2,7 @@
 
 #include "Support/Logger/LogDef.h"
 #include "Event/Events/EngineEvents.h"
-#include "Core/VyObject/VyObject.h"
+#include "Core/Object/Object.h"
 #include "Window/Window.h"
 
 namespace VyEngine
@@ -10,7 +10,7 @@ namespace VyEngine
     /**
      *  VyEngine Engine
      */
-    class Engine : public VyObject
+    class Engine : public Object
     {
     public:
         explicit Engine(Context* context);
@@ -18,8 +18,8 @@ namespace VyEngine
         ~Engine() override;
         
         bool Init();
-        void Exit();
-        void Run();
+        // void Exit();
+        // void Run();
 
         static bool OnEngineClosed(Events::EngineClosedEvent& event);
 

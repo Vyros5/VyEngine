@@ -51,13 +51,7 @@ FetchContent_MakeAvailable(glm)
 #==================================================================================================
 
 # EASTL
-# FetchContent_Declare(
-#     eastl
-#     GIT_REPOSITORY  https://github.com/electronicarts/EASTL.git
-#     GIT_TAG         ${EASTL_TAG}
-# )
-
-# FetchContent_MakeAvailable(eastl)
+add_subdirectory(EASTL)
 
 #==================================================================================================
 

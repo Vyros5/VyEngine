@@ -62,11 +62,17 @@ set(ENGINE_FILES
     
     Core/Context.cpp
     Core/Context.h
-
-    Core/VyObject/VyObject.cpp
-    Core/VyObject/VyObject.h
+    
+    Core/Object/Object.cpp
+    Core/Object/Object.h
 
     ${VY_GRAPHICS}
+
+    Containers/Hash.h
+    Containers/Allocator.cpp
+    Containers/Allocator.h
+    Containers/RefCounted.cpp
+    Containers/RefCounted.h
 
     Utils/EnumMapper.hpp
 
@@ -78,11 +84,11 @@ set(ENGINE_FILES
 set(LIBRARY_NAME VyEngineLib)
 add_library(${LIBRARY_NAME} STATIC ${ENGINE_FILES})
 
-
 set(ENGINE_INCLUDE_DIRS
     ${glfw_SOURCE_DIR}/include
     ${spdlog_SOURCE_DIR}/include
     ${assimp_SOURCE_DIR}/include
+    ${EASTL_SOURCE_DIR}/include
     ${glm_SOURCE_DIR}
 
     ${VENDOR_DIR}/stb
@@ -101,7 +107,7 @@ target_include_directories(${LIBRARY_NAME}
 set(VENDOR_LIBS
     glfw
     glad
-    # eastl
+    EASTL
     spdlog
     imgui
     assimp

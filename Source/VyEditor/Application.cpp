@@ -5,35 +5,39 @@
 
 namespace VyEditor
 {
-    Application::Application(Context* context) :
-        VyObject(context)
+    Application::Application(Context* context) : 
+        Object(context),
+        m_ExitCode(EXIT_SUCCESS)
     {
-        m_Engine = MakeRef<Engine>(context);
+        m_Engine = new Engine(context);
     }
 
-    Application::~Application() {}
 
-    void Application::Run()
-    {
-        // Clock clock;
+    // int Application::Run()
+    // {
+    //     // if (m_ExitCode)
+    //     // {
+    //     //     return m_ExitCode;
+    //     // }
 
-        // while (IsRunning())
-        // {
-            // m_Editor.PreUpdate();
-            // m_Editor.Update(clock.GetDeltaTime());
-            // m_Editor.PostUpdate();
-            // clock.Update();
-        // }
+    //     // if (!m_Engine->Init())
+    //     // {
+    //     //     ErrorExit();
+    //     //     return m_ExitCode;
+    //     // }
 
-        if (!m_Engine->Init())
-        {
-            
-        }
-    }
+    //     return m_ExitCode;
+    // }
 
     bool Application::IsRunning() const
     {
         return false;
         // return !m_Context.window->GetClose();
+    }
+
+    void Application::ErrorExit()
+    {
+        // m_Engine->Exit();
+        m_ExitCode = EXIT_FAILURE;
     }
 }

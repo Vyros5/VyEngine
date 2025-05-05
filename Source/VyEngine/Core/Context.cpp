@@ -1,8 +1,8 @@
 #include "Core/Context.h"
 
+#include <cassert>
 
-
-namespace VyEngine::Core
+namespace VyEngine
 {
     /// @brief Global Context Instance.
     static Context* s_ContextInstance = nullptr;
@@ -10,7 +10,8 @@ namespace VyEngine::Core
 
     Context::Context()
     {
-
+        assert(s_ContextInstance == nullptr);
+        s_ContextInstance = this;
     }
 
     Context::~Context()
