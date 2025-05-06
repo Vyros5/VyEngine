@@ -9,13 +9,13 @@
 #include "Event/EventDispatcher.hpp"
 #include "Event/Events/EngineEvents.h"
 #include "Engine/Engine.h"
-#include "Window/Device/Device.h"
+#include "Render/Device/Device.h"
 
 using namespace VyEngine::Events;
 
 namespace VyEngine::Window
 {
-    Window::Window(const Context::Device& context, const Cfg::WindowConfig& config) :
+    Window::Window(const Render::Device& context, const Cfg::WindowConfig& config) :
         m_MaxSize{ config.maxWidth, config.maxHeight },
         m_MinSize{ config.minWidth, config.minHeight },
         m_Size{ config.width, config.height },

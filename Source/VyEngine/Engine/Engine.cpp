@@ -10,7 +10,10 @@ namespace VyEngine
         VYTRACE("Created Engine")
     }
 
-    Engine::~Engine() = default;
+    Engine::~Engine()
+    {
+        
+    }
 
     bool Engine::Init()
     {
@@ -27,10 +30,10 @@ namespace VyEngine
 
     // }
 
-    // void Engine::Exit()
-    // {
+    void Engine::Exit()
+    {
 
-    // }
+    }
 
     bool Engine::OnEngineClosed(Events::EngineClosedEvent& event)
     {

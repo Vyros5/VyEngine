@@ -9,12 +9,13 @@
 
 struct GLFWwindow;
 
+namespace VyEngine::Render
+{
+    class Device;
+}
+
 namespace VyEngine::Window
 {
-    namespace Context
-    {
-        class Device;
-    }
 
     class Window : public Inputs::IKeyboardEventCallback, public Inputs::IMouseEventCallback, public Inputs::IWindowEventCallback
     {
@@ -23,7 +24,7 @@ namespace VyEngine::Window
         Data::WindowData  m_Data;
         Cfg::WindowConfig m_Config;
 
-        const Context::Device& m_Device;
+        const Render::Device& m_Device;
 
         /* Window Configuration */
         std::string m_Title;
@@ -54,13 +55,13 @@ namespace VyEngine::Window
         Window() = delete;
         Window(const Window&) = delete;
 
-        Window(const Context::Device& device, const Cfg::WindowConfig& config);
+        Window(const Render::Device& device, const Cfg::WindowConfig& config);
 
         ~Window();
 
         // virtual void Init(const VyEngine::WindowConfig& cfg);
 
-        void         Shutdown();
+        void Shutdown();
         void OnUpdate(float dt);
         void OnRender();
         bool OnEvent(Event& event);

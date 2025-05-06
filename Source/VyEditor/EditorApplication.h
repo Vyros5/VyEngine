@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Engine/Application.hpp>
+#include <Engine/Application.h>
 
 namespace VyEditor
 {
@@ -8,6 +8,6 @@ namespace VyEditor
     {
     public:
         explicit EditorApplication(VyEngine::Context* context);
-        ~EditorApplication() override = default;
+        ~EditorApplication() = default;
     };
 }

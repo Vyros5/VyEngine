@@ -13,13 +13,19 @@ namespace VyEngine
     class Engine : public Object
     {
     public:
+        
         explicit Engine(Context* context);
 
-        ~Engine() override;
+        ~Engine();
         
+        /// @brief 
+        /// @return 
         bool Init();
-        // void Exit();
+
+        void Exit();
         // void Run();
+
+        bool IsRunning() const;
 
         static bool OnEngineClosed(Events::EngineClosedEvent& event);
 

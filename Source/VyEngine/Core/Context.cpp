@@ -12,6 +12,14 @@ namespace VyEngine
     {
         assert(s_ContextInstance == nullptr);
         s_ContextInstance = this;
+
+        // Window::Cfg::DeviceConfig deviceConfig;
+        // device = MakeScope<Window::Context::Device>(deviceConfig);
+        // window = MakeScope<Window::Window>(*device, windowConfig);
+
+        // window->SetCallbackFunction(std::bind(&Window::Window::OnEvent, std::ref(window), std::placeholders::_1));
+
+        // window->MakeCurrentContext();
     }
 
     Context::~Context()

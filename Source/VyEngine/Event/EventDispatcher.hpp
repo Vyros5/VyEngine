@@ -22,7 +22,7 @@ namespace VyEngine
             if (m_Event.GetType() == F::GetStaticType())
             {
                 m_Event.SetHandled(func(dynamic_cast<F&>(m_Event)));
-                VY_CORE_INFO("[Dispatcher] Event Handled: {0}", m_Event.ToString());
+                VYINFO("[Dispatcher] Event Handled: {0}", m_Event.ToString());
                 return true;
             }
 

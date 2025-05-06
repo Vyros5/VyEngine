@@ -5,9 +5,9 @@
 
 namespace VyEngine
 {
-    class Object : public RefCounted
+    class Object //: public RefCounted
     {
-        friend class Context;
+        // friend class Context;
 
     public:
         
@@ -16,7 +16,7 @@ namespace VyEngine
         explicit Object(Context* context);
 
         /// @brief Destructor.
-        ~Object() override;
+        ~Object();
 
 
         Context* GetContext() const { return m_Context; }

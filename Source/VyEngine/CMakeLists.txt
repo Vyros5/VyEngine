@@ -55,6 +55,28 @@ set(VY_GRAPHICS
     Graphics/Data/EShader.h
 )
 
+set(VY_RENDER
+    Render/Device/Device.cpp
+    Render/Device.Device.h
+    Render/Device/DeviceConfig.h
+
+)
+
+
+set(VY_WINDOW
+    Window/Window.cpp
+    Window/Window.h
+
+    Window/Input/InputDef.h
+    Window/Input/IInputEventCallbacks.h
+
+    Window/Data/ECursor.h
+    Window/Data/EInput.h
+    Window/Data/WindowData.h
+
+    Window/Config/WindowConfig.h
+)
+
 
 set(ENGINE_FILES
 
@@ -64,7 +86,7 @@ set(ENGINE_FILES
     Core/Context.h
     
     Engine/Application.cpp
-    Engine/Application.hpp
+    Engine/Application.h
     Engine/Engine.cpp
     Engine/Engine.h
     
@@ -73,11 +95,13 @@ set(ENGINE_FILES
 
     ${VY_GRAPHICS}
 
-    Containers/Hash.h
-    Containers/Allocator.cpp
-    Containers/Allocator.h
-    Containers/RefCounted.cpp
-    Containers/RefCounted.h
+    ${VY_WINDOW}
+
+    # Containers/Hash.h
+    # Containers/Allocator.cpp
+    # Containers/Allocator.h
+    # Containers/RefCounted.cpp
+    # Containers/RefCounted.h
 
     Utils/EnumMapper.hpp
 
@@ -93,7 +117,6 @@ set(ENGINE_INCLUDE_DIRS
     ${glfw_SOURCE_DIR}/include
     ${spdlog_SOURCE_DIR}/include
     ${assimp_SOURCE_DIR}/include
-    ${EASTL_SOURCE_DIR}/include
     ${glm_SOURCE_DIR}
 
     ${VENDOR_DIR}/stb
@@ -112,7 +135,6 @@ target_include_directories(${LIBRARY_NAME}
 set(VENDOR_LIBS
     glfw
     glad
-    EASTL
     spdlog
     imgui
     assimp

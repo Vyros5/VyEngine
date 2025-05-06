@@ -1,4 +1,4 @@
-#include "Engine/Application.hpp"
+#include "Engine/Application.h"
 
 
 
@@ -9,7 +9,9 @@ namespace VyEngine
         Object(context),
         m_ExitCode(EXIT_SUCCESS)
     {
+        // Create the engine - Not yet initialized.
         m_Engine = new Engine(context);
+        
     }
 
 
@@ -37,7 +39,7 @@ namespace VyEngine
 
     void Application::ErrorExit()
     {
-        // m_Engine->Exit();
+        m_Engine->Exit();
         m_ExitCode = EXIT_FAILURE;
     }
 }
