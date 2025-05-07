@@ -5,17 +5,15 @@
 #include <functional>
 
 #include "Core/Base.h"
-#include "Event/Event.hpp"
-#include "Event/EventDispatcher.hpp"
-#include "Event/Events/EngineEvents.h"
-#include "Engine/Engine.h"
 #include "Render/Device/Device.h"
 
-using namespace VyEngine::Events;
+using namespace VyEngine::Evt;
+
+std::unordered_map<GLFWwindow*, VyEngine::Window::Window*> VyEngine::Window::Window::__WINDOWS_MAP;
 
 namespace VyEngine::Window
 {
-    Window::Window(const Render::Device& context, const Cfg::WindowConfig& config) :
+    Window::Window(const Display::Device& device, const Cfg::WindowConfig& config) :
         m_MaxSize{ config.maxWidth, config.maxHeight },
         m_MinSize{ config.minWidth, config.minHeight },
         m_Size{ config.width, config.height },
@@ -25,7 +23,7 @@ namespace VyEngine::Window
         m_CursorType(config.cursorType),
         m_CursorMode(config.cursorMode),
         m_Title(config.title),
-        m_Device(context), 
+        m_Device(device), 
         m_Config(config)
         {
             /* Create Window */
@@ -35,34 +33,27 @@ namespace VyEngine::Window
             SetCursorMode(config.cursorMode);
             SetCursorType(config.cursorType);
     
-    
+            /* Callback binding */
+            BindKeyCallback();
+            BindMouseCallback();
+            BindScrollCallback();
+            BindIconifyCallback();
+            BindCloseCallback();
+            BindResizeCallback();
+            BindCursorMoveCallback();
+            BindFramebufferResizeCallback();
+            BindMoveCallback();
+            BindFocusCallback();
+
+            /* Event listening */
+            ResizeEvent.AddListener(std::bind(&Window::OnResize, this, std::placeholders::_1, std::placeholders::_2));
+            MoveEvent.AddListener(std::bind(&Window::OnMove, this, std::placeholders::_1, std::placeholders::_2));
         }
         
         Window::~Window()
         {
             glfwDestroyWindow(m_GlfwWindow);
         }
-    
-        // void Window::ForwardEventToLayers(Event& event)
-        // {
-        //     for (auto layer : m_Config.renderingLayers)
-        //     {
-        //         if (event.IsHandled()) { break; }
-    
-        //         layer->OnEvent(event);
-        //     }
-    
-        //     for (auto layer : m_Config.overlayLayers)
-        //     {
-        //         if (event.IsHandled()) { break; }
-    
-        //         layer->OnEvent(event);
-        //     }
-        // }
-    
-        // void Window::Init(const VyEngine::WindowConfig& config)
-        // {
-        // }
     
     
         void Window::CreateGlfwWindow(const Cfg::WindowConfig& config)
@@ -92,7 +83,7 @@ namespace VyEngine::Window
             if (!m_GlfwWindow)
             {
                 const char* pDesc = NULL;
-                int err = glfwGetError(&pDesc);
+                i32 err = glfwGetError(&pDesc);
                 VYERROR("Failed to create GLFW Window: {0}\n{1}", pDesc, err);
                 exit(EXIT_FAILURE);
             }
@@ -104,20 +95,9 @@ namespace VyEngine::Window
     
                 glfwSetWindowUserPointer(m_GlfwWindow, &m_Data);
     
-                /* Callbacks */
-                glfwSetFramebufferSizeCallback(m_GlfwWindow, __OnGlfwFrameBufferSizeChanged);
-                
-                glfwSetWindowCloseCallback(m_GlfwWindow, __OnGlfwWindowClose);
-                glfwSetWindowSizeCallback(m_GlfwWindow, __OnGlfwWindowResized);
-                glfwSetWindowMaximizeCallback(m_GlfwWindow, __OnGlfwWindowMaximized);
-                glfwSetWindowIconifyCallback(m_GlfwWindow, __OnGlfwWindowMinimized);
-    
-                glfwSetMouseButtonCallback(m_GlfwWindow, __OnGlfwMouseButtonRaised);
-                glfwSetScrollCallback(m_GlfwWindow, __OnGlfwMouseScrollRaised);
-                glfwSetKeyCallback(m_GlfwWindow, __OnGlfwKeyboardRaised);
-    
-                glfwSetCursorPosCallback(m_GlfwWindow, __OnGlfwCursorMoved);
-                glfwSetCharCallback(m_GlfwWindow, __OnGlfwTextInputRaised);
+                __WINDOWS_MAP[m_GlfwWindow] = this;
+
+                VYINFO("Successfully created new GLFW Window: {}", __WINDOWS_MAP.size())
             }
         }
     
@@ -128,9 +108,9 @@ namespace VyEngine::Window
         }
     
     
-        void Window::SetCallbackFunction(const EventCallbackFn& callback)
+        Window* Window::FindInstance(GLFWwindow* glfwWindow)
         {
-            m_Data.CallbackFn = callback;
+            return __WINDOWS_MAP.find(glfwWindow) != __WINDOWS_MAP.end() ? __WINDOWS_MAP[glfwWindow] : nullptr;
         }
     
     
@@ -150,41 +130,7 @@ namespace VyEngine::Window
             glfwSwapBuffers(m_GlfwWindow);
         }
     
-    
-        void Window::OnUpdate(float dt)
-        {
-    
-        }
-    
-        void Window::OnRender()
-        {
-    
-        }
-    
-        bool Window::OnEvent(Event& event)
-        {
-            EventDispatcher dispatcher(event);
-            
-            dispatcher.Dispatch<KeyTypedEvent>(std::bind(&Window::OnKeyTyped, this, std::placeholders::_1));
-            dispatcher.Dispatch<KeyPressedEvent>(std::bind(&Window::OnKeyPressed, this, std::placeholders::_1));
-            dispatcher.Dispatch<KeyReleasedEvent>(std::bind(&Window::OnKeyReleased, this, std::placeholders::_1));
-            
-            dispatcher.Dispatch<MouseMovedEvent>(std::bind(&Window::OnMouseMoved, this, std::placeholders::_1));
-            dispatcher.Dispatch<MouseScrolledEvent>(std::bind(&Window::OnMouseScrolled, this, std::placeholders::_1));
-            dispatcher.Dispatch<MouseButtonPressedEvent>(std::bind(&Window::OnMouseButtonPressed, this, std::placeholders::_1));
-            dispatcher.Dispatch<MouseButtonReleasedEvent>(std::bind(&Window::OnMouseButtonReleased, this, std::placeholders::_1));
-    
-            dispatcher.Dispatch<WindowClosedEvent>(std::bind(&Window::OnWindowClosed, this, std::placeholders::_1));
-            dispatcher.Dispatch<WindowResizedEvent>(std::bind(&Window::OnWindowResized, this, std::placeholders::_1));
-            dispatcher.Dispatch<WindowRestoredEvent>(std::bind(&Window::OnWindowRestored, this, std::placeholders::_1));
-            dispatcher.Dispatch<WindowMaximizedEvent>(std::bind(&Window::OnWindowMaximized, this, std::placeholders::_1));
-            dispatcher.Dispatch<WindowMinimizedEvent>(std::bind(&Window::OnWindowMinimized, this, std::placeholders::_1));
-    
-            return true;
-        }
-    
-    
-    
+
         void Window::SetFullscreen(bool value)
         {
             if (value) { m_Data.IsFullscreen = true; }
@@ -192,10 +138,10 @@ namespace VyEngine::Window
             glfwSetWindowMonitor(
                 m_GlfwWindow,
                 value ? glfwGetPrimaryMonitor() : nullptr,
-                static_cast<int>(m_Position.first),
-                static_cast<int>(m_Position.second),
-                static_cast<int>(m_Size.first),
-                static_cast<int>(m_Size.second),
+                static_cast<i32>(m_Position.first),
+                static_cast<i32>(m_Position.second),
+                static_cast<i32>(m_Size.first),
+                static_cast<i32>(m_Size.second),
                 m_RefreshRate
             );
     
@@ -216,10 +162,10 @@ namespace VyEngine::Window
         {
             glfwSetWindowSizeLimits(
                 m_GlfwWindow,
-                static_cast<int>(m_MinSize.first),
-                static_cast<int>(m_MinSize.second),
-                static_cast<int>(m_MaxSize.first),
-                static_cast<int>(m_MaxSize.second)
+                static_cast<i32>(m_MinSize.first),
+                static_cast<i32>(m_MinSize.second),
+                static_cast<i32>(m_MaxSize.first),
+                static_cast<i32>(m_MaxSize.second)
             );
         }
     
@@ -229,89 +175,89 @@ namespace VyEngine::Window
             // ============================================================================================
             /* Title */
     
-            void Window::SetTitle(const std::string& title)
+            void Window::SetTitle(const VyString& title)
             {
                 m_Data.Title = title.c_str();
                 m_Title = title;
                 glfwSetWindowTitle(m_GlfwWindow, title.c_str());
             }
     
-            std::string Window::GetTitle() const { return m_Title; }
+            VyString Window::GetTitle() const { return m_Title; }
     
             // ============================================================================================
             /* Refresh Rate */
     
-            void Window::SetRefreshRate(int32_t refreshRate)
+            void Window::SetRefreshRate(i32 refreshRate)
             {
                 m_RefreshRate = refreshRate;
             }
     
-            int32_t Window::GetRefreshRate() const { return m_RefreshRate; }
+            i32 Window::GetRefreshRate() const { return m_RefreshRate; }
     
             // ============================================================================================
             /* Window Size */
     
-            void Window::SetSize(uint16_t width, uint16_t height)
+            void Window::SetSize(u16 width, u16 height)
             {
-                glfwSetWindowSize(m_GlfwWindow, static_cast<int>(width), static_cast<int>(height));
+                glfwSetWindowSize(m_GlfwWindow, static_cast<i32>(width), static_cast<i32>(height));
             }
     
-            void Window::SetMinimumSize(int16_t minWidth, int16_t minHeight)
+            void Window::SetMinimumSize(i16 minWidth, i16 minHeight)
             {
                 m_MinSize.first = minWidth;
                 m_MinSize.second = minHeight;
                 UpdateSizeLimit();
             }
     
-            void Window::SetMaximumSize(int16_t maxWidth, int16_t maxHeight)
+            void Window::SetMaximumSize(i16 maxWidth, i16 maxHeight)
             {
                 m_MaxSize.first = maxWidth;
                 m_MaxSize.second = maxHeight;
                 UpdateSizeLimit();
             }
             
-            std::pair<uint16_t, uint16_t> Window::GetSize() const
+            std::pair<u16, u16> Window::GetSize() const
             {
-                int width, height;
+                i32 width, height;
                 glfwGetWindowSize(m_GlfwWindow, &width, &height);
-                return std::make_pair(static_cast<uint16_t>(width), static_cast<uint16_t>(height));
+                return std::make_pair(static_cast<u16>(width), static_cast<u16>(height));
             }
     
-            std::pair<int16_t, int16_t> Window::GetMinimumSize() const { return m_MinSize; }
+            std::pair<i16, i16> Window::GetMinimumSize() const { return m_MinSize; }
     
-            std::pair<int16_t, int16_t> Window::GetMaximumSize() const { return m_MaxSize; }
+            std::pair<i16, i16> Window::GetMaximumSize() const { return m_MaxSize; }
     
             // ============================================================================================
             /* FrameBuffer Size */
     
-            std::pair<uint16_t, uint16_t> Window::GetFramebufferSize() const
+            std::pair<u16, u16> Window::GetFramebufferSize() const
             {
-                int width, height;
+                i32 width, height;
                 glfwGetFramebufferSize(m_GlfwWindow, &width, &height);
-                return std::make_pair(static_cast<uint16_t>(width), static_cast<uint16_t>(height));
+                return std::make_pair(static_cast<u16>(width), static_cast<u16>(height));
             }
     
             // ============================================================================================
             /* Position */
     
-            void Window::SetPosition(int16_t X, int16_t Y)
+            void Window::SetPosition(i16 X, i16 Y)
             {
-                glfwSetWindowPos(m_GlfwWindow, static_cast<int>(X), static_cast<int>(Y));
+                glfwSetWindowPos(m_GlfwWindow, static_cast<i32>(X), static_cast<i32>(Y));
             }
     
-            std::pair<int16_t, int16_t> Window::GetPosition() const
+            std::pair<i16, i16> Window::GetPosition() const
             {
-                int x, y;
+                i32 x, y;
                 glfwGetWindowPos(m_GlfwWindow, &x, &y);
-                return std::make_pair(static_cast<uint16_t>(x), static_cast<uint16_t>(y)); 
+                return std::make_pair(static_cast<u16>(x), static_cast<u16>(y)); 
             }
     
             // ============================================================================================
             /* Cursor */
     
-            void Window::SetCursorPosition(int16_t X, int16_t Y)
+            void Window::SetCursorPosition(i16 X, i16 Y)
             {
-                glfwSetCursorPos(m_GlfwWindow, static_cast<double>(X), static_cast<double>(Y));
+                glfwSetCursorPos(m_GlfwWindow, static_cast<f64>(X), static_cast<f64>(Y));
             }
     
             void Window::SetCursorType(ECursorType cursorType)
@@ -328,7 +274,7 @@ namespace VyEngine::Window
             void Window::SetCursorMode(ECursorMode cursorMode)
             {
                 m_CursorMode = cursorMode;
-                glfwSetInputMode(m_GlfwWindow, GLFW_CURSOR, static_cast<int>(cursorMode));
+                glfwSetInputMode(m_GlfwWindow, GLFW_CURSOR, static_cast<i32>(cursorMode));
             }
     
             ECursorMode Window::GetCursorMode() const
@@ -339,12 +285,12 @@ namespace VyEngine::Window
             // ============================================================================================
             /* Icon */
     
-            void Window::SetIcon(const std::string& filePath)
+            void Window::SetIcon(const VyString& filePath)
             {
     
             }
     
-            void Window::SetIconFromMemory(uint8_t* data, uint32_t width, uint32_t height)
+            void Window::SetIconFromMemory(u8* data, u32 width, u32 height)
             {
     
             }
@@ -391,266 +337,487 @@ namespace VyEngine::Window
     
     
     
-    
-    
-    
-        #pragma region CALLBACKS
-    
-            // ====================================================================================
-    
-            /* Window */
-            void Window::__OnGlfwWindowClose(GLFWwindow* glWindow)
+        void Window::BindKeyCallback() const
+        {
+            auto keyCallback = [](GLFWwindow* p_window, int p_key, int p_scancode, int p_action, int p_mods)
             {
-                WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
-                if (data)
-                {
-                    WindowClosedEvent e;
-                    data->CallbackFn(e);
-                }
-            }
-    
-            void Window::__OnGlfwWindowResized(GLFWwindow* glWindow, int width, int height)
-            {
-                WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
-                if (data)
-                {
-                    WindowResizedEvent e{static_cast<uint32_t>(width), static_cast<uint32_t>(height)};
-                    data->CallbackFn(e);
-                }
-            }
-    
-            void Window::__OnGlfwWindowMaximized(GLFWwindow* glWindow, int maximized)
-            {
-                WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
-                if (data)
-                {
-                    if (maximized == GLFW_TRUE)
-                    {
-                        WindowMaximizedEvent e;
-                        data->CallbackFn(e);
-                        return;
-                    }
-    
-                    WindowRestoredEvent e;
-                    data->CallbackFn(e);
-                }
-            }
-    
-            void Window::__OnGlfwWindowMinimized(GLFWwindow* glWindow, int minimized)
-            {
-                WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
-                if (data)
-                {
-                    if (minimized == GLFW_TRUE)
-                    {
-                        WindowMinimizedEvent e;
-                        data->CallbackFn(e);
-                        return;
-                    }
-    
-                    WindowRestoredEvent e;
-                    data->CallbackFn(e);
-                }
-            }
-    
-    
-            /* Keyboard */
-            void Window::__OnGlfwKeyboardRaised(GLFWwindow* glWindow, int key, int scancode, int action, int mods)
-            {
-                WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
-                
-                if (!data) { return; }
-    
-                if (action == GLFW_PRESS)
-                {
-                    KeyPressedEvent e{static_cast<Data::EKeyCode>(key), 0};
-                    data->CallbackFn(e);
-                }
-                
-                if (action == GLFW_RELEASE)
-                {
-                    KeyReleasedEvent e{static_cast<Data::EKeyCode>(key)};
-                    data->CallbackFn(e);
-                }
+                Window* windowInstance = FindInstance(p_window);
         
-                if (action == GLFW_REPEAT)
+                if (windowInstance)
                 {
-                    KeyPressedEvent e{static_cast<Data::EKeyCode>(key), 0};
-                    data->CallbackFn(e);
+                    if (p_action == GLFW_PRESS)
+                        windowInstance->KeyPressedEvent.Invoke(p_key);
+        
+                    if (p_action == GLFW_RELEASE)
+                        windowInstance->KeyReleasedEvent.Invoke(p_key);
                 }
+            };
+        
+            glfwSetKeyCallback(m_GlfwWindow, keyCallback);
+        }
     
-                if (key == GLFW_KEY_ESCAPE)
+        void Window::BindMouseCallback() const
+        {
+            auto mouseCallback = [](GLFWwindow* p_window, int p_button, int p_action, int p_mods)
+            {
+                Window* windowInstance = FindInstance(p_window);
+
+                if (windowInstance)
                 {
-                    WindowClosedEvent e;
-                    data->CallbackFn(e);
+                    if (p_action == GLFW_PRESS)
+                        windowInstance->MouseButtonPressedEvent.Invoke(p_button);
+
+                    if (p_action == GLFW_RELEASE)
+                        windowInstance->MouseButtonReleasedEvent.Invoke(p_button);
                 }
-            }
-    
-            void Window::__OnGlfwTextInputRaised(GLFWwindow* glWindow, unsigned int character)
+            };
+
+            glfwSetMouseButtonCallback(m_GlfwWindow, mouseCallback);
+        }
+
+        void Window::BindScrollCallback() const
+        {
+            auto scrollCallback = [](GLFWwindow* p_window, double p_xOffset, double p_yOffset)
             {
-                WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
-                if (data)
+                Window* windowInstance = FindInstance(p_window);
+
+                if (windowInstance)
                 {
-                    std::string arr;
-                    arr.append(1, character);
-                    KeyTypedEvent e{arr.c_str()};
-                    data->CallbackFn(e);
+                    windowInstance->MouseScrollEvent.Invoke(p_xOffset, p_yOffset);
                 }
-            }
-    
-    
-            /* Mouse */
-            void Window::__OnGlfwMouseButtonRaised(GLFWwindow* glWindow, int button, int action, int mods)
+            };
+
+            glfwSetScrollCallback(m_GlfwWindow, scrollCallback);
+        }
+
+        void Window::BindResizeCallback() const
+        {
+            auto resizeCallback = [](GLFWwindow* p_window, int p_width, int p_height)
             {
-                WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
-                if (data)
+                Window* windowInstance = FindInstance(p_window);
+
+                if (windowInstance)
                 {
-                    if (action == GLFW_PRESS)
-                    {
-                        MouseButtonPressedEvent e{static_cast<Data::EMouseCode>(button)};
-                        data->CallbackFn(e);
-                        return;
-                    }
-    
-                    MouseButtonReleasedEvent e{static_cast<Data::EMouseCode>(button)};
-                    data->CallbackFn(e);
+                    windowInstance->ResizeEvent.Invoke(static_cast<uint16_t>(p_width), static_cast<uint16_t>(p_height));
                 }
-            }
-    
-            void Window::__OnGlfwMouseScrollRaised(GLFWwindow* glWindow, double xOffset, double yOffset)
+            };
+
+            glfwSetWindowSizeCallback(m_GlfwWindow, resizeCallback);
+        }
+
+        void Window::BindFramebufferResizeCallback() const
+        {
+            auto framebufferResizeCallback = [](GLFWwindow* p_window, int p_width, int p_height)
             {
-                WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
-                if (data)
+                Window* windowInstance = FindInstance(p_window);
+
+                if (windowInstance)
                 {
-                    MouseScrolledEvent e{xOffset, yOffset};
-                    data->CallbackFn(e);
+                    windowInstance->FramebufferResizeEvent.Invoke(static_cast<uint16_t>(p_width), static_cast<uint16_t>(p_height));
                 }
-            }
-    
-            void Window::__OnGlfwCursorMoved(GLFWwindow* glWindow, double xPos, double yPos)
+            };
+
+            glfwSetFramebufferSizeCallback(m_GlfwWindow, framebufferResizeCallback);
+        }
+
+        void Window::BindCursorMoveCallback() const
+        {
+            auto cursorMoveCallback = [](GLFWwindow* p_window, double p_x, double p_y)
             {
-                WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
-                if (data)
+                Window* windowInstance = FindInstance(p_window);
+
+                if (windowInstance)
                 {
-                    MouseMovedEvent e{xPos, yPos};
-                    // data->CallbackFn(e);
+                    windowInstance->CursorMoveEvent.Invoke(static_cast<int16_t>(p_x), static_cast<int16_t>(p_y));
                 }
-            }
-    
-    
-            /* FrameBuffer */
-            void Window::__OnGlfwFrameBufferSizeChanged(GLFWwindow* glWindow, int width, int height)
+            };
+
+            glfwSetCursorPosCallback(m_GlfwWindow, cursorMoveCallback);
+        }
+
+        void Window::BindMoveCallback() const
+        {
+            auto moveCallback = [](GLFWwindow* p_window, int p_x, int p_y)
             {
-                WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
-                if (data)
+                Window* windowInstance = FindInstance(p_window);
+
+                if (windowInstance)
                 {
-                    data->SetWidth(width);
-                    data->SetHeight(height);
-    
-                    VYINFO("FrameBuffer size changed: {0}, {1}", data->Width, data->Height);
+                    windowInstance->MoveEvent.Invoke(static_cast<int16_t>(p_x), static_cast<int16_t>(p_y));
                 }
-            }
-    
-            // ========================================================================================
-    
-            bool Window::OnWindowClosed(VyEngine::Events::WindowClosedEvent& event)
+            };
+
+            glfwSetWindowPosCallback(m_GlfwWindow, moveCallback);
+        }
+
+        void Window::BindIconifyCallback() const
+        {
+            auto iconifyCallback = [](GLFWwindow* p_window, int p_iconified)
             {
-                glfwSetWindowShouldClose(m_GlfwWindow, GLFW_TRUE);
-                VYINFO("Window has been closed");
-    
-                EngineClosedEvent e(event.GetName());
-                EventDispatcher dispatcher(e);
-                dispatcher.Dispatch<EngineClosedEvent>(std::bind(&VyEngine::Engine::OnEngineClosed, std::placeholders::_1));
-                return true;
-            }
-    
-            bool Window::OnWindowResized(VyEngine::Events::WindowResizedEvent& event)
+                Window* windowInstance = FindInstance(p_window);
+
+                if (windowInstance)
+                {
+                    if (p_iconified == GLFW_TRUE)
+                        windowInstance->MinimizeEvent.Invoke();
+
+                    if (p_iconified == GLFW_FALSE)
+                        windowInstance->MaximizeEvent.Invoke();
+                }
+            };
+
+            glfwSetWindowIconifyCallback(m_GlfwWindow, iconifyCallback);
+        }
+
+        void Window::BindFocusCallback() const
+        {
+            auto focusCallback = [](GLFWwindow* p_window, int p_focused)
             {
-                VYINFO("Window has been resized");
-    
-                EventDispatcher dispatcher(event);
-                dispatcher.ForwardTo<VyEngine::Events::WindowResizedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
-                return false;
-            }
-    
-            bool Window::OnWindowRestored(VyEngine::Events::WindowRestoredEvent& event)
+                Window* windowInstance = FindInstance(p_window);
+
+                if (windowInstance)
+                {
+                    if (p_focused == GLFW_TRUE)
+                        windowInstance->GainFocusEvent.Invoke();
+
+                    if (p_focused == GLFW_FALSE)
+                        windowInstance->LostFocusEvent.Invoke();
+                }
+            };
+
+            glfwSetWindowFocusCallback(m_GlfwWindow, focusCallback);
+        }
+
+        void Window::BindCloseCallback() const
+        {
+            auto closeCallback = [](GLFWwindow* p_window)
             {
-                VYINFO("Window has been restored");
-    
-                m_Data.IsMinimized = false;
-                EventDispatcher dispatcher(event);
-                dispatcher.ForwardTo<VyEngine::Events::WindowResizedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
-                return false;
-            }
-    
-            bool Window::OnWindowMinimized(VyEngine::Events::WindowMinimizedEvent& event)
+                Window* windowInstance = FindInstance(p_window);
+
+                if (windowInstance)
+                {
+                    VYTRACE("Invoke CloseEvent")
+                    windowInstance->CloseEvent.Invoke();
+                }
+            };
+
+            glfwSetWindowCloseCallback(m_GlfwWindow, closeCallback);
+        }
+
+        void Window::OnResize(u16 width, u16 height)
+        {
+            VYINFO("Resized: ({0}, {1})", width, height)
+            m_Size.first = width;
+            m_Size.second = height;
+        }
+
+        void Window::OnMove(i16 x, i16 y)
+        {
+            if (!m_Fullscreen)
             {
-                VYINFO("Window has been minimized");
-    
-                m_Data.IsMinimized = true;
-                m_Data.IsMaximized = false;
-                EventDispatcher dispatcher(event);
-                dispatcher.ForwardTo<VyEngine::Events::WindowResizedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
-                return false;
+                m_Position.first = x;
+                m_Position.second = y;
             }
+        }
     
-            bool Window::OnWindowMaximized(VyEngine::Events::WindowMaximizedEvent& event)
-            {
-                VYINFO("Window has been maximized");
-                return false;
-            }
+
+
+                /* Callbacks */
+                // glfwSetFramebufferSizeCallback(m_GlfwWindow, __OnGlfwFrameBufferSizeChanged);
+                
+                // glfwSetWindowCloseCallback(m_GlfwWindow, __OnGlfwWindowClose);
+                // glfwSetWindowSizeCallback(m_GlfwWindow, __OnGlfwWindowResized);
+                // glfwSetWindowMaximizeCallback(m_GlfwWindow, __OnGlfwWindowMaximized);
+                // glfwSetWindowIconifyCallback(m_GlfwWindow, __OnGlfwWindowMinimized);
     
-            // ========================================================================================
+                // glfwSetMouseButtonCallback(m_GlfwWindow, __OnGlfwMouseButtonRaised);
+                // glfwSetScrollCallback(m_GlfwWindow, __OnGlfwMouseScrollRaised);
+                // glfwSetKeyCallback(m_GlfwWindow, __OnGlfwKeyboardRaised);
     
-            bool Window::OnKeyPressed(VyEngine::Events::KeyPressedEvent& event)
-            {
-                EventDispatcher dispatcher(event);
-                dispatcher.ForwardTo<VyEngine::Events::KeyPressedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
-                return true;
-            }
+                // glfwSetCursorPosCallback(m_GlfwWindow, __OnGlfwCursorMoved);
+                // glfwSetCharCallback(m_GlfwWindow, __OnGlfwTextInputRaised);
+
+                // bool Window::OnEvent(Event& event)
+        // {
+        //     EventDispatcher dispatcher(event);
+            
+        //     dispatcher.Dispatch<KeyTypedEvent>(std::bind(&Window::OnKeyTyped, this, std::placeholders::_1));
+        //     dispatcher.Dispatch<KeyPressedEvent>(std::bind(&Window::OnKeyPressed, this, std::placeholders::_1));
+        //     dispatcher.Dispatch<KeyReleasedEvent>(std::bind(&Window::OnKeyReleased, this, std::placeholders::_1));
+            
+        //     dispatcher.Dispatch<MouseMovedEvent>(std::bind(&Window::OnMouseMoved, this, std::placeholders::_1));
+        //     dispatcher.Dispatch<MouseScrolledEvent>(std::bind(&Window::OnMouseScrolled, this, std::placeholders::_1));
+        //     dispatcher.Dispatch<MouseButtonPressedEvent>(std::bind(&Window::OnMouseButtonPressed, this, std::placeholders::_1));
+        //     dispatcher.Dispatch<MouseButtonReleasedEvent>(std::bind(&Window::OnMouseButtonReleased, this, std::placeholders::_1));
     
-            bool Window::OnKeyReleased(VyEngine::Events::KeyReleasedEvent& event)
-            {
-                EventDispatcher dispatcher(event);
-                dispatcher.ForwardTo<VyEngine::Events::KeyReleasedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
-                return true;
-            }
+        //     dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Window::OnWindowClosed, this, std::placeholders::_1));
+        //     dispatcher.Dispatch<WindowResizeEvent>(std::bind(&Window::OnWindowResized, this, std::placeholders::_1));
+        //     // dispatcher.Dispatch<WindowRestoreEvent>(std::bind(&Window::OnWindowRestored, this, std::placeholders::_1));
+        //     // dispatcher.Dispatch<WindowMaximizeEvent>(std::bind(&Window::OnWindowMaximized, this, std::placeholders::_1));
+        //     // dispatcher.Dispatch<WindowMinimizeEvent>(std::bind(&Window::OnWindowMinimized, this, std::placeholders::_1));
     
-            bool Window::OnKeyTyped(VyEngine::Events::KeyTypedEvent& event)
-            {
-                EventDispatcher dispatcher(event);
-                dispatcher.ForwardTo<VyEngine::Events::KeyTypedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
-                return true;
-            }
+        //     return true;
+        // }
     
     
-            bool Window::OnMouseMoved(VyEngine::Events::MouseMovedEvent& event)
-            {
-                EventDispatcher dispatcher(event);
-                dispatcher.ForwardTo<VyEngine::Events::MouseMovedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
-                return true;
-            }
     
-            bool Window::OnMouseScrolled(VyEngine::Events::MouseScrolledEvent& event)
-            {
-                EventDispatcher dispatcher(event);
-                dispatcher.ForwardTo<VyEngine::Events::MouseScrolledEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
-                return true;
-            }
+        // #pragma region CALLBACKS
     
-            bool Window::OnMouseButtonPressed(VyEngine::Events::MouseButtonPressedEvent& event)
-            {
-                EventDispatcher dispatcher(event);
-                dispatcher.ForwardTo<VyEngine::Events::MouseButtonPressedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
-                return true;
-            }
+        //     // ====================================================================================
     
-            bool Window::OnMouseButtonReleased(VyEngine::Events::MouseButtonReleasedEvent& event)
-            {
-                EventDispatcher dispatcher(event);
-                dispatcher.ForwardTo<VyEngine::Events::MouseButtonReleasedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
-                return true;
-            }
+        //     /* Window */
+        //     void Window::__OnGlfwWindowClose(GLFWwindow* glWindow)
+        //     {
+        //         WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
+        //         if (data)
+        //         {
+        //             WindowClosedEvent e;
+        //             data->CallbackFn(e);
+        //         }
+        //     }
     
-        #pragma endregion
+        //     void Window::__OnGlfwWindowResized(GLFWwindow* glWindow, i32 width, i32 height)
+        //     {
+        //         WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
+        //         if (data)
+        //         {
+        //             WindowResizedEvent e{static_cast<u32>(width), static_cast<u32>(height)};
+        //             data->CallbackFn(e);
+        //         }
+        //     }
+    
+        //     void Window::__OnGlfwWindowMaximized(GLFWwindow* glWindow, i32 maximized)
+        //     {
+        //         WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
+        //         if (data)
+        //         {
+        //             if (maximized == GLFW_TRUE)
+        //             {
+        //                 WindowMaximizedEvent e;
+        //                 data->CallbackFn(e);
+        //                 return;
+        //             }
+    
+        //             WindowRestoredEvent e;
+        //             data->CallbackFn(e);
+        //         }
+        //     }
+    
+        //     void Window::__OnGlfwWindowMinimized(GLFWwindow* glWindow, i32 minimized)
+        //     {
+        //         WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
+        //         if (data)
+        //         {
+        //             if (minimized == GLFW_TRUE)
+        //             {
+        //                 WindowMinimizedEvent e;
+        //                 data->CallbackFn(e);
+        //                 return;
+        //             }
+    
+        //             WindowRestoredEvent e;
+        //             data->CallbackFn(e);
+        //         }
+        //     }
+    
+    
+        //     /* Keyboard */
+        //     void Window::__OnGlfwKeyboardRaised(GLFWwindow* glWindow, i32 key, i32 scancode, i32 action, i32 mods)
+        //     {
+        //         WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
+                
+        //         if (!data) { return; }
+    
+        //         if (action == GLFW_PRESS)
+        //         {
+        //             KeyPressedEvent e{static_cast<Data::EKeyCode>(key), 0};
+        //             data->CallbackFn(e);
+        //         }
+                
+        //         if (action == GLFW_RELEASE)
+        //         {
+        //             KeyReleasedEvent e{static_cast<Data::EKeyCode>(key)};
+        //             data->CallbackFn(e);
+        //         }
+        
+        //         if (action == GLFW_REPEAT)
+        //         {
+        //             KeyPressedEvent e{static_cast<Data::EKeyCode>(key), 0};
+        //             data->CallbackFn(e);
+        //         }
+    
+        //         if (key == GLFW_KEY_ESCAPE)
+        //         {
+        //             WindowClosedEvent e;
+        //             data->CallbackFn(e);
+        //         }
+        //     }
+    
+        //     void Window::__OnGlfwTextInputRaised(GLFWwindow* glWindow, u32 character)
+        //     {
+        //         WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
+        //         if (data)
+        //         {
+        //             VyString arr;
+        //             arr.append(1, character);
+        //             KeyTypedEvent e{arr.c_str()};
+        //             data->CallbackFn(e);
+        //         }
+        //     }
+    
+    
+        //     /* Mouse */
+        //     void Window::__OnGlfwMouseButtonRaised(GLFWwindow* glWindow, i32 button, i32 action, i32 mods)
+        //     {
+        //         WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
+        //         if (data)
+        //         {
+        //             if (action == GLFW_PRESS)
+        //             {
+        //                 MouseButtonPressedEvent e{static_cast<Data::EMouseCode>(button)};
+        //                 data->CallbackFn(e);
+        //                 return;
+        //             }
+    
+        //             MouseButtonReleasedEvent e{static_cast<Data::EMouseCode>(button)};
+        //             data->CallbackFn(e);
+        //         }
+        //     }
+    
+        //     void Window::__OnGlfwMouseScrollRaised(GLFWwindow* glWindow, f64 xOffset, f64 yOffset)
+        //     {
+        //         WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
+        //         if (data)
+        //         {
+        //             MouseScrolledEvent e{xOffset, yOffset};
+        //             data->CallbackFn(e);
+        //         }
+        //     }
+    
+        //     void Window::__OnGlfwCursorMoved(GLFWwindow* glWindow, f64 xPos, f64 yPos)
+        //     {
+        //         WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
+        //         if (data)
+        //         {
+        //             MouseMovedEvent e{xPos, yPos};
+        //             // data->CallbackFn(e);
+        //         }
+        //     }
+    
+    
+        //     /* FrameBuffer */
+        //     void Window::__OnGlfwFrameBufferSizeChanged(GLFWwindow* glWindow, i32 width, i32 height)
+        //     {
+        //         WindowData* data = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(glWindow));
+        //         if (data)
+        //         {
+        //             data->SetWidth(width);
+        //             data->SetHeight(height);
+    
+        //             VYINFO("FrameBuffer size changed: {0}, {1}", data->Width, data->Height);
+        //         }
+        //     }
+    
+        //     // ========================================================================================
+    
+        //     bool Window::OnWindowClosed(VyEngine::Events::WindowClosedEvent& event)
+        //     {
+        //         glfwSetWindowShouldClose(m_GlfwWindow, GLFW_TRUE);
+        //         VYINFO("Window has been closed");
+    
+        //         EngineClosedEvent e(event.GetName());
+        //         EventDispatcher dispatcher(e);
+        //         dispatcher.Dispatch<EngineClosedEvent>(std::bind(&VyEngine::Engine::OnEngineClosed, std::placeholders::_1));
+        //         return true;
+        //     }
+    
+        //     bool Window::OnWindowResized(VyEngine::Events::WindowResizedEvent& event)
+        //     {
+        //         VYINFO("Window has been resized");
+    
+        //         // EventDispatcher dispatcher(event);
+        //         // dispatcher.ForwardTo<VyEngine::Events::WindowResizedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
+        //         return false;
+        //     }
+    
+        //     bool Window::OnWindowRestored(VyEngine::Events::WindowRestoredEvent& event)
+        //     {
+        //         VYINFO("Window has been restored");
+    
+        //         m_Data.IsMinimized = false;
+        //         // EventDispatcher dispatcher(event);
+        //         // dispatcher.ForwardTo<VyEngine::Events::WindowResizedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
+        //         return false;
+        //     }
+    
+        //     bool Window::OnWindowMinimized(VyEngine::Events::WindowMinimizedEvent& event)
+        //     {
+        //         VYINFO("Window has been minimized");
+    
+        //         m_Data.IsMinimized = true;
+        //         m_Data.IsMaximized = false;
+        //         // EventDispatcher dispatcher(event);
+        //         // dispatcher.ForwardTo<VyEngine::Events::WindowResizedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
+        //         return false;
+        //     }
+    
+        //     bool Window::OnWindowMaximized(VyEngine::Events::WindowMaximizedEvent& event)
+        //     {
+        //         VYINFO("Window has been maximized");
+        //         return false;
+        //     }
+    
+        //     // ========================================================================================
+    
+        //     bool Window::OnKeyPressed(VyEngine::Events::KeyPressedEvent& event)
+        //     {
+        //         // EventDispatcher dispatcher(event);
+        //         // dispatcher.ForwardTo<VyEngine::Events::KeyPressedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
+        //         return false; //true;
+        //     }
+    
+        //     bool Window::OnKeyReleased(VyEngine::Events::KeyReleasedEvent& event)
+        //     {
+        //         // EventDispatcher dispatcher(event);
+        //         // dispatcher.ForwardTo<VyEngine::Events::KeyReleasedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
+        //         return false; //true;
+        //     }
+    
+        //     bool Window::OnKeyTyped(VyEngine::Events::KeyTypedEvent& event)
+        //     {
+        //         // EventDispatcher dispatcher(event);
+        //         // dispatcher.ForwardTo<VyEngine::Events::KeyTypedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
+        //         return false; //true;
+        //     }
+    
+    
+        //     bool Window::OnMouseMoved(VyEngine::Events::MouseMovedEvent& event)
+        //     {
+        //         // EventDispatcher dispatcher(event);
+        //         // dispatcher.ForwardTo<VyEngine::Events::MouseMovedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
+        //         return false; //true;
+        //     }
+    
+        //     bool Window::OnMouseScrolled(VyEngine::Events::MouseScrolledEvent& event)
+        //     {
+        //         // EventDispatcher dispatcher(event);
+        //         // dispatcher.ForwardTo<VyEngine::Events::MouseScrolledEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
+        //         return false; //true;
+        //     }
+    
+        //     bool Window::OnMouseButtonPressed(VyEngine::Events::MouseButtonPressedEvent& event)
+        //     {
+        //         // EventDispatcher dispatcher(event);
+        //         // dispatcher.ForwardTo<VyEngine::Events::MouseButtonPressedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
+        //         return false; //true;
+        //     }
+    
+        //     bool Window::OnMouseButtonReleased(VyEngine::Events::MouseButtonReleasedEvent& event)
+        //     {
+        //         // EventDispatcher dispatcher(event);
+        //         // dispatcher.ForwardTo<VyEngine::Events::MouseButtonReleasedEvent>(std::bind(&Window::ForwardEventToLayers, this, std::placeholders::_1));
+        //         return false; //true;
+        //     }
+    
+        // #pragma endregion
 }

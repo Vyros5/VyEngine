@@ -21,7 +21,7 @@ namespace VyEngine::Window::Data
         bool         IsResizable  { true  };
         bool         IsDecorated  { true  };
 
-        std::function<void(Event&)> CallbackFn;
+        // std::function<void(Event&)> CallbackFn;
 
     public:
         WindowData(unsigned int width = 1280, unsigned int height = 720, const char* title = "VyEngine") : Width(width), Height(height)

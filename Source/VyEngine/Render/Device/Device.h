@@ -9,7 +9,7 @@
 struct GLFWwindow;
 struct GLFWcursor;
 
-namespace VyEngine::Render
+namespace VyEngine::Display
 {
 
     class Device
@@ -27,7 +27,7 @@ namespace VyEngine::Render
         std::array<int, 4> GetWorkAreaSize() const;
 
         /// @brief Return an instance of GLFWcursor corresponding to the given type
-        GLFWcursor* GetCursorInstance(Window::Data::ECursorType cursorType) const;
+        GLFWcursor* GetCursorInstance(ECursorType cursorType) const;
 
         /// @brief Return true if the vsync is currently enabled
         bool HasVSync() const;
@@ -53,6 +53,6 @@ namespace VyEngine::Render
         bool m_IsVSync { false };
         bool m_IsAlive { false };
 
-        std::unordered_map<Window::Data::ECursorType, GLFWcursor*> m_Cursors;
+        std::unordered_map<ECursorType, GLFWcursor*> m_Cursors;
     };
 }

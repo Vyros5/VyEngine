@@ -12,19 +12,24 @@ namespace VyEngine
     {
         assert(s_ContextInstance == nullptr);
         s_ContextInstance = this;
+        
+        VYTRACE("Context Created")
 
-        // Window::Cfg::DeviceConfig deviceConfig;
-        // device = MakeScope<Window::Context::Device>(deviceConfig);
-        // window = MakeScope<Window::Window>(*device, windowConfig);
+        /* Device & Window Creation */
+        Display::DeviceConfig deviceConfig;
+        displayDevice = MakeScope<Display::Device>(deviceConfig);
+        window        = MakeScope<Window::Window>(*displayDevice, windowConfig);
 
-        // window->SetCallbackFunction(std::bind(&Window::Window::OnEvent, std::ref(window), std::placeholders::_1));
+        window->MakeCurrentContext();
 
-        // window->MakeCurrentContext();
+        /* Graphics Context Creation */
+        gfxDriver = MakeScope<GFX::Driver>(GFX::DriverConfig{ true });
+        
     }
 
     Context::~Context()
     {
-
+        VYTRACE("Context Destroyed")
     }
 
     Context* Context::GetInstance()

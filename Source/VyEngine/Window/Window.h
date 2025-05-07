@@ -1,15 +1,13 @@
 #pragma once
 
-#include "Window/Input/IInputEventCallbacks.h"
-
 #include "Window/Data/WindowData.h"
 #include "Window/Config/WindowConfig.h"
-
+#include "Event/Event.h"
 #include <string>
 
 struct GLFWwindow;
 
-namespace VyEngine::Render
+namespace VyEngine::Display
 {
     class Device;
 }
@@ -17,31 +15,51 @@ namespace VyEngine::Render
 namespace VyEngine::Window
 {
 
-    class Window : public Inputs::IKeyboardEventCallback, public Inputs::IMouseEventCallback, public Inputs::IWindowEventCallback
+    class Window
     {
     private:
 
-        Data::WindowData  m_Data;
-        Cfg::WindowConfig m_Config;
-
-        const Render::Device& m_Device;
+        Data::WindowData       m_Data;
+        Cfg::WindowConfig      m_Config;
+        const Display::Device& m_Device;
 
         /* Window Configuration */
-        std::string m_Title;
-        std::pair<uint16_t, uint16_t> m_Size;
-		std::pair< int16_t,  int16_t> m_MinSize;
-		std::pair< int16_t,  int16_t> m_MaxSize;
-        std::pair< int16_t,  int16_t> m_Position;
+        VyString            m_Title;
+        std::pair<u16, u16> m_Size;
+		std::pair<i16, i16> m_MinSize;
+		std::pair<i16, i16> m_MaxSize;
+        std::pair<i16, i16> m_Position;
 
-        int32_t m_RefreshRate;
-        bool    m_Fullscreen;
+        i32  m_RefreshRate;
+        bool m_Fullscreen;
 
-        Data::ECursorMode m_CursorMode;
-        Data::ECursorType m_CursorType;
+        ECursorMode m_CursorMode;
+        ECursorType m_CursorType;
+
+        /* This map is used by callbacks to find a "Window" instance out of a "GLFWwindow" instnace*/
+		static std::unordered_map<GLFWwindow*, Window*> __WINDOWS_MAP;
 
     public:
     
-        using EventCallbackFn = std::function<void(Event&)>;
+        /* Inputs events */
+		VyEngine::Evt::Event<i32> KeyPressedEvent;
+		VyEngine::Evt::Event<i32> KeyReleasedEvent;
+		VyEngine::Evt::Event<i32> MouseButtonPressedEvent;
+		VyEngine::Evt::Event<i32> MouseButtonReleasedEvent;
+		VyEngine::Evt::Event<f32, f32> MouseScrollEvent;
+
+		/* Window events */
+		VyEngine::Evt::Event<u16, u16> ResizeEvent;
+		VyEngine::Evt::Event<u16, u16> FramebufferResizeEvent;
+		VyEngine::Evt::Event<i16, i16> MoveEvent;
+		VyEngine::Evt::Event<i16, i16> CursorMoveEvent;
+		VyEngine::Evt::Event<> MinimizeEvent;
+		VyEngine::Evt::Event<> MaximizeEvent;
+		VyEngine::Evt::Event<> GainFocusEvent;
+		VyEngine::Evt::Event<> LostFocusEvent;
+		VyEngine::Evt::Event<> CloseEvent;
+        
+        // using EventCallbackFn = std::function<void(Event&)>;
 
     private:
         GLFWwindow* m_GlfwWindow { nullptr };
@@ -55,20 +73,21 @@ namespace VyEngine::Window
         Window() = delete;
         Window(const Window&) = delete;
 
-        Window(const Render::Device& device, const Cfg::WindowConfig& config);
+        Window(const Display::Device& device, const Cfg::WindowConfig& config);
 
         ~Window();
 
         // virtual void Init(const VyEngine::WindowConfig& cfg);
 
         void Shutdown();
-        void OnUpdate(float dt);
-        void OnRender();
-        bool OnEvent(Event& event);
+        // void OnUpdate(float dt);
+        // void OnRender();
+        // bool OnEvent(Event& event);
 
-        void SetCallbackFunction(const EventCallbackFn& callback);
-        void ForwardEventToLayers(Event& event);
+        // void SetCallbackFunction(const EventCallbackFn& callback);
+        // void ForwardEventToLayers(Event& event);
 
+        static Window* FindInstance(GLFWwindow* glfwWindow);
     //     virtual void* GetNativeWindow() const = 0;
         
         // ====================================================================================
@@ -125,70 +144,70 @@ namespace VyEngine::Window
     #pragma region SETTINGS
         
         /// @brief Set Icon
-        void SetIcon(const std::string& filePath);
+        void SetIcon(const VyString& filePath);
 
         /// @brief Set Icon from memory
-        void SetIconFromMemory(uint8_t* data, uint32_t width, uint32_t height);
+        void SetIconFromMemory(u8* data, u32 width, u32 height);
 
         /// @brief Define a title for the window
-        void SetTitle(const std::string& title);
+        void SetTitle(const VyString& title);
 
         /// @brief Return the title of the window
-        std::string GetTitle() const;
+        VyString GetTitle() const;
 
         /// @brief Resize the window
-        void SetSize(uint16_t width, uint16_t weight);
+        void SetSize(u16 width, u16 weight);
 
         /// @brief Return the current size of the window
-        std::pair<uint16_t, uint16_t> GetSize() const;
+        std::pair<u16, u16> GetSize() const;
 
         /// @brief Defines a minimum size for the window
         /// @note -1 (WindowConfig::DontCare) value means no limitation
-        void SetMinimumSize(int16_t minWidth, int16_t minHeight);
+        void SetMinimumSize(i16 minWidth, i16 minHeight);
 
         /// @brief Return the current minimum size of the window
         /// @note -1 (WindowConfig::DontCare) values means no limitation
-        std::pair<int16_t, int16_t> GetMinimumSize() const;
+        std::pair<i16, i16> GetMinimumSize() const;
 
         /// @brief Defines a maximum size for the window
         /// @note -1 (WindowConfig::DontCare) value means no limitation
-        void SetMaximumSize(int16_t maxWidth, int16_t maxHeight);
+        void SetMaximumSize(i16 maxWidth, i16 maxHeight);
 
         /// @brief Return the current maximum size of the window
         /// @note -1 (WindowConfig::DontCare) values means no limitation
-        std::pair<int16_t, int16_t> GetMaximumSize() const;
+        std::pair<i16, i16> GetMaximumSize() const;
 
         /// @brief Return the framebuffer size (Viewport size)
-        std::pair<uint16_t, uint16_t> GetFramebufferSize() const;
+        std::pair<u16, u16> GetFramebufferSize() const;
 
         /// @brief Defines a position for the window
-        void SetPosition(int16_t x, int16_t y);
+        void SetPosition(i16 x, i16 y);
 
         /// @brief Return the current position of the window
-        std::pair<int16_t, int16_t> GetPosition() const;
+        std::pair<i16, i16> GetPosition() const;
 
         /// @brief Defines a refesh rate (Use WindowSettings::DontCare to use the highest available refresh rate)
         /// @note You need to switch to fullscreen mode to apply this effect (Or leave fullscreen and re-apply)
-        void SetRefreshRate(int32_t refreshRate);
+        void SetRefreshRate(i32 refreshRate);
 
         /// @brief Return the current refresh rate (Only applied to the fullscreen mode)
         /// @note If the value is -1 (WindowSettings::DontCare) the highest refresh rate will be used
-        int32_t GetRefreshRate() const;
+        i32 GetRefreshRate() const;
 
         /// @brief Move the cursor to the given position
-        void SetCursorPosition(int16_t X, int16_t Y);
+        void SetCursorPosition(i16 X, i16 Y);
 
         /// @brief Define a type (shape) to apply to the current cursor
-        void SetCursorType(Data::ECursorType cursorType);
+        void SetCursorType(ECursorType cursorType);
 
         /// @brief Return the current cursor type
-        Data::ECursorType GetCursorType() const;
+        ECursorType GetCursorType() const;
 
         /// @brief Define a mode for the mouse cursor
-        void SetCursorMode(Data::ECursorMode cursorMode);
+        void SetCursorMode(ECursorMode cursorMode);
 
         /// @brief Return the current cursor mode
-        Data::ECursorMode GetCursorMode() const;
+        ECursorMode GetCursorMode() const;
 
 
     #pragma endregion
@@ -227,42 +246,59 @@ namespace VyEngine::Window
 
     #pragma region CALLBACKS
     
-    protected:
+    private:
 
-        virtual bool OnKeyPressed(VyEngine::Events::KeyPressedEvent&) override;
-        virtual bool OnKeyReleased(VyEngine::Events::KeyReleasedEvent&) override;
-        virtual bool OnKeyTyped(VyEngine::Events::KeyTypedEvent&) override;
+        /* Callbacks binding */
+		void BindKeyCallback() const;
+		void BindMouseCallback() const;
+		void BindScrollCallback() const;
+		void BindResizeCallback() const;
+		void BindFramebufferResizeCallback() const;
+		void BindCursorMoveCallback() const;
+		void BindMoveCallback() const;
+		void BindIconifyCallback() const;
+		void BindFocusCallback() const;
+		void BindCloseCallback() const;
 
-        virtual bool OnMouseMoved(VyEngine::Events::MouseMovedEvent&) override;
-        virtual bool OnMouseScrolled(VyEngine::Events::MouseScrolledEvent&) override;
-        virtual bool OnMouseButtonPressed(VyEngine::Events::MouseButtonPressedEvent&) override;
-        virtual bool OnMouseButtonReleased(VyEngine::Events::MouseButtonReleasedEvent&) override;
+        /* Event listeners */
+		void OnResize(u16 width, u16 height);
+		void OnMove(i16 x, i16 y);
+    // protected:
 
-        virtual bool OnWindowClosed(VyEngine::Events::WindowClosedEvent&) override;
-        virtual bool OnWindowResized(VyEngine::Events::WindowResizedEvent&) override;
-        virtual bool OnWindowRestored(VyEngine::Events::WindowRestoredEvent&) override;
-        virtual bool OnWindowMinimized(VyEngine::Events::WindowMinimizedEvent&) override;
-        virtual bool OnWindowMaximized(VyEngine::Events::WindowMaximizedEvent&) override;
+    //     virtual bool OnKeyPressed(VyEngine::KeyPressedEvent&) override;
+    //     virtual bool OnKeyReleased(VyEngine::KeyReleasedEvent&) override;
+    //     virtual bool OnKeyTyped(VyEngine::KeyTypedEvent&) override;
 
-        // ====================================================================================
+    //     virtual bool OnMouseMoved(VyEngine::MouseMovedEvent&) override;
+    //     virtual bool OnMouseScrolled(VyEngine::MouseScrolledEvent&) override;
+    //     virtual bool OnMouseButtonPressed(VyEngine::MouseButtonPressedEvent&) override;
+    //     virtual bool OnMouseButtonReleased(VyEngine::MouseButtonReleasedEvent&) override;
 
-        /* Window */
-        static void  __OnGlfwWindowClose(GLFWwindow*);
-        static void  __OnGlfwWindowResized(GLFWwindow*, int width, int height);
-        static void  __OnGlfwWindowMaximized(GLFWwindow*, int maximized);
-        static void  __OnGlfwWindowMinimized(GLFWwindow*, int minimized);
+    //     virtual bool OnWindowClosed(VyEngine::WindowCloseEvent&) override;
+    //     virtual bool OnWindowResized(VyEngine::WindowResizeEvent&) override;
+    //     virtual bool OnWindowRestored(VyEngine::WindowRestoredEvent&) override;
+    //     virtual bool OnWindowMinimized(VyEngine::WindowMinimizedEvent&) override;
+    //     virtual bool OnWindowMaximized(VyEngine::WindowMaximizedEvent&) override;
 
-        /* Keyboard */
-        static void  __OnGlfwKeyboardRaised(GLFWwindow*, int key, int scancode, int action, int mods);
-        static void  __OnGlfwTextInputRaised(GLFWwindow*, unsigned int character);
+    //     // ====================================================================================
 
-        /* Mouse */
-        static void  __OnGlfwMouseButtonRaised(GLFWwindow*, int button, int action, int mods);
-        static void  __OnGlfwMouseScrollRaised(GLFWwindow*, double xOffset, double yOffset);
-        static void  __OnGlfwCursorMoved(GLFWwindow*, double xPos, double yPos);
+    //     /* Window */
+    //     static void  __OnGlfwWindowClose(GLFWwindow*);
+    //     static void  __OnGlfwWindowResized(GLFWwindow*, i32 width, i32 height);
+    //     static void  __OnGlfwWindowMaximized(GLFWwindow*, i32 maximized);
+    //     static void  __OnGlfwWindowMinimized(GLFWwindow*, i32 minimized);
 
-        /* FrameBuffer */
-        static void  __OnGlfwFrameBufferSizeChanged(GLFWwindow*, int width, int height);
+    //     /* Keyboard */
+    //     static void  __OnGlfwKeyboardRaised(GLFWwindow*, i32 key, i32 scancode, i32 action, i32 mods);
+    //     static void  __OnGlfwTextInputRaised(GLFWwindow*, u32 character);
+
+    //     /* Mouse */
+    //     static void  __OnGlfwMouseButtonRaised(GLFWwindow*, i32 button, i32 action, i32 mods);
+    //     static void  __OnGlfwMouseScrollRaised(GLFWwindow*, f64 xOffset, f64 yOffset);
+    //     static void  __OnGlfwCursorMoved(GLFWwindow*, f64 xPos, f64 yPos);
+
+    //     /* FrameBuffer */
+    //     static void  __OnGlfwFrameBufferSizeChanged(GLFWwindow*, i32 width, i32 height);
 
     #pragma endregion
 

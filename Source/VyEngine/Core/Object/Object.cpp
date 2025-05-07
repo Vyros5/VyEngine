@@ -4,10 +4,8 @@
 
 namespace VyEngine
 {
-    Object::Object(Context* context) : 
-        m_Context(context)
+    Object::Object()
     {
-        assert(m_Context);
     }
 
     Object::~Object()

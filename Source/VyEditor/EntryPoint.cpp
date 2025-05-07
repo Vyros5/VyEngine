@@ -3,11 +3,13 @@
 #include <iostream>
 #include <filesystem>
 #include <Core/Base.h>
-#include <Support/Logger/LogDef.h>
-#include "EditorApplication.h"
 #include <Core/Context.h>
+#include <Support/Logger/LogDef.h>
+#include <App/MainLoop.cpp>
+#include "EditorApp.h"
+
 using namespace VyEngine;
-using namespace VyEditor;
+using namespace Editor;
 using namespace VyEngine::Support;
 
 
@@ -24,16 +26,22 @@ int EntryPoint(int argc, char* argv[])
     Context* context = new Context();
     EditorApplication* app = new EditorApplication(context);
 
-    return app->Run();
+    try
+    {
+        app->Run();
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    
+    delete app;
+
+    return 0;
 }
 
 
 int main(int argc, char* argv[])
 {
-    for (int i = 0; i < argc; i++)
-    {
-        std::cout << argv[i] << std::endl;
-    }
-
     return EntryPoint(argc, argv);
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace VyEngine::Window::Data
+namespace VyEngine
 {
 
     enum class ECursorMode

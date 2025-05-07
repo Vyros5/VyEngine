@@ -1,6 +1,6 @@
 # ./Source/VyEngine - Static Library
 
-set(VY_GRAPHICS
+set(VY_GRAPHICS_FILES
 
     # Driver
     Graphics/Driver/Driver.cpp
@@ -55,15 +55,15 @@ set(VY_GRAPHICS
     Graphics/Data/EShader.h
 )
 
-set(VY_RENDER
+set(VY_RENDER_FILES
     Render/Device/Device.cpp
-    Render/Device.Device.h
+    Render/Device/Device.h
     Render/Device/DeviceConfig.h
 
 )
 
 
-set(VY_WINDOW
+set(VY_WINDOW_FILES
     Window/Window.cpp
     Window/Window.h
 
@@ -78,30 +78,39 @@ set(VY_WINDOW
 )
 
 
+set(VY_APP_FILES
+    Engine/Engine.cpp
+    Engine/Engine.h
+
+    App/App.cpp
+    App/App.h
+    App/MainLoop.cpp
+
+    Engine/Configuration/Startup.cpp
+    Engine/Configuration/Startup.h
+    Engine/Configuration/SubSystem.h
+)
+
+
 set(ENGINE_FILES
 
     Core/Base.h
+
+    defines.h
     
     Core/Context.cpp
     Core/Context.h
     
-    Engine/Application.cpp
-    Engine/Application.h
-    Engine/Engine.cpp
-    Engine/Engine.h
-    
     Core/Object/Object.cpp
     Core/Object/Object.h
 
-    ${VY_GRAPHICS}
+    ${VY_APP_FILES}
+    ${VY_GRAPHICS_FILES}
+    ${VY_RENDER_FILES}
+    ${VY_WINDOW_FILES}
 
-    ${VY_WINDOW}
-
-    # Containers/Hash.h
-    # Containers/Allocator.cpp
-    # Containers/Allocator.h
-    # Containers/RefCounted.cpp
-    # Containers/RefCounted.h
+    Event/Event.h
+    Event/Event.inl
 
     Utils/EnumMapper.hpp
 
@@ -131,6 +140,8 @@ target_include_directories(${LIBRARY_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR} # ./Source/VyEngine/
     ${ENGINE_INCLUDE_DIRS}
 )
+
+target_precompile_headers(${LIBRARY_NAME} PRIVATE EnginePCH.h)
 
 set(VENDOR_LIBS
     glfw

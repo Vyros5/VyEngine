@@ -3,105 +3,101 @@
 #include <vector>
 #include <string>
 #include <list>
+#include <defines.h>
 
 #include "Window/Data/ECursor.h"
-
-namespace VyEngine::Layers
-{
-    struct Layer;
-}
 
 namespace VyEngine::Window::Cfg
 {
     struct WindowConfig
     {
-        std::list<Layers::Layer*> renderingLayers;
-        std::vector<Layers::Layer*> overlayLayers;
+        // std::list<Layers::Layer*> renderingLayers;
+        // std::vector<Layer*> overlayLayers;
 
 
         /// @brief A simple constant used to ignore a value setting (Let the program decide for you)
         /// @note You can you WindowConfig::DontCare only where it is indicated
-        static const int32_t DontCare = -1;
+        static const i32 DontCare = -1;
 
         /// @brief Title of the window (Displayed in the title bar)
-        std::string title = "VyEngine";
+        VyString title = "VyEngine";
 
         /// @brief Width of the window in pixels 
-        uint16_t width = 1280;
+        u16 width = 1280;
 
         /// @brief Height of the window in pixels
-        uint16_t height = 720;
+        u16 height = 720;
 
         /// @brief X position of the window
-        int16_t x = 0;
+        i16 x = 0;
 
         /// @brief Y position of the window
-        int16_t y = 0;
+        i16 y = 0;
 
         /// @brief Minimum width of the window
         /// @note Use WindowConfig::DontCare to disable limit
-        int16_t minWidth = DontCare;
+        i16 minWidth = DontCare;
 
         /// @brief Minimum height of the window
         /// @note Use WindowConfig::DontCare to disable limit
-        int16_t minHeight = DontCare;
+        i16 minHeight = DontCare;
 
         /// @brief Maximum width of the window
         /// @note Use WindowConfig::DontCare to disable limit
-        int16_t maxWidth = DontCare;
+        i16 maxWidth = DontCare;
 
         /// @brief Maximum height of the window
         /// @note Use WindowConfig::DontCare to disable limit
-        int16_t maxHeight = DontCare;
+        i16 maxHeight = DontCare;
 
         /// @brief Enable V-Sync
-        bool enableVSync = false;
+        b8 enableVSync = false;
 
         /// @brief Specifies if the window is by default in fullscreen or windowed mode
-        bool fullscreen = false;
+        b8 fullscreen = false;
 
         /// @brief Specifies whether the windowed mode window will have window decorations such as a border, a close widget, etc.
         /// @note This hint is ignored for full screen windows.
-        bool decorated = true;
+        b8 decorated = true;
 
         /// @brief Specifies whether the windowed mode window will be resizable by the user.
         /// @note The window will still be resizable using the "SetSize(uint16_t, uint16_t)" method of the "Window" class.
         /// @note This hint is ignored for full screen windows.
-        bool resizable = true;
+        b8 resizable = true;
 
         /// @brief Specifies whether the windowed mode window will be given input focus when created.
         /// @note This hint is ignored for full screen and initially hidden windows.
-        bool focused = true;
+        b8 focused = true;
 
         /// @brief Specifies whether the windowed mode window will be maximized when created.
         /// @note This hint is ignored for full screen windows.
-        bool maximized = false;
+        b8 maximized = false;
 
         /// @brief Specifies whether the windowed mode window will be floating above other regular windows, also called topmost or always-on-top.
         /// @note This is intended primarily for debugging purposes and cannot be used to implement proper full screen windows.
         /// @note This hint is ignored for full screen windows.
-        bool floating = false;
+        b8 floating = false;
 
         /// @brief Specifies whether the windowed mode window will be initially visible.
         /// @note This hint is ignored for full screen windows.
-        bool visible = true;
+        b8 visible = true;
 
         /// @brief Specifies whether the full screen window will automatically iconify and restore the previous video mode on input focus loss.
         /// @note This hint is ignored for windowed mode windows.
-        bool autoIconify = true;
+        b8 autoIconify = true;
 
         /// @brief Specifies the desired refresh rate for full screen windows.
         /// @note If set to WindowConfig::DontCare, the highest available refresh rate will be used.
         /// @note This hint is ignored for windowed mode windows.
-        int32_t refreshRate = WindowConfig::DontCare;
+        i32 refreshRate = WindowConfig::DontCare;
 
         /// @brief Specifies the default cursor mode of the window
-        Data::ECursorMode cursorMode = Data::ECursorMode::NORMAL;
+        ECursorMode cursorMode = ECursorMode::NORMAL;
 
         /// @brief Specifies the default cursor type (shape) of the window
-        Data::ECursorType cursorType = Data::ECursorType::ARROW;
+        ECursorType cursorType = ECursorType::ARROW;
 
         /// @brief Defines the number of samples to use (For anti-aliasing)
-        uint32_t samples = 4;
+        u32 samples = 4;
     };
 }

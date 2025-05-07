@@ -4,7 +4,7 @@
 #include "Support/Logger/LogDef.h"
 
 
-namespace VyEngine::Render
+namespace VyEngine::Display
 {
     Device::Device(const DeviceConfig& deviceConfig)
     {
@@ -67,7 +67,7 @@ namespace VyEngine::Render
     }
 
 
-    GLFWcursor* Device::GetCursorInstance(Window::Data::ECursorType cursorType) const
+    GLFWcursor* Device::GetCursorInstance(ECursorType cursorType) const
     {
         return m_Cursors.at(cursorType);
     }
@@ -106,21 +106,21 @@ namespace VyEngine::Render
 
     void Device::CreateCursors()
     {
-        m_Cursors[Window::Data::ECursorType::ARROW]     = glfwCreateStandardCursor(static_cast<int>(Window::Data::ECursorType::ARROW));
-        m_Cursors[Window::Data::ECursorType::IBEAM]     = glfwCreateStandardCursor(static_cast<int>(Window::Data::ECursorType::IBEAM));
-        m_Cursors[Window::Data::ECursorType::CROSSHAIR] = glfwCreateStandardCursor(static_cast<int>(Window::Data::ECursorType::CROSSHAIR));
-        m_Cursors[Window::Data::ECursorType::HAND]      = glfwCreateStandardCursor(static_cast<int>(Window::Data::ECursorType::HAND));
-        m_Cursors[Window::Data::ECursorType::HRESIZE]   = glfwCreateStandardCursor(static_cast<int>(Window::Data::ECursorType::HRESIZE));
-        m_Cursors[Window::Data::ECursorType::VRESIZE]   = glfwCreateStandardCursor(static_cast<int>(Window::Data::ECursorType::VRESIZE));
+        m_Cursors[ECursorType::ARROW]     = glfwCreateStandardCursor(static_cast<int>(ECursorType::ARROW));
+        m_Cursors[ECursorType::IBEAM]     = glfwCreateStandardCursor(static_cast<int>(ECursorType::IBEAM));
+        m_Cursors[ECursorType::CROSSHAIR] = glfwCreateStandardCursor(static_cast<int>(ECursorType::CROSSHAIR));
+        m_Cursors[ECursorType::HAND]      = glfwCreateStandardCursor(static_cast<int>(ECursorType::HAND));
+        m_Cursors[ECursorType::HRESIZE]   = glfwCreateStandardCursor(static_cast<int>(ECursorType::HRESIZE));
+        m_Cursors[ECursorType::VRESIZE]   = glfwCreateStandardCursor(static_cast<int>(ECursorType::VRESIZE));
     }
     
     void Device::DestroyCursors()
     {
-        glfwDestroyCursor(m_Cursors[Window::Data::ECursorType::ARROW]);
-        glfwDestroyCursor(m_Cursors[Window::Data::ECursorType::IBEAM]);
-        glfwDestroyCursor(m_Cursors[Window::Data::ECursorType::CROSSHAIR]);
-        glfwDestroyCursor(m_Cursors[Window::Data::ECursorType::HAND]);
-        glfwDestroyCursor(m_Cursors[Window::Data::ECursorType::HRESIZE]);
-        glfwDestroyCursor(m_Cursors[Window::Data::ECursorType::VRESIZE]);
+        glfwDestroyCursor(m_Cursors[ECursorType::ARROW]);
+        glfwDestroyCursor(m_Cursors[ECursorType::IBEAM]);
+        glfwDestroyCursor(m_Cursors[ECursorType::CROSSHAIR]);
+        glfwDestroyCursor(m_Cursors[ECursorType::HAND]);
+        glfwDestroyCursor(m_Cursors[ECursorType::HRESIZE]);
+        glfwDestroyCursor(m_Cursors[ECursorType::VRESIZE]);
     }
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Support/Logger/LogDef.h"
-#include "Event/Events/EngineEvents.h"
 #include "Core/Object/Object.h"
 #include "Window/Window.h"
 
@@ -14,9 +13,9 @@ namespace VyEngine
     {
     public:
         
-        explicit Engine(Context* context);
+        Engine();
 
-        ~Engine();
+        virtual ~Engine();
         
         /// @brief 
         /// @return 
@@ -25,9 +24,14 @@ namespace VyEngine
         void Exit();
         // void Run();
 
+        void Update();
+
+        void Render();
+
+
         bool IsRunning() const;
 
-        static bool OnEngineClosed(Events::EngineClosedEvent& event);
+        // static bool OnEngineClosed(Events::EngineClosedEvent& event);
 
     private:
 

@@ -1,18 +1,15 @@
 #pragma once
 
-// #include <EASTL/unique_ptr.h>
 
-// #include "Containers/Pointers.h"
+#include "Core/Base.h"
 #include "Window/Window.h"
 #include "Render/Device/Device.h"
-#include "Core/Base.h"
+#include "Graphics/Driver/Driver.h"
 
 namespace VyEngine
 {
-    class Context // : public RefCounted
+    class Context
     {
-        // friend class Object;
-
     public:
         
         Context();
@@ -24,11 +21,12 @@ namespace VyEngine
         /// @return Context
         static Context* GetInstance();
 
+    public:
+        Scope<Window::Window>     window;
+        Scope<Display::Device>    displayDevice;
+        Scope<GFX::Driver>        gfxDriver;
 
-        // Object* GetSubSystem() const;
-    // public:
-    //     Scope<Window::Context::Device> device;
-    //     Scope<Window::Window>     window;
-    //     Window::Cfg::WindowConfig windowConfig;
+        Window::Cfg::WindowConfig windowConfig;
+        
     };
 }

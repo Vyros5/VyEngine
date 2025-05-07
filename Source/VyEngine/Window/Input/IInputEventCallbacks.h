@@ -4,7 +4,7 @@
 #include "Event/Events/MouseEvents.h"
 #include "Event/Events/KeyEvents.h"
 
-namespace VyEngine::Window::Inputs
+namespace VyEngine::Inputs
 {
     struct IMouseEventCallback
     {

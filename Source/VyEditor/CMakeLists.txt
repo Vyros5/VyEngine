@@ -1,19 +1,13 @@
-# ./Source/VyEditor - Editor Application
+# ./Source/Editor - Editor Application
 
 set(EDITOR_FILES
     EntryPoint.cpp
 
-    EditorApplication.cpp
-    EditorApplication.h
+    EditorApp.cpp
+    EditorApp.h
 
-    # Editor.cpp
-    # Editor.hpp
-
-    # Context/Context.cpp
-    # Context/Context.hpp
-
-    # Layers/ImGuiLayer.cpp
-    # Layers/ImGuiLayer.hpp
+    Editor.cpp
+    Editor.h
 )
 
 set(APP_NAME VyEngine)
