@@ -14,7 +14,6 @@ namespace VyEngine::Display
 
 namespace VyEngine::Window
 {
-
     class Window
     {
     private:
@@ -24,14 +23,14 @@ namespace VyEngine::Window
         const Display::Device& m_Device;
 
         /* Window Configuration */
-        VyString            m_Title;
-        std::pair<u16, u16> m_Size;
-		std::pair<i16, i16> m_MinSize;
-		std::pair<i16, i16> m_MaxSize;
-        std::pair<i16, i16> m_Position;
+        // VyString            m_Title;
+        // std::pair<u16, u16> m_Size;
+		// std::pair<i16, i16> m_MinSize;
+		// std::pair<i16, i16> m_MaxSize;
+        // std::pair<i16, i16> m_Position;
 
-        i32  m_RefreshRate;
-        bool m_Fullscreen;
+        // i32  m_RefreshRate;
+        // bool m_Fullscreen;
 
         ECursorMode m_CursorMode;
         ECursorType m_CursorType;
@@ -58,8 +57,6 @@ namespace VyEngine::Window
 		VyEngine::Evt::Event<> GainFocusEvent;
 		VyEngine::Evt::Event<> LostFocusEvent;
 		VyEngine::Evt::Event<> CloseEvent;
-        
-        // using EventCallbackFn = std::function<void(Event&)>;
 
     private:
         GLFWwindow* m_GlfwWindow { nullptr };
@@ -73,6 +70,9 @@ namespace VyEngine::Window
         Window() = delete;
         Window(const Window&) = delete;
 
+        /// @brief 
+        /// @param device 
+        /// @param config 
         Window(const Display::Device& device, const Cfg::WindowConfig& config);
 
         ~Window();
@@ -84,11 +84,7 @@ namespace VyEngine::Window
         // void OnRender();
         // bool OnEvent(Event& event);
 
-        // void SetCallbackFunction(const EventCallbackFn& callback);
-        // void ForwardEventToLayers(Event& event);
-
         static Window* FindInstance(GLFWwindow* glfwWindow);
-    //     virtual void* GetNativeWindow() const = 0;
         
         // ====================================================================================
 
@@ -263,42 +259,6 @@ namespace VyEngine::Window
         /* Event listeners */
 		void OnResize(u16 width, u16 height);
 		void OnMove(i16 x, i16 y);
-    // protected:
-
-    //     virtual bool OnKeyPressed(VyEngine::KeyPressedEvent&) override;
-    //     virtual bool OnKeyReleased(VyEngine::KeyReleasedEvent&) override;
-    //     virtual bool OnKeyTyped(VyEngine::KeyTypedEvent&) override;
-
-    //     virtual bool OnMouseMoved(VyEngine::MouseMovedEvent&) override;
-    //     virtual bool OnMouseScrolled(VyEngine::MouseScrolledEvent&) override;
-    //     virtual bool OnMouseButtonPressed(VyEngine::MouseButtonPressedEvent&) override;
-    //     virtual bool OnMouseButtonReleased(VyEngine::MouseButtonReleasedEvent&) override;
-
-    //     virtual bool OnWindowClosed(VyEngine::WindowCloseEvent&) override;
-    //     virtual bool OnWindowResized(VyEngine::WindowResizeEvent&) override;
-    //     virtual bool OnWindowRestored(VyEngine::WindowRestoredEvent&) override;
-    //     virtual bool OnWindowMinimized(VyEngine::WindowMinimizedEvent&) override;
-    //     virtual bool OnWindowMaximized(VyEngine::WindowMaximizedEvent&) override;
-
-    //     // ====================================================================================
-
-    //     /* Window */
-    //     static void  __OnGlfwWindowClose(GLFWwindow*);
-    //     static void  __OnGlfwWindowResized(GLFWwindow*, i32 width, i32 height);
-    //     static void  __OnGlfwWindowMaximized(GLFWwindow*, i32 maximized);
-    //     static void  __OnGlfwWindowMinimized(GLFWwindow*, i32 minimized);
-
-    //     /* Keyboard */
-    //     static void  __OnGlfwKeyboardRaised(GLFWwindow*, i32 key, i32 scancode, i32 action, i32 mods);
-    //     static void  __OnGlfwTextInputRaised(GLFWwindow*, u32 character);
-
-    //     /* Mouse */
-    //     static void  __OnGlfwMouseButtonRaised(GLFWwindow*, i32 button, i32 action, i32 mods);
-    //     static void  __OnGlfwMouseScrollRaised(GLFWwindow*, f64 xOffset, f64 yOffset);
-    //     static void  __OnGlfwCursorMoved(GLFWwindow*, f64 xPos, f64 yPos);
-
-    //     /* FrameBuffer */
-    //     static void  __OnGlfwFrameBufferSizeChanged(GLFWwindow*, i32 width, i32 height);
 
     #pragma endregion
 

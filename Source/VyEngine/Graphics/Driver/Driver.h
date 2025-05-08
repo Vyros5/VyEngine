@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "defines.h"
 #include <string>
 #include <array>
 #include <memory>
@@ -23,17 +23,17 @@ namespace VyEngine::GFX
         /// @brief Notifies the driver that the frame is finished
         // void OnFrameCompleted();
 
-        void SetViewport(uint32_t X, uint32_t Y, uint32_t width, uint32_t height);
+        void SetViewport(u32 X, u32 Y, u32 width, u32 height);
 
 
         void ClearBuffer(
             bool colorBuffer,
 			bool depthBuffer,
 			bool stencilBuffer,
-            const glm::vec4& color = glm::vec4(0.35f, 0.35f, 0.35f, 1.0f)
+            const Vec4& color = Vec4(0.35f, 0.35f, 0.35f, 1.0f)
         );
 
-        void Draw(uint32_t instances);
+        // void Draw(u32 instances);
 
 
         std::string_view GetVendor() const;

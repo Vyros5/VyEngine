@@ -23,68 +23,68 @@ namespace VyEngine::Window::Cfg
         VyString title = "VyEngine";
 
         /// @brief Width of the window in pixels 
-        u16 width = 1280;
+        u32 width = 1280;
 
         /// @brief Height of the window in pixels
-        u16 height = 720;
+        u32 height = 720;
 
         /// @brief X position of the window
-        i16 x = 0;
+        i32 x = 100;
 
         /// @brief Y position of the window
-        i16 y = 0;
+        i32 y = 100;
 
         /// @brief Minimum width of the window
         /// @note Use WindowConfig::DontCare to disable limit
-        i16 minWidth = DontCare;
+        i32 minWidth = DontCare;
 
         /// @brief Minimum height of the window
         /// @note Use WindowConfig::DontCare to disable limit
-        i16 minHeight = DontCare;
+        i32 minHeight = DontCare;
 
         /// @brief Maximum width of the window
         /// @note Use WindowConfig::DontCare to disable limit
-        i16 maxWidth = DontCare;
+        i32 maxWidth = DontCare;
 
         /// @brief Maximum height of the window
         /// @note Use WindowConfig::DontCare to disable limit
-        i16 maxHeight = DontCare;
+        i32 maxHeight = DontCare;
 
         /// @brief Enable V-Sync
-        b8 enableVSync = false;
+        bool enableVSync = false;
 
         /// @brief Specifies if the window is by default in fullscreen or windowed mode
-        b8 fullscreen = false;
+        bool fullscreen = false;
 
         /// @brief Specifies whether the windowed mode window will have window decorations such as a border, a close widget, etc.
         /// @note This hint is ignored for full screen windows.
-        b8 decorated = true;
+        bool decorated = true;
 
         /// @brief Specifies whether the windowed mode window will be resizable by the user.
         /// @note The window will still be resizable using the "SetSize(uint16_t, uint16_t)" method of the "Window" class.
         /// @note This hint is ignored for full screen windows.
-        b8 resizable = true;
+        bool resizable = true;
 
         /// @brief Specifies whether the windowed mode window will be given input focus when created.
         /// @note This hint is ignored for full screen and initially hidden windows.
-        b8 focused = true;
+        bool focused = true;
 
         /// @brief Specifies whether the windowed mode window will be maximized when created.
         /// @note This hint is ignored for full screen windows.
-        b8 maximized = false;
+        bool maximized = false;
 
         /// @brief Specifies whether the windowed mode window will be floating above other regular windows, also called topmost or always-on-top.
         /// @note This is intended primarily for debugging purposes and cannot be used to implement proper full screen windows.
         /// @note This hint is ignored for full screen windows.
-        b8 floating = false;
+        bool floating = false;
 
         /// @brief Specifies whether the windowed mode window will be initially visible.
         /// @note This hint is ignored for full screen windows.
-        b8 visible = true;
+        bool visible = true;
 
         /// @brief Specifies whether the full screen window will automatically iconify and restore the previous video mode on input focus loss.
         /// @note This hint is ignored for windowed mode windows.
-        b8 autoIconify = true;
+        bool autoIconify = true;
 
         /// @brief Specifies the desired refresh rate for full screen windows.
         /// @note If set to WindowConfig::DontCare, the highest available refresh rate will be used.

@@ -6,7 +6,7 @@
 #include <Core/Context.h>
 #include <Support/Logger/LogDef.h>
 #include <App/MainLoop.cpp>
-#include "EditorApp.h"
+#include "Editor/EditorApp.h"
 
 using namespace VyEngine;
 using namespace Editor;

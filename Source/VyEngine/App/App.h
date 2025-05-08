@@ -60,9 +60,6 @@ namespace VyEngine
 
     private:
 
-        // [[nodiscard]] bool OnWindowClosed([[maybe_unused]] const WindowCloseEvent& e);
-        // [[nodiscard]] bool OnWindowResize(const WindowResizeEvent& e);
-
         // bool m_Running;
 
     protected:

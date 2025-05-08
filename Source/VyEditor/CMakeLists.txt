@@ -3,11 +3,11 @@
 set(EDITOR_FILES
     EntryPoint.cpp
 
-    EditorApp.cpp
-    EditorApp.h
+    Editor/EditorApp.cpp
+    Editor/EditorApp.h
 
-    Editor.cpp
-    Editor.h
+    Editor/Editor.cpp
+    Editor/Editor.h
 )
 
 set(APP_NAME VyEngine)

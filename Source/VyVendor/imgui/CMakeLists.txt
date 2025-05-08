@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.25)
-project(imgui)
+# cmake_minimum_required(VERSION 3.25)
+# project(imgui)
 
 add_library(imgui STATIC)
 
@@ -12,6 +12,16 @@ set(IMGUI_SOURCES
 
     src/imgui_impl_glfw.cpp
     src/imgui_impl_opengl3.cpp
+
+    include/imgui.h
+    include/imconfig.h
+    include/imgui_internal.h
+    include/imstb_rectpack.h
+    include/imstb_textedit.h
+    include/imstb_truetype.h
+    
+    include/imgui_impl_glfw.h
+    include/imgui_impl_opengl3.h
 )
 
 target_sources(imgui PRIVATE ${IMGUI_SOURCES})

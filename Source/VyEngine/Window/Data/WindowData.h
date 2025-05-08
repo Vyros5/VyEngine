@@ -1,30 +1,41 @@
 #pragma once
 
+#include "defines.h"
+
 namespace VyEngine::Window::Data
 {
     struct WindowData
     {
     public:
-        const char*  Title        {   };
-        unsigned int Width        { 0 };
-        unsigned int Height       { 0 };
-        int          Dpi          { 0 };
-        float        DpiScale     { 0.0f  };
-        float        AspectRatio  { 0.0f  };
-        bool         IsVSync      { false };
-        bool         IsFullscreen { false };
-        bool         IsHidden     { false };
-        bool         IsVisible    { true  };
-        bool         IsMaximized  { false };
-        bool         IsMinimized  { false };
-        bool         IsFocused    { true  };
-        bool         IsResizable  { true  };
-        bool         IsDecorated  { true  };
 
-        // std::function<void(Event&)> CallbackFn;
+        VyString Title    { "Default" };
+
+        u16 SizeX         { 0 };
+        u16 SizeY         { 0 };
+        i16 MinSizeX      { 0 };
+        i16 MinSizeY      { 0 };
+        i16 MaxSizeX      { 0 };
+        i16 MaxSizeY      { 0 };
+        i16 XPos          { 0 };
+        i16 YPos          { 0 };
+
+        i32 RefreshRate   { 0 };
+        i32 Dpi           { 0 };
+        f32 DpiScale      { 0.0f };
+        f32 AspectRatio   { 0.0f };
+        
+        bool IsVSync      { false };
+        bool IsFullscreen { false };
+        bool IsHidden     { false };
+        bool IsVisible    { true  };
+        bool IsMaximized  { false };
+        bool IsMinimized  { false };
+        bool IsFocused    { true  };
+        bool IsResizable  { true  };
+        bool IsDecorated  { true  };
 
     public:
-        WindowData(unsigned int width = 1280, unsigned int height = 720, const char* title = "VyEngine") : Width(width), Height(height)
+        WindowData(i32 width = 720, i32 height = 720, VyString title = "Default") : SizeX(width), SizeY(height)
         {
             this->Title = title;
             UpdateAspectRatio();
@@ -32,22 +43,26 @@ namespace VyEngine::Window::Data
 
         ~WindowData() = default;
 
-        void SetWidth(unsigned int w)
+        void SetWidth(u32 w)
         {
-            Width = w;
+            SizeX = w;
             UpdateAspectRatio();
         }
 
-        void SetHeight(unsigned int h)
+        void SetHeight(u32 h)
         {
-            Height = h;
+            SizeY = h;
             UpdateAspectRatio();
         }
 
     private:
         void UpdateAspectRatio()
         {
-            AspectRatio = (float)Width / (float)Height;
+            AspectRatio = SizeX / SizeY;
         }
     };
 }
+
+        // const char* Title        {   };
+        // u32         Width        { 0 };
+        // u32         Height       { 0 };

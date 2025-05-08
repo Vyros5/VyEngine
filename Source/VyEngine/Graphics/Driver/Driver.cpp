@@ -38,17 +38,12 @@ namespace VyEngine::GFX
 
     // }
 
-    void Driver::SetViewport(uint32_t X, uint32_t Y, uint32_t width, uint32_t height)
+    void Driver::SetViewport(u32 X, u32 Y, u32 width, u32 height)
     {
         m_GraphicsBackend->SetViewport(X, Y, width, height);
     }
 
-    void Driver::ClearBuffer(
-        bool colorBuffer,
-        bool depthBuffer,
-        bool stencilBuffer,
-        const glm::vec4& color
-    )
+    void Driver::ClearBuffer(bool colorBuffer, bool depthBuffer, bool stencilBuffer, const Vec4& color)
     {
         if (colorBuffer) 
         { 
@@ -59,10 +54,10 @@ namespace VyEngine::GFX
     }
 
 
-    void Driver::Draw(uint32_t instances)
-    {
+    // void Driver::Draw(u32 instances)
+    // {
 
-    }
+    // }
 
     std::string_view Driver::GetVendor() const { return m_Vendor; }
 

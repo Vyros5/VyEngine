@@ -71,9 +71,12 @@ static_assert(sizeof(u16) == 2);
 static_assert(sizeof(u32) == 4);
 static_assert(sizeof(u64) == 8);
 
+static_assert(sizeof(f32)  == 4);
+static_assert(sizeof(f64)  == 8);
+
 static_assert(sizeof(b8)  == 1);
 
-
+// ================================================================================================
 
 // String Type
 
@@ -84,62 +87,37 @@ typedef std::string VyString;
 typedef std::string_view VyStringView;
 
 // ================================================================================================
+/* Vectors / Matrices / Quaternions */
 
-/// @brief Enum values for success and failure. To be used by functions as return values mostly, instead of bool.
-enum VyResultEnum
-{
-    VY_SUCCESS,
-    VY_FAILURE
-};
-
-/// @brief Default enum for returning failure or success, instead of using a bool.
-struct VyResult
-{
-public:
-    VyResult(VyResultEnum val) : m_Value(val) {}
-
-
-    void operator=(VyResultEnum rhs) { m_Value = rhs; }
-    bool operator==(VyResultEnum cmp) const { return m_Value == cmp; }
-    bool operator!=(VyResultEnum cmp) const { return m_Value != cmp; }
-
-    [[nodiscard]] inline bool Succeeded() const { return m_Value == VY_SUCCESS; }
-    [[nodiscard]] inline bool Failed() const { return m_Value == VY_FAILURE; }
-
-    /// @brief Used to silence compiler warnings, when success or failure doesn't matter.
-    inline void Ignore()
-    {
-        /* dummy to be called when a return value is [[nodiscard]] but the result is not needed */
-    }
-
-    /// @brief Asserts that the function succeeded. In case of failure, the program will terminate.
-    /// @param msg 
-    /// @param details 
-    /// @note If \a 'msg' is given, it will be the assert message. If \a 'details' is provided, \a 'msg' should contain a formatting element ({}), e.g. "Error: {}".
-    void AssertSuccess(const char* msg = nullptr, const char* details = nullptr) const;
-
-private:
-    VyResultEnum m_Value;
-};
-
-
-/// @brief Explicit conversion to VyResult, can be overloaded for arbitrary types.
-/// @param result 
-/// @return VyResult
-/// @note This is intentionally not done via casting operator overload (or even additional constructors) since this usually comes with a
-/// considerable data loss.
-inline VyResult VyToResult(VyResult result)
-{
-    return result;
-}
-
-
+/** @brief Float (f32) Vector2(x, y) */
 typedef glm::vec2 Vec2;
+/** @brief Float (f32) Vector3(x, y, z) */
 typedef glm::vec3 Vec3;
+/** @brief Float (f32) Vector4(x, y, z, w) */
 typedef glm::vec4 Vec4;
 
+/** @brief Int (i32) Vector2(x, y) */
+typedef glm::ivec2 IVec2;
+/** @brief Int (i32) Vector3(x, y, z) */
+typedef glm::ivec3 IVec3;
+/** @brief Int (i32) Vector4(x, y, z, w) */
+typedef glm::ivec4 IVec4;
+
+/** @brief Double (f64) Vector2(x, y) */
+typedef glm::dvec2 DVec2;
+/** @brief Double (f64) Vector3(x, y, z) */
+typedef glm::dvec3 DVec3;
+/** @brief Double (f64) Vector4(x, y, z, w) */
+typedef glm::dvec4 DVec4;
+
+/** @brief Float (f32) 2 x 2 Matrix (4) */
 typedef glm::mat2 Mat2;
+/** @brief Float (f32) 3 x 3 Matrix (9) */
 typedef glm::mat3 Mat3;
+/** @brief Float (f32) 4 x 4 Matrix (16) */
 typedef glm::mat4 Mat4;
 
+/** @brief Float (f32) Quaternion (4 x 4) */
 typedef glm::quat Quat;
+
+// ================================================================================================

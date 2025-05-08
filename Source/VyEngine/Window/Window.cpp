@@ -14,18 +14,38 @@ std::unordered_map<GLFWwindow*, VyEngine::Window::Window*> VyEngine::Window::Win
 namespace VyEngine::Window
 {
     Window::Window(const Display::Device& device, const Cfg::WindowConfig& config) :
-        m_MaxSize{ config.maxWidth, config.maxHeight },
-        m_MinSize{ config.minWidth, config.minHeight },
-        m_Size{ config.width, config.height },
-        m_Position{ config.x, config.y },
-        m_RefreshRate(config.refreshRate),
-        m_Fullscreen(config.fullscreen),
+        // m_MaxSize{ config.maxWidth, config.maxHeight },
+        // m_MinSize{ config.minWidth, config.minHeight },
+        // m_Size{ config.width, config.height },
+        // m_Position{ config.x, config.y },
+        // m_RefreshRate(config.refreshRate),
+        // m_Fullscreen(config.fullscreen),
         m_CursorType(config.cursorType),
         m_CursorMode(config.cursorMode),
-        m_Title(config.title),
+        // m_Title(config.title),
         m_Device(device), 
         m_Config(config)
         {
+            m_Data = Data::WindowData(config.width, config.height, config.title);
+            
+            m_Data.XPos         = config.x;
+            m_Data.YPos         = config.y;
+            m_Data.MaxSizeX     = config.maxWidth;
+            m_Data.MaxSizeY     = config.maxHeight;
+            m_Data.MinSizeX     = config.minWidth;
+            m_Data.MinSizeY     = config.minHeight;
+            m_Data.RefreshRate  = config.refreshRate;
+
+            m_Data.IsFocused    = config.focused;
+            m_Data.IsVisible    = config.visible;
+            m_Data.IsHidden     = !config.visible;
+            m_Data.IsMaximized  = config.maximized;
+            m_Data.IsMinimized  = !config.maximized;
+            m_Data.IsFullscreen = config.fullscreen;
+            m_Data.IsResizable  = config.resizable;
+            m_Data.IsDecorated  = config.decorated;
+            m_Data.IsVSync      = config.enableVSync;
+
             /* Create Window */
             CreateGlfwWindow(config);
     
@@ -58,9 +78,12 @@ namespace VyEngine::Window
     
         void Window::CreateGlfwWindow(const Cfg::WindowConfig& config)
         {
-            GLFWmonitor* monitor = nullptr;
+            GLFWmonitor* selectedMonitor = nullptr;
     
-            if (m_Data.IsFullscreen) { monitor = glfwGetPrimaryMonitor(); }
+            if (m_Data.IsFullscreen) 
+            { 
+                selectedMonitor = glfwGetPrimaryMonitor(); 
+            }
         
             glfwWindowHint(GLFW_RESIZABLE,    config.resizable);
             glfwWindowHint(GLFW_DECORATED,    config.decorated);
@@ -73,10 +96,10 @@ namespace VyEngine::Window
             glfwWindowHint(GLFW_SAMPLES,      config.samples);
     
             m_GlfwWindow = glfwCreateWindow(
-                m_Data.Width,
-                m_Data.Height,
-                m_Data.Title,
-                monitor,
+                static_cast<i32>(m_Data.SizeX),
+                static_cast<i32>(m_Data.SizeY),
+                m_Data.Title.c_str(),
+                selectedMonitor,
                 nullptr
             );
     
@@ -90,7 +113,7 @@ namespace VyEngine::Window
             else
             {
                 UpdateSizeLimit();
-                SetPosition(m_Position.first, m_Position.second);
+                SetPosition(m_Data.XPos, m_Data.YPos);
                 
     
                 glfwSetWindowUserPointer(m_GlfwWindow, &m_Data);
@@ -133,19 +156,25 @@ namespace VyEngine::Window
 
         void Window::SetFullscreen(bool value)
         {
-            if (value) { m_Data.IsFullscreen = true; }
+            if (value) 
+            { 
+                m_Data.IsFullscreen = true; 
+            }
     
             glfwSetWindowMonitor(
                 m_GlfwWindow,
                 value ? glfwGetPrimaryMonitor() : nullptr,
-                static_cast<i32>(m_Position.first),
-                static_cast<i32>(m_Position.second),
-                static_cast<i32>(m_Size.first),
-                static_cast<i32>(m_Size.second),
-                m_RefreshRate
+                static_cast<i32>(m_Data.XPos),
+                static_cast<i32>(m_Data.YPos),
+                static_cast<i32>(m_Data.SizeX),
+                static_cast<i32>(m_Data.SizeY),
+                m_Data.RefreshRate
             );
     
-            if (!value) { m_Data.IsFullscreen = false; }
+            if (!value) 
+            { 
+                m_Data.IsFullscreen = false; 
+            }
         }
     
         bool Window::IsFullscreen() const
@@ -162,10 +191,10 @@ namespace VyEngine::Window
         {
             glfwSetWindowSizeLimits(
                 m_GlfwWindow,
-                static_cast<i32>(m_MinSize.first),
-                static_cast<i32>(m_MinSize.second),
-                static_cast<i32>(m_MaxSize.first),
-                static_cast<i32>(m_MaxSize.second)
+                static_cast<i32>(m_Data.MinSizeX),
+                static_cast<i32>(m_Data.MinSizeY),
+                static_cast<i32>(m_Data.MaxSizeX),
+                static_cast<i32>(m_Data.MaxSizeY)
             );
         }
     
@@ -177,42 +206,43 @@ namespace VyEngine::Window
     
             void Window::SetTitle(const VyString& title)
             {
-                m_Data.Title = title.c_str();
-                m_Title = title;
+                m_Data.Title = title;
                 glfwSetWindowTitle(m_GlfwWindow, title.c_str());
             }
     
-            VyString Window::GetTitle() const { return m_Title; }
+            VyString Window::GetTitle() const { return m_Data.Title; }
     
             // ============================================================================================
             /* Refresh Rate */
     
             void Window::SetRefreshRate(i32 refreshRate)
             {
-                m_RefreshRate = refreshRate;
+                m_Data.RefreshRate = refreshRate;
             }
     
-            i32 Window::GetRefreshRate() const { return m_RefreshRate; }
+            i32 Window::GetRefreshRate() const { return m_Data.RefreshRate; }
     
             // ============================================================================================
             /* Window Size */
     
             void Window::SetSize(u16 width, u16 height)
             {
+                m_Data.SizeX = width;
+                m_Data.SizeY = height;
                 glfwSetWindowSize(m_GlfwWindow, static_cast<i32>(width), static_cast<i32>(height));
             }
     
             void Window::SetMinimumSize(i16 minWidth, i16 minHeight)
             {
-                m_MinSize.first = minWidth;
-                m_MinSize.second = minHeight;
+                m_Data.MinSizeX = minWidth;
+                m_Data.MinSizeY = minHeight;
                 UpdateSizeLimit();
             }
     
             void Window::SetMaximumSize(i16 maxWidth, i16 maxHeight)
             {
-                m_MaxSize.first = maxWidth;
-                m_MaxSize.second = maxHeight;
+                m_Data.MaxSizeX = maxWidth;
+                m_Data.MaxSizeX = maxHeight;
                 UpdateSizeLimit();
             }
             
@@ -223,9 +253,9 @@ namespace VyEngine::Window
                 return std::make_pair(static_cast<u16>(width), static_cast<u16>(height));
             }
     
-            std::pair<i16, i16> Window::GetMinimumSize() const { return m_MinSize; }
+            std::pair<i16, i16> Window::GetMinimumSize() const { return std::make_pair(static_cast<i16>(m_Data.MinSizeX), static_cast<i16>(m_Data.MinSizeY)); }
     
-            std::pair<i16, i16> Window::GetMaximumSize() const { return m_MaxSize; }
+            std::pair<i16, i16> Window::GetMaximumSize() const { return std::make_pair(static_cast<i16>(m_Data.MaxSizeX), static_cast<i16>(m_Data.MaxSizeY)); }
     
             // ============================================================================================
             /* FrameBuffer Size */
@@ -242,6 +272,8 @@ namespace VyEngine::Window
     
             void Window::SetPosition(i16 X, i16 Y)
             {
+                m_Data.XPos = X;
+                m_Data.YPos = Y;
                 glfwSetWindowPos(m_GlfwWindow, static_cast<i32>(X), static_cast<i32>(Y));
             }
     
@@ -249,7 +281,7 @@ namespace VyEngine::Window
             {
                 i32 x, y;
                 glfwGetWindowPos(m_GlfwWindow, &x, &y);
-                return std::make_pair(static_cast<u16>(x), static_cast<u16>(y)); 
+                return std::make_pair(static_cast<i16>(x), static_cast<i16>(y)); 
             }
     
             // ============================================================================================
@@ -506,17 +538,16 @@ namespace VyEngine::Window
 
         void Window::OnResize(u16 width, u16 height)
         {
-            VYINFO("Resized: ({0}, {1})", width, height)
-            m_Size.first = width;
-            m_Size.second = height;
+            m_Data.SizeX = width;
+            m_Data.SizeY = height;
         }
 
         void Window::OnMove(i16 x, i16 y)
         {
-            if (!m_Fullscreen)
+            if (!m_Data.IsFullscreen)
             {
-                m_Position.first = x;
-                m_Position.second = y;
+                m_Data.XPos = x;
+                m_Data.YPos = y;
             }
         }
     

@@ -4,7 +4,7 @@
 #include <string>
 #include <cstdint>
 
-// #include "Graphics/Config/DriverConfig.hpp"
+#include "Defines.h"
 #include "Graphics/Data/EPixel.h"
 #include "Graphics/Data/ERender.h"
 
@@ -41,8 +41,8 @@ namespace VyEngine::GFX::API
         // /// @param type The data type of the pixel data.
         // /// @param data The destination buffer to store pixel data.
         // void ReadPixels(
-        //     uint32_t X, uint32_t Y, 
-        //     uint32_t width, uint32_t height, 
+        //     u32 X, u32 Y, 
+        //     u32 width, u32 height, 
         //     GLenum format, GLenum type, 
         //     void* data
         // );
@@ -50,28 +50,28 @@ namespace VyEngine::GFX::API
         /// @brief Renders primitives from array data.
         /// @param primitiveMode Specifies the kind of primitives to render.
         /// @param indexCount The number of elements to render.
-        void DrawElements(GLenum primitiveMode, uint32_t indexCount);
+        void DrawElements(GLenum primitiveMode, u32 indexCount);
         
         /// @brief Renders multiple instances of a set of elements.
         /// @param primitiveMode Specifies the kind of primitives to render.
         /// @param indexCount The number of elements to render.
         /// @param instances The number of instances to render.
-        void DrawElementsInstanced(GLenum primitiveMode, uint32_t indexCount, uint32_t instances);
+        void DrawElementsInstanced(GLenum primitiveMode, u32 indexCount, u32 instances);
         
         /// @brief Renders primitives from array data without indexing.
         /// @param primitiveMode Specifies the kind of primitives to render.
         /// @param vertexCount The number of vertices to render.
-        void DrawArrays(GLenum primitiveMode, uint32_t vertexCount);
+        void DrawArrays(GLenum primitiveMode, u32 vertexCount);
         
         /// @brief Renders multiple instances of a set of vertices.
         /// @param primitiveMode Specifies the kind of primitives to render.
         /// @param vertexCount The number of vertices to render.
         /// @param instances The number of instances to render.
-        void DrawArraysInstanced(GLenum primitiveMode, uint32_t vertexCount, uint32_t instances);
+        void DrawArraysInstanced(GLenum primitiveMode, u32 vertexCount, u32 instances);
 
 
         /// @brief Sets the clear color for the color buffer.
-        void SetClearColor(float r, float g, float b, float a);
+        void SetClearColor(f32 r, f32 g, f32 b, f32 a);
 
         /// @brief Specifies the rasterization mode.
         /// @param rasterizationMode The desired rasterization mode.
@@ -79,7 +79,7 @@ namespace VyEngine::GFX::API
 
         /// @brief Sets the width for rasterized lines.
         /// @param width The width of rasterized lines.
-        void SetRasterizationLinesWidth(float width);
+        void SetRasterizationLinesWidth(f32 width);
 
         /// @brief Enables or disables a specific rendering capability.
         /// @param capability The rendering capability to modify.
@@ -95,7 +95,7 @@ namespace VyEngine::GFX::API
         /// @param algorithm The comparison function to use.
         /// @param reference The reference value for the stencil test.
         /// @param mask A mask that is ANDed with both the reference value and the stored stencil value.
-        void SetStencilAlgorithm(GLenum algorithm, int32_t reference, uint32_t mask);
+        void SetStencilAlgorithm(GLenum algorithm, i32 reference, u32 mask);
 
         /// @brief Sets the depth comparison function.
         /// @param algorithm The depth comparison function to use.
@@ -103,7 +103,7 @@ namespace VyEngine::GFX::API
 
         /// @brief Controls the writing of individual bits in the stencil planes.
         /// @param mask Specifies a mask to enable and disable writing of individual bits in the stencil planes.
-        void SetStencilMask(uint32_t mask);
+        void SetStencilMask(u32 mask);
 
 		/// @brief Sets stencil test actions depending on test outcomes.
 		/// @param stencilFail Action to take when the stencil test fails.
@@ -122,7 +122,7 @@ namespace VyEngine::GFX::API
         void SetColorWriting(bool enableRed, bool enableGreen, bool enableBlue, bool enableAlpha);
 
         /// @brief Sets the viewport transformation parameters.
-        void SetViewport(uint32_t X, uint32_t Y, uint32_t width, uint32_t height);
+        void SetViewport(u32 X, u32 Y, u32 width, u32 height);
 
         /// @brief Retrieves the name of the graphics vendor.
         /// @return @return A string containing the vendor name.
